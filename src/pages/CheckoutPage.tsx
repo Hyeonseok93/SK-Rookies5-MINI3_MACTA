@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { ArrowLeft, Shield, CheckCircle, Lock, Award, Package, CreditCard } from 'lucide-react';
+import { ArrowLeft, CheckCircle, Lock, Package, CreditCard } from 'lucide-react';
 import { Layout } from '../components/layout/Layout';
 import { auctionItems } from '../data/mockData';
 

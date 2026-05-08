@@ -1,8 +1,10 @@
 import { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { ArrowLeft, Shield, Clock, User, Star, MessageCircle, Package, CheckCircle } from 'lucide-react';
+import { ArrowLeft, Shield, Clock, Package } from 'lucide-react';
 import { Layout } from '../components/layout/Layout';
-import { auctionItems, Bid } from '../data/mockData';
+import { auctionItems } from '../data/mockData';
+import type { Bid } from '../data/mockData';
+
 import { CountdownTimer } from '../components/common/CountdownTimer';
 
 export function ProductDetailPage() {

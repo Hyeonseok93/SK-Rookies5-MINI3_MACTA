@@ -9,10 +9,9 @@ import {
   Package,
   CheckCircle,
   XCircle,
-  CreditCard
 } from 'lucide-react';
 import { Layout } from '../components/layout/Layout';
-import { auctionItems } from '../data/mockData';
+
 
 type MenuSection = 'won' | 'lost' | 'sales' | 'wishlist' | 'registered' | 'password';
 
