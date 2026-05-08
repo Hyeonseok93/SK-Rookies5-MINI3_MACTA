@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { ArrowLeft, Shield, Clock, Package } from 'lucide-react';
+import { ArrowLeft, Clock, Package } from 'lucide-react';
 import { Layout } from '../components/layout/Layout';
 import { auctionItems } from '../data/mockData';
 import type { Bid } from '../data/mockData';
@@ -159,8 +159,10 @@ export function ProductDetailPage() {
               </div>
 
               <div className="flex items-center justify-center gap-2 text-xs text-gray-400 bg-[#1e3a5f]/20 px-4 py-3 rounded-lg border border-[#1e3a5f]">
-                <Shield className="w-4 h-4 text-green-400" />
-                <span>Secured by AWS WAF Protection</span>
+                <div className="w-2 h-2 bg-orange-500 rounded-full"></div>
+                <span className="font-bold text-gray-300">MACTA AUTHENTIC</span>
+                <span className="text-gray-500">|</span>
+                <span>Final Bid Assurance</span>
               </div>
             </div>
           </div>
