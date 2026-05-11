@@ -1,16 +1,19 @@
 import { useState, useEffect } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
-import { Filter, Plus, Clock, TrendingUp, ChevronDown, ChevronUp, Search, Coins, Loader2 } from 'lucide-react';
+import { Filter, Plus, Clock, TrendingUp, ChevronDown, ChevronUp, Search, Coins, Loader2, Heart } from 'lucide-react';
 import { Layout } from '../components/layout/Layout';
 import { CountdownTimer } from '../components/common/CountdownTimer';
 import { useAuctions } from '../hooks/useAuctions';
 import { auctionApi } from '../api/auction';
 import type { Category, AuctionStats } from '../api/types';
+import { formatPrice } from '../utils/format';
+import { useToast } from '../components/common/Toast';
 
 type SortOption = 'newest' | 'closing-soon' | 'price-low' | 'price-high';
 
 export function HomePage() {
   const navigate = useNavigate();
+  const { showToast } = useToast();
   const [searchParams, setSearchParams] = useSearchParams();
   
   // URL-based states
@@ -21,7 +24,7 @@ export function HomePage() {
   const [sortBy, setSortBy] = useState<SortOption>('newest');
   
   // API Data
-  const { auctions, isLoading, error } = useAuctions({
+  const { auctions, setAuctions, isLoading, error } = useAuctions({
     category: selectedCategory,
     q: searchQuery,
     minPrice,
@@ -66,6 +69,33 @@ export function HomePage() {
 
   const handlePriceApply = () => {
     updateFilters({ minPrice: minPriceInput, maxPrice: maxPriceInput });
+  };
+
+  const handleToggleLike = async (e: React.MouseEvent, id: number) => {
+    e.stopPropagation();
+    
+    // 1. Optimistic UI Update: 즉시 화면의 하트 색상을 바꿈 (로딩 없이 즉시)
+    setAuctions(prev => prev.map(item => 
+      item.id === id ? { ...item, is_liked: !item.is_liked } : item
+    ));
+
+    try {
+      // 2. 서버 통신 (로딩 스피너 없이 백그라운드에서 실행)
+      const res = await auctionApi.toggleLike(id);
+      if (res.success) {
+        showToast(res.data.is_liked ? 'Added to watchlist' : 'Removed from watchlist', 'success');
+        // 사이드바 통계만 조용히 업데이트
+        auctionApi.getAuctionStats().then(statsRes => {
+          if (statsRes.success) setStats(statsRes.data);
+        });
+      }
+    } catch {
+      // 3. 실패 시 UI 롤백
+      setAuctions(prev => prev.map(item => 
+        item.id === id ? { ...item, is_liked: !item.is_liked } : item
+      ));
+      showToast('Failed to update watchlist', 'error');
+    }
   };
 
   return (
@@ -263,6 +293,14 @@ export function HomePage() {
                         alt={item.title}
                         className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
                       />
+                      <button 
+                        onClick={(e) => handleToggleLike(e, item.id)}
+                        className={`absolute bottom-3 right-3 p-2 rounded-full backdrop-blur-md transition-all shadow-lg z-10 ${
+                          item.is_liked ? 'bg-red-500 text-white' : 'bg-black/40 text-white hover:bg-white hover:text-red-500'
+                        }`}
+                      >
+                        <Heart className={`w-4 h-4 ${item.is_liked ? 'fill-current' : ''}`} />
+                      </button>
                       <div className="absolute top-3 right-3 bg-red-600 text-white px-3 py-1.5 rounded-full text-sm font-semibold flex items-center gap-1.5 shadow-lg">
                         <Clock className="w-4 h-4" />
                         <CountdownTimer endTime={new Date(item.end_time)} />
@@ -278,7 +316,7 @@ export function HomePage() {
                       </div>
                       <div className="flex items-end justify-between">
                         <div className="text-2xl font-bold text-blue-400">
-                          ₩{item.current_price.toLocaleString()}
+                          ₩{formatPrice(item.current_price)}
                         </div>
                         <div className="text-xs text-gray-500">
                           {item.bid_count} bids

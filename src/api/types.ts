@@ -31,6 +31,7 @@ export interface AuctionSummary {
   category: CategoryType;
   end_time: string;
   bid_count: number;
+  is_liked: boolean; // Add this
 }
 
 export interface Category {
@@ -42,6 +43,33 @@ export interface Category {
 export interface AuctionStats {
   total_active: number;
   ending_soon: number;
+}
+
+export interface UserDashboardStats {
+  bidding_count: number;
+  won_count: number;
+  hosted_count: number;
+  watchlist_count: number;
+}
+
+export interface UserAuctionItem {
+  auction_id: number;
+  title: string;
+  current_price: number;
+  status: 'READY' | 'LIVE' | 'FINISHED' | 'CANCEL';
+  view_count: number;
+  created_at: string;
+  preview_url: string;
+}
+
+export interface UserBidItem extends UserAuctionItem {
+  my_bid_price: number;
+}
+
+export interface LikeToggleResponse {
+  auction_id: number;
+  like_count: number;
+  is_liked: boolean;
 }
 
 export interface Bid {
