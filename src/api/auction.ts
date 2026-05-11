@@ -1,7 +1,20 @@
 import { auctionDatabase } from '../data/mockData';
-import type { AuctionSummary, PaginatedResponse, ApiResponse, Category, AuctionDetail, Comment, AuctionStats, CreateAuctionRequest, Notification } from './types';
+import type { 
+  AuctionSummary, PaginatedResponse, ApiResponse, Category, 
+  AuctionDetail, Comment, AuctionStats, CreateAuctionRequest, 
+  Notification, UserDashboardStats, UserAuctionItem, UserBidItem, 
+  LikeToggleResponse 
+} from './types';
 
 const delay = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
+
+// Simulating session storage for likes and user data
+const sessionData = {
+  likedAuctionIds: new Set<number>([1, 4]), // Initial likes
+  myBids: [
+    { auction_id: 1, bid_price: 1450000, timestamp: new Date().toISOString() }
+  ]
+};
 
 export const auctionApi = {
   // GET /api/v1/auctions
@@ -24,7 +37,8 @@ export const auctionApi = {
       main_picture_url: item.imageUrl,
       category: item.category,
       end_time: item.end_time.toISOString(),
-      bid_count: item.bids.length
+      bid_count: item.bids.length,
+      is_liked: sessionData.likedAuctionIds.has(parseInt(item.id))
     }));
 
     if (params.category && params.category !== 'All') {
@@ -77,10 +91,9 @@ export const auctionApi = {
     await delay(800);
     const newId = auctionDatabase.length + 1;
 
-    // Simulate adding to DB
     auctionDatabase.push({
       id: newId.toString(),
-      seller_id: 999, // Current user
+      seller_id: 999,
       seller_nickname: 'You',
       seller_joined_at: new Date(),
       title: data.title,
@@ -163,6 +176,7 @@ export const auctionApi = {
         category: item.category,
         end_time: item.end_time.toISOString(),
         bid_count: item.bids.length,
+        is_liked: sessionData.likedAuctionIds.has(parseInt(item.id)),
         seller_id: item.seller_id,
         seller_nickname: item.seller_nickname,
         seller_joined_at: item.seller_joined_at.toISOString(),
@@ -188,7 +202,21 @@ export const auctionApi = {
   placeBid: async (id: string, amount: number): Promise<ApiResponse<{ bid_id: string; current_price: number }>> => {
     await delay(300);
     const item = auctionDatabase.find(i => i.id === id);
-    if (item) item.current_price = amount;
+    if (item) {
+      item.current_price = amount;
+      item.bids.unshift({
+        id: `b${Date.now()}`,
+        bidder_id: 999,
+        bidder_nickname: 'You',
+        price: amount,
+        updated_at: new Date()
+      });
+      sessionData.myBids.unshift({
+        auction_id: parseInt(id),
+        bid_price: amount,
+        timestamp: new Date().toISOString()
+      });
+    }
 
     return {
       success: true,
@@ -196,6 +224,113 @@ export const auctionApi = {
         bid_id: `b${Date.now()}`,
         current_price: amount
       },
+      timestamp: new Date().toISOString()
+    };
+  },
+
+  // POST /api/v1/auctions/{id}/likes
+  toggleLike: async (id: number): Promise<ApiResponse<LikeToggleResponse>> => {
+    await delay(200);
+    const item = auctionDatabase.find(i => parseInt(i.id) === id);
+    if (!item) throw new Error('Auction not found');
+
+    const isLiked = sessionData.likedAuctionIds.has(id);
+    if (isLiked) {
+      sessionData.likedAuctionIds.delete(id);
+      item.like_count--;
+    } else {
+      sessionData.likedAuctionIds.add(id);
+      item.like_count++;
+    }
+
+    return {
+      success: true,
+      data: {
+        auction_id: id,
+        like_count: item.like_count,
+        is_liked: !isLiked
+      },
+      timestamp: new Date().toISOString()
+    };
+  },
+
+  // GET /api/v1/users/me/stats
+  getUserStats: async (): Promise<ApiResponse<UserDashboardStats>> => {
+    await delay(300);
+    return {
+      success: true,
+      data: {
+        bidding_count: sessionData.myBids.length,
+        won_count: 1,
+        hosted_count: auctionDatabase.filter(a => a.seller_id === 999).length,
+        watchlist_count: sessionData.likedAuctionIds.size
+      },
+      timestamp: new Date().toISOString()
+    };
+  },
+
+  // GET /api/v1/users/me/auctions
+  getMyAuctions: async (): Promise<PaginatedResponse<UserAuctionItem[]>> => {
+    await delay(400);
+    const myItems = auctionDatabase.filter(a => a.seller_id === 999).map(a => ({
+      auction_id: parseInt(a.id),
+      title: a.title,
+      current_price: a.current_price,
+      status: a.status,
+      view_count: a.view_count,
+      created_at: a.created_at.toISOString(),
+      preview_url: a.imageUrl
+    }));
+    return {
+      success: true,
+      data: myItems,
+      page_info: { current_page: 0, page_size: 10, total_pages: 1, total_elements: myItems.length, is_first: true, is_last: true, has_next: false, has_previous: false },
+      timestamp: new Date().toISOString()
+    };
+  },
+
+  // GET /api/v1/users/me/bids
+  getMyBids: async (): Promise<PaginatedResponse<UserBidItem[]>> => {
+    await delay(400);
+    const myBidItems = sessionData.myBids.map(mb => {
+      const auction = auctionDatabase.find(a => parseInt(a.id) === mb.auction_id)!;
+      return {
+        auction_id: auction.id,
+        title: auction.title,
+        my_bid_price: mb.bid_price,
+        current_price: auction.current_price,
+        status: auction.status,
+        view_count: auction.view_count,
+        created_at: mb.timestamp,
+        preview_url: auction.imageUrl
+      };
+    }) as any; // Temporary cast due to ID type difference
+    return {
+      success: true,
+      data: myBidItems,
+      page_info: { current_page: 0, page_size: 10, total_pages: 1, total_elements: myBidItems.length, is_first: true, is_last: true, has_next: false, has_previous: false },
+      timestamp: new Date().toISOString()
+    };
+  },
+
+  // GET /api/v1/users/me/likes
+  getMyWatchlist: async (): Promise<PaginatedResponse<UserAuctionItem[]>> => {
+    await delay(400);
+    const watchlist = auctionDatabase
+      .filter(a => sessionData.likedAuctionIds.has(parseInt(a.id)))
+      .map(a => ({
+        auction_id: parseInt(a.id),
+        title: a.title,
+        current_price: a.current_price,
+        status: a.status,
+        view_count: a.view_count,
+        created_at: a.created_at.toISOString(),
+        preview_url: a.imageUrl
+      }));
+    return {
+      success: true,
+      data: watchlist,
+      page_info: { current_page: 0, page_size: 10, total_pages: 1, total_elements: watchlist.length, is_first: true, is_last: true, has_next: false, has_previous: false },
       timestamp: new Date().toISOString()
     };
   },
@@ -288,6 +423,14 @@ export const auctionApi = {
   // DELETE /api/v1/notifications/read
   deleteReadNotifications: async (): Promise<ApiResponse<void>> => {
     await delay(200);
+    return { success: true, data: undefined, timestamp: new Date().toISOString() };
+  },
+
+  // POST /payments
+  processPayment: async (auctionId: number): Promise<ApiResponse<void>> => {
+    await delay(1000);
+    const item = auctionDatabase.find(i => parseInt(i.id) === auctionId);
+    if (item) item.status = 'FINISHED'; // In real app, maybe 'PAID'
     return { success: true, data: undefined, timestamp: new Date().toISOString() };
   }
 };

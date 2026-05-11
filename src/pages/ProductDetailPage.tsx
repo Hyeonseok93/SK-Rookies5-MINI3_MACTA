@@ -1,11 +1,12 @@
 import { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { ArrowLeft, Clock, Package, User, MessageCircle, CheckCircle, Shield, Loader2 } from 'lucide-react';
+import { ArrowLeft, Clock, Package, User, MessageCircle, CheckCircle, Shield, Loader2, Heart } from 'lucide-react';
 import { Layout } from '../components/layout/Layout';
 import { CountdownTimer } from '../components/common/CountdownTimer';
 import { auctionApi } from '../api/auction';
 import type { AuctionDetail, Bid, Comment } from '../api/types';
 import { useToast } from '../components/common/Toast';
+import { formatPrice, sanitizeNumeric } from '../utils/format';
 
 export function ProductDetailPage() {
   const { id } = useParams();
@@ -110,6 +111,19 @@ export function ProductDetailPage() {
     }
   };
 
+  const handleToggleLike = async () => {
+    if (!item) return;
+    try {
+      const res = await auctionApi.toggleLike(item.id);
+      if (res.success) {
+        setItem(prev => prev ? { ...prev, is_liked: res.data.is_liked, like_count: res.data.like_count } : null);
+        showToast(res.data.is_liked ? 'Added to watchlist' : 'Removed from watchlist', 'success');
+      }
+    } catch {
+      showToast('Failed to update watchlist', 'error');
+    }
+  };
+
   if (isLoading) {
     return (
       <Layout>
@@ -194,7 +208,19 @@ export function ProductDetailPage() {
           {/* Right: Bidding Panel */}
           <div>
             <div className="bg-[#0d1b2e] border border-[#1e3a5f] rounded-lg p-6 sticky top-24">
-              <h1 className="text-2xl font-bold text-white mb-2">{item.title}</h1>
+              <div className="flex justify-between items-start mb-2 gap-4">
+                <h1 className="text-2xl font-bold text-white leading-tight">{item.title}</h1>
+                <button 
+                  onClick={handleToggleLike}
+                  className={`p-3 rounded-xl transition-all shadow-lg flex-shrink-0 ${
+                    item.is_liked 
+                      ? 'bg-red-500 text-white' 
+                      : 'bg-[#1e3a5f]/50 text-gray-400 hover:text-red-400'
+                  }`}
+                >
+                  <Heart className={`w-6 h-6 ${item.is_liked ? 'fill-current' : ''}`} />
+                </button>
+              </div>
               <div className="flex items-center gap-2 mb-6">
                 <span className="px-3 py-1 bg-blue-600/20 text-blue-400 rounded-lg text-sm">{item.category}</span>
                 <div className="flex items-center gap-1 text-gray-400 text-sm">
@@ -216,7 +242,7 @@ export function ProductDetailPage() {
               <div className={`bg-[#1e3a5f]/30 rounded-lg p-6 mb-6 transition-all duration-500 ${flash ? 'ring-4 ring-red-500 bg-red-500/20' : ''}`}>
                 <div className="text-sm text-gray-400 mb-2">Current Highest Bid</div>
                 <div className="text-4xl font-bold text-blue-400 mb-1">
-                  ₩{item.current_price.toLocaleString()}
+                  ₩{formatPrice(item.current_price)}
                 </div>
                 <div className="text-xs text-gray-500">by {item.bids[0]?.bidder_nickname || 'Initial Bid'}</div>
               </div>
@@ -226,9 +252,9 @@ export function ProductDetailPage() {
                 <input
                   type="text"
                   inputMode="numeric"
-                  value={bidAmount ? Number(bidAmount.replace(/,/g, '')).toLocaleString() : ''}
-                  onChange={(e) => setBidAmount(e.target.value.replace(/[^0-9]/g, ''))}
-                  placeholder={`Minimum: ₩${(item.current_price + 1000).toLocaleString()}`}
+                  value={formatPrice(bidAmount)}
+                  onChange={(e) => setBidAmount(sanitizeNumeric(e.target.value))}
+                  placeholder={`Minimum: ₩${formatPrice(item.current_price + 1000)}`}
                   className="w-full px-4 py-3 bg-[#0a1628] border border-[#1e3a5f] rounded-lg text-white placeholder-gray-600 focus:outline-none focus:border-blue-500 mb-3"
                 />
                 <button

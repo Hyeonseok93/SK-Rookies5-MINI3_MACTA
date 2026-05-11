@@ -6,6 +6,7 @@ import { auctionApi } from '../api/auction';
 import type { Category } from '../api/types';
 import type { CategoryType } from '../data/mockData';
 import { useToast } from '../components/common/Toast';
+import { formatPrice, sanitizeNumeric } from '../utils/format';
 
 interface FormErrors {
   title?: string;
@@ -256,9 +257,10 @@ export function RegisterAuctionPage() {
                   <input
                     type="text"
                     inputMode="numeric"
-                    value={startPrice ? Number(startPrice.replace(/,/g, '')).toLocaleString() : ''}
+                    required
+                    value={formatPrice(startPrice)}
                     onChange={(e) => {
-                      setStartPrice(e.target.value.replace(/[^0-9]/g, ''));
+                      setStartPrice(sanitizeNumeric(e.target.value));
                       if (errors.startPrice) setErrors({ ...errors, startPrice: undefined });
                     }}
                     placeholder="e.g., 500,000"

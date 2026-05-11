@@ -14,26 +14,26 @@ export function useAuctions(params: {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  useEffect(() => {
-    const fetchAuctions = async () => {
-      setIsLoading(true);
-      try {
-        const response = await auctionApi.getAuctions(params);
-        if (response.success) {
-          setAuctions(response.data);
-          setPageInfo(response.page_info);
-        } else {
-          setError(response.message || 'Failed to fetch auctions');
-        }
-      } catch (err) {
-        setError('An unexpected error occurred');
-      } finally {
-        setIsLoading(false);
+  const fetchAuctions = async () => {
+    setIsLoading(true);
+    try {
+      const response = await auctionApi.getAuctions(params);
+      if (response.success) {
+        setAuctions(response.data);
+        setPageInfo(response.page_info);
+      } else {
+        setError(response.message || 'Failed to fetch auctions');
       }
-    };
+    } catch {
+      setError('An unexpected error occurred');
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
+  useEffect(() => {
     fetchAuctions();
   }, [params.category, params.q, params.minPrice, params.maxPrice, params.sort]);
 
-  return { auctions, pageInfo, isLoading, error };
+  return { auctions, setAuctions, pageInfo, isLoading, error, refetch: fetchAuctions };
 }
