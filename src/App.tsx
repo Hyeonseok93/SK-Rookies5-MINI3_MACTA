@@ -4,6 +4,7 @@ import { ProductDetailPage } from './pages/ProductDetailPage';
 import { CheckoutPage } from './pages/CheckoutPage';
 import { MyPage } from './pages/MyPage';
 import { RegisterAuctionPage } from './pages/RegisterAuctionPage';
+import { NotificationsPage } from './pages/NotificationsPage';
 import { LoginPage } from './pages/LoginPage';
 import { SignupPage } from './pages/SignupPage';
 import { ToastProvider } from './components/common/Toast';
@@ -18,6 +19,7 @@ export default function App() {
           <Route path="/checkout/:id" element={<CheckoutPage />} />
           <Route path="/my-page" element={<MyPage />} />
           <Route path="/register-auction" element={<RegisterAuctionPage />} />
+          <Route path="/notifications" element={<NotificationsPage />} />
           <Route path="/login" element={<LoginPage />} />
           <Route path="/signup" element={<SignupPage />} />
           <Route path="*" element={

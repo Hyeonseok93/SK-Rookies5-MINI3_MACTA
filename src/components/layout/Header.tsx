@@ -1,18 +1,40 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useNavigate, Link, useSearchParams } from 'react-router-dom';
-import { Search, Bell, User, Menu } from 'lucide-react';
+import { Search, Bell, User, Menu, Clock, ExternalLink } from 'lucide-react';
+import { auctionApi } from '../../api/auction';
+import type { Notification } from '../../api/types';
 
 export function Header() {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const [searchQuery, setSearchQuery] = useState(searchParams.get('q') || '');
-  const [showNotifications, setShowNotifications] = useState(false);
   const [showMobileMenu, setShowMobileMenu] = useState(false);
 
-  // Sync internal input state with URL changes (e.g., when clearing filters on HomePage)
+  // Notification State
+  const [notifications, setNotifications] = useState<Notification[]>([]);
+  const [showNotifications, setShowNotifications] = useState(false);
+  const notificationRef = useRef<HTMLDivElement>(null);
+
+  const unreadCount = notifications.filter(n => !n.is_read).length;
+
   useEffect(() => {
-    setSearchQuery(searchParams.get('q') || '');
-  }, [searchParams]);
+    // Fetch notifications
+    auctionApi.getNotifications().then(res => {
+      if (res.success) setNotifications(res.data);
+    });
+
+    // Close dropdown on outside click
+    const handleClickOutside = (event: MouseEvent) => {
+      if (notificationRef.current && !notificationRef.current.contains(event.target as Node)) {
+        setShowNotifications(false);
+      }
+    };
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
+
+  // Sync internal input state with URL changes (e.g., when clearing filters on HomePage)
+  const urlQuery = searchParams.get('q') || '';
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
@@ -22,6 +44,20 @@ export function Header() {
     } else {
       navigate('/');
     }
+  };
+
+  const markAsRead = async (id: number) => {
+    const res = await auctionApi.markNotificationAsRead(id);
+    if (res.success) {
+      setNotifications(prev => prev.map(n => n.id === id ? { ...n, is_read: true } : n));
+    }
+  };
+
+  const handleNavigate = (e: React.MouseEvent, referenceId: number, id: number) => {
+    e.stopPropagation();
+    markAsRead(id);
+    setShowNotifications(false);
+    navigate(`/product/${referenceId}`);
   };
 
   return (
@@ -44,9 +80,10 @@ export function Header() {
             <div className="relative w-full">
               <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
               <input
+                key={urlQuery}
                 type="text"
                 placeholder="Search auctions..."
-                value={searchQuery}
+                defaultValue={urlQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 className="w-full pl-12 pr-4 py-2.5 bg-[#0a1628] border border-[#1e3a5f] rounded-lg text-white placeholder-gray-500 focus:outline-none focus:border-blue-500"
               />
@@ -55,14 +92,75 @@ export function Header() {
 
           {/* Actions */}
           <div className="flex items-center gap-4">
-            <div className="relative">
+            <div className="relative" ref={notificationRef}>
               <button
                 onClick={() => setShowNotifications(!showNotifications)}
-                className="relative p-2 text-gray-400 hover:text-white transition-colors"
+                className={`relative p-2 text-gray-400 hover:text-white transition-colors rounded-lg ${showNotifications ? 'bg-[#1e3a5f]/50 text-white' : ''}`}
               >
                 <Bell className="w-6 h-6" />
-                <span className="absolute top-1 right-1 w-2 h-2 bg-red-500 rounded-full"></span>
+                {unreadCount > 0 && (
+                  <span className="absolute top-1.5 right-1.5 w-4 h-4 bg-red-500 text-white text-[10px] font-bold rounded-full flex items-center justify-center ring-2 ring-[#0d1b2e]">
+                    {unreadCount}
+                  </span>
+                )}
               </button>
+
+              {/* Notification Dropdown */}
+              {showNotifications && (
+                <div className="absolute right-0 mt-2 w-80 bg-[#0d1b2e] border border-[#1e3a5f] rounded-xl shadow-2xl overflow-hidden animate-in fade-in zoom-in-95 duration-200">
+                  <div className="p-4 border-b border-[#1e3a5f] flex justify-between items-center bg-[#0a1628]/50">
+                    <h3 className="text-white font-semibold">Notifications</h3>
+                    <span className="text-[10px] bg-blue-600/20 text-blue-400 px-2 py-0.5 rounded-full font-bold uppercase">Live</span>
+                  </div>
+                  <div className="max-h-[400px] overflow-y-auto">
+                    {notifications.length > 0 ? (
+                      <div className="divide-y border-[#1e3a5f]">
+                        {notifications.slice(0, 5).map((n) => (
+                          <div 
+                            key={n.id} 
+                            className={`p-4 hover:bg-[#1e3a5f]/20 transition-colors cursor-pointer group flex items-start gap-3 ${!n.is_read ? 'bg-blue-600/5' : ''}`}
+                            onClick={() => markAsRead(n.id)}
+                          >
+                            <div className={`mt-1 p-2 rounded-lg flex-shrink-0 ${!n.is_read ? 'bg-blue-600/20 text-blue-400' : 'bg-gray-800 text-gray-500'}`}>
+                              <Bell className="w-4 h-4" />
+                            </div>
+                            <div className="flex-1 min-w-0">
+                              <p className={`text-sm leading-snug mb-1 ${!n.is_read ? 'text-white font-medium' : 'text-gray-400'}`}>
+                                {n.content}
+                              </p>
+                              <div className="flex items-center gap-2 text-[10px] text-gray-500">
+                                <Clock className="w-3 h-3" />
+                                {new Date(n.created_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                              </div>
+                            </div>
+                            <button
+                              onClick={(e) => handleNavigate(e, n.target_url, n.id)}
+                              className="mt-1 p-1.5 rounded-md hover:bg-blue-600 hover:text-white text-gray-500 transition-all"
+                              title="Go to Auction"
+                            >
+                              <ExternalLink className="w-3.5 h-3.5" />
+                            </button>
+                          </div>
+                        ))}
+                      </div>
+                    ) : (
+                      <div className="py-12 px-4 text-center">
+                        <Bell className="w-12 h-12 text-gray-600 mx-auto mb-3 opacity-20" />
+                        <p className="text-gray-500 text-sm">No new notifications</p>
+                      </div>
+                    )}
+                  </div>
+                  {notifications.length > 0 && (
+                    <Link 
+                      to="/notifications"
+                      onClick={() => setShowNotifications(false)}
+                      className="block w-full py-3 bg-[#0a1628]/50 text-gray-400 hover:text-white text-xs font-medium border-t border-[#1e3a5f] transition-colors text-center"
+                    >
+                      View All Notifications
+                    </Link>
+                  )}
+                </div>
+              )}
             </div>
 
             <Link
@@ -94,9 +192,10 @@ export function Header() {
           <div className="relative">
             <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
             <input
+              key={urlQuery}
               type="text"
               placeholder="Search auctions..."
-              value={searchQuery}
+              defaultValue={urlQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               className="w-full pl-12 pr-4 py-2.5 bg-[#0a1628] border border-[#1e3a5f] rounded-lg text-white placeholder-gray-500 focus:outline-none focus:border-blue-500"
             />
