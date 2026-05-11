@@ -5,11 +5,13 @@ import { auctionApi } from '../../api/auction';
 import type { Notification } from '../../api/types';
 import { AUTH_STATE_CHANGED_EVENT, logout } from '../../api/auth';
 import { getAccessTokenCookie } from '../../api/tokenCookie';
+import { useToast } from '../common/Toast';
 
 const isAuthenticated = () => Boolean(getAccessTokenCookie() && localStorage.getItem('macta_user'));
 
 export function Header() {
   const navigate = useNavigate();
+  const { showToast } = useToast();
   const [searchParams] = useSearchParams();
   const [searchQuery, setSearchQuery] = useState(searchParams.get('q') || '');
   const [showMobileMenu, setShowMobileMenu] = useState(false);
@@ -80,11 +82,8 @@ export function Header() {
   };
 
   const handleLogout = () => {
-    if (!confirm('로그아웃 하시겠습니까?')) {
-      return;
-    }
-
     logout();
+    showToast('로그아웃 되었습니다.', 'success');
     setShowMobileMenu(false);
     navigate('/');
   };

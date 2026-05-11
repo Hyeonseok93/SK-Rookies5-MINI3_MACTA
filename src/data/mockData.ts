@@ -164,3 +164,20 @@ export const auctionDatabase: AuctionItem[] = [
 ];
 
 export const auctionItems = auctionDatabase;
+
+export const MOCK_USERS = [
+  {
+    loginId: 'user1',
+    password: 'password123',
+    nickname: '유저1',
+    email: 'user1@macta.com',
+    role: 'VIP Member'
+  },
+  {
+    loginId: 'admin',
+    password: 'adminpassword',
+    nickname: '관리자',
+    email: 'admin@macta.com',
+    role: 'Administrator'
+  }
+];

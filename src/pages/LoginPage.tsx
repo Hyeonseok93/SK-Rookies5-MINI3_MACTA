@@ -1,17 +1,29 @@
-import { useState } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import type { FormEvent } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { LockKeyhole, LogIn, User } from 'lucide-react';
 import { Layout } from '../components/layout/Layout';
 import { getAuthErrorMessage, login } from '../api/auth';
+import { useToast } from '../components/common/Toast';
 
 const MAX_FIELD_LENGTH = 50;
 
 export function LoginPage() {
   const navigate = useNavigate();
+  const location = useLocation();
+  const { showToast } = useToast();
   const [loginId, setLoginId] = useState('');
   const [password, setPassword] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const hasShownAuthToast = useRef(false);
+
+  // Check for login requirement flag from AuthGuard
+  useEffect(() => {
+    if (location.state?.requireLogin && !hasShownAuthToast.current) {
+      showToast('로그인이 필요한 서비스입니다.', 'error');
+      hasShownAuthToast.current = true;
+    }
+  }, [location.state, showToast]);
 
   const validateForm = () => {
     if (loginId.trim().length === 0) {
@@ -38,7 +50,7 @@ export function LoginPage() {
 
     const validationError = validateForm();
     if (validationError) {
-      alert(validationError);
+      showToast(validationError, 'error');
       return;
     }
 
@@ -46,10 +58,13 @@ export function LoginPage() {
 
     try {
       const response = await login({ loginId, password });
-      alert(response.message);
-      navigate('/');
+      showToast(response.message, 'success');
+      
+      // Redirect back to original destination if exists, otherwise home
+      const from = location.state?.from?.pathname || '/';
+      navigate(from, { replace: true });
     } catch (requestError) {
-      alert(getAuthErrorMessage(requestError, '로그인에 실패했습니다.'));
+      showToast(getAuthErrorMessage(requestError, '로그인에 실패했습니다.'), 'error');
     } finally {
       setIsSubmitting(false);
     }
