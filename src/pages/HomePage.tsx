@@ -1,9 +1,11 @@
 import { useState, useEffect } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
-import { Filter, Plus, Clock, TrendingUp, ChevronDown, ChevronUp, Search, Coins } from 'lucide-react';
+import { Filter, Plus, Clock, TrendingUp, ChevronDown, ChevronUp, Search, Coins, Loader2 } from 'lucide-react';
 import { Layout } from '../components/layout/Layout';
-import { auctionItems } from '../data/mockData';
 import { CountdownTimer } from '../components/common/CountdownTimer';
+import { useAuctions } from '../hooks/useAuctions';
+import { auctionApi } from '../api/auction';
+import type { Category, AuctionStats } from '../api/types';
 
 type SortOption = 'newest' | 'closing-soon' | 'price-low' | 'price-high';
 
@@ -16,24 +18,38 @@ export function HomePage() {
   const searchQuery = searchParams.get('q') || '';
   const minPrice = searchParams.get('minPrice') || '';
   const maxPrice = searchParams.get('maxPrice') || '';
-  
   const [sortBy, setSortBy] = useState<SortOption>('newest');
-  const [now, setNow] = useState(() => Date.now());
+  
+  // API Data
+  const { auctions, isLoading, error } = useAuctions({
+    category: selectedCategory,
+    q: searchQuery,
+    minPrice,
+    maxPrice,
+    sort: sortBy
+  });
+
+  const [apiCategories, setApiCategories] = useState<Category[]>([]);
+  const [stats, setStats] = useState<AuctionStats | null>(null);
   
   // Collapsible states
   const [isCategoryExpanded, setIsCategoryExpanded] = useState(true);
   const [isSortExpanded, setIsSortExpanded] = useState(true);
   const [isPriceExpanded, setIsPriceExpanded] = useState(true);
 
-  // Local input states for price (to avoid immediate URL updates on every keystroke)
+  // Local input states for price
   const [minPriceInput, setMinPriceInput] = useState(minPrice);
   const [maxPriceInput, setMaxPriceInput] = useState(maxPrice);
 
   useEffect(() => {
-    const timer = setInterval(() => {
-      setNow(Date.now());
-    }, 60000);
-    return () => clearInterval(timer);
+    // Fetch categories and stats from API
+    Promise.all([
+      auctionApi.getCategories(),
+      auctionApi.getAuctionStats()
+    ]).then(([catRes, statsRes]) => {
+      if (catRes.success) setApiCategories(catRes.data);
+      if (statsRes.success) setStats(statsRes.data);
+    });
   }, []);
 
   const updateFilters = (updates: Record<string, string>) => {
@@ -51,46 +67,6 @@ export function HomePage() {
   const handlePriceApply = () => {
     updateFilters({ minPrice: minPriceInput, maxPrice: maxPriceInput });
   };
-
-  const categories = [
-    'All', 
-    'Digital Devices', 
-    'Home Appliances', 
-    'Furniture/Interior', 
-    'Clothing', 
-    'Beauty/Personal Care', 
-    'Sports/Leisure', 
-    'Games/Hobbies', 
-    'Books/Tickets',
-    'Other'
-  ];
-
-  const filteredAndSortedItems = auctionItems
-    .filter(item => {
-      const matchesCategory = selectedCategory === 'All' || item.category === selectedCategory;
-      const matchesSearch = !searchQuery || 
-        item.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        item.description.toLowerCase().includes(searchQuery.toLowerCase());
-      
-      const price = item.currentBid;
-      const matchesMinPrice = !minPrice || price >= parseInt(minPrice);
-      const matchesMaxPrice = !maxPrice || price <= parseInt(maxPrice);
-      
-      return matchesCategory && matchesSearch && matchesMinPrice && matchesMaxPrice;
-    })
-    .sort((a, b) => {
-      switch (sortBy) {
-        case 'closing-soon':
-          return a.endTime.getTime() - b.endTime.getTime();
-        case 'price-low':
-          return a.currentBid - b.currentBid;
-        case 'price-high':
-          return b.currentBid - a.currentBid;
-        case 'newest':
-        default:
-          return 0;
-      }
-    });
 
   return (
     <Layout>
@@ -116,17 +92,27 @@ export function HomePage() {
               </button>
               {isCategoryExpanded && (
                 <div className="px-4 pb-4 space-y-1">
-                  {categories.map(category => (
+                  <button
+                    onClick={() => updateFilters({ category: '' })}
+                    className={`w-full text-left px-3 py-2 rounded-lg text-sm transition-colors ${
+                      selectedCategory === 'All'
+                        ? 'bg-blue-600 text-white'
+                        : 'text-gray-300 hover:bg-[#1e3a5f]/30'
+                    }`}
+                  >
+                    All
+                  </button>
+                  {apiCategories.map(cat => (
                     <button
-                      key={category}
-                      onClick={() => updateFilters({ category: category === 'All' ? '' : category })}
+                      key={cat.id}
+                      onClick={() => updateFilters({ category: cat.name })}
                       className={`w-full text-left px-3 py-2 rounded-lg text-sm transition-colors ${
-                        selectedCategory === category
+                        selectedCategory === cat.name
                           ? 'bg-blue-600 text-white'
                           : 'text-gray-300 hover:bg-[#1e3a5f]/30'
                       }`}
                     >
-                      {category}
+                      {cat.name}
                     </button>
                   ))}
                 </div>
@@ -157,10 +143,7 @@ export function HomePage() {
                       inputMode="numeric"
                       placeholder="Min"
                       value={minPriceInput ? Number(minPriceInput).toLocaleString() : ''}
-                      onChange={(e) => {
-                        const value = e.target.value.replace(/[^0-9]/g, '');
-                        setMinPriceInput(value);
-                      }}
+                      onChange={(e) => setMinPriceInput(e.target.value.replace(/[^0-9]/g, ''))}
                       className="w-full px-3 py-2 bg-[#0a1628] border border-[#1e3a5f] rounded text-sm text-white focus:outline-none focus:border-blue-500"
                     />
                     <span className="text-gray-500">-</span>
@@ -169,10 +152,7 @@ export function HomePage() {
                       inputMode="numeric"
                       placeholder="Max"
                       value={maxPriceInput ? Number(maxPriceInput).toLocaleString() : ''}
-                      onChange={(e) => {
-                        const value = e.target.value.replace(/[^0-9]/g, '');
-                        setMaxPriceInput(value);
-                      }}
+                      onChange={(e) => setMaxPriceInput(e.target.value.replace(/[^0-9]/g, ''))}
                       className="w-full px-3 py-2 bg-[#0a1628] border border-[#1e3a5f] rounded text-sm text-white focus:outline-none focus:border-blue-500"
                     />
                   </div>
@@ -232,12 +212,14 @@ export function HomePage() {
               <div className="space-y-3">
                 <div className="flex justify-between items-center">
                   <span className="text-gray-400 text-sm">Total</span>
-                  <span className="text-white font-bold">{auctionItems.length}</span>
+                  <span className="text-white font-bold">
+                    {stats ? stats.total_active : '...'}
+                  </span>
                 </div>
                 <div className="flex justify-between items-center">
                   <span className="text-gray-400 text-sm">Ending Soon</span>
                   <span className="text-red-400 font-bold">
-                    {auctionItems.filter(item => item.endTime.getTime() - now < 2 * 60 * 60 * 1000).length}
+                    {stats ? stats.ending_soon : '...'}
                   </span>
                 </div>
               </div>
@@ -251,55 +233,64 @@ export function HomePage() {
               <div>
                 <h1 className="text-2xl font-bold text-white mb-1">Live Auctions</h1>
                 <p className="text-gray-400 text-sm">
-                  {filteredAndSortedItems.length} items found
+                  {isLoading ? 'Loading...' : `${auctions.length} items found`}
                   {searchQuery && <span> for "{searchQuery}"</span>}
                 </p>
               </div>
-              
-              {/* Mobile View Toggle Buttons could go here */}
             </div>
 
-            {/* Product Grid */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-              {filteredAndSortedItems.map(item => (
-                <div
-                  key={item.id}
-                  onClick={() => navigate(`/product/${item.id}`)}
-                  className="bg-[#0d1b2e] rounded-lg overflow-hidden border border-[#1e3a5f] hover:border-blue-500 transition-all cursor-pointer group"
-                >
-                  <div className="relative aspect-square overflow-hidden bg-[#1e3a5f]/20">
-                    <img
-                      src={item.imageUrl}
-                      alt={item.title}
-                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-                    />
-                    <div className="absolute top-3 right-3 bg-red-600 text-white px-3 py-1.5 rounded-full text-sm font-semibold flex items-center gap-1.5 shadow-lg">
-                      <Clock className="w-4 h-4" />
-                      <CountdownTimer endTime={item.endTime} />
-                    </div>
-                    <div className="absolute top-3 left-3 bg-blue-600/90 text-white px-3 py-1 rounded-full text-xs font-medium">
-                      {item.category}
-                    </div>
-                  </div>
-                  <div className="p-5">
-                    <h3 className="text-white font-semibold mb-3 line-clamp-2 min-h-[3rem]">{item.title}</h3>
-                    <div className="mb-2">
-                      <span className="text-xs text-gray-400">Current Bid</span>
-                    </div>
-                    <div className="flex items-end justify-between">
-                      <div className="text-2xl font-bold text-blue-400">
-                        ₩{item.currentBid.toLocaleString()}
+            {isLoading ? (
+              <div className="flex flex-col items-center justify-center py-32 text-blue-400">
+                <Loader2 className="w-12 h-12 animate-spin mb-4" />
+                <p className="text-gray-400">Fetching latest auctions...</p>
+              </div>
+            ) : error ? (
+              <div className="text-center py-24 bg-red-500/10 border border-red-500/20 rounded-xl">
+                <p className="text-red-400">{error}</p>
+                <button onClick={() => window.location.reload()} className="mt-4 text-white underline">Try again</button>
+              </div>
+            ) : (
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                {auctions.map(item => (
+                  <div
+                    key={item.id}
+                    onClick={() => navigate(`/product/${item.id}`)}
+                    className="bg-[#0d1b2e] rounded-lg overflow-hidden border border-[#1e3a5f] hover:border-blue-500 transition-all cursor-pointer group"
+                  >
+                    <div className="relative aspect-square overflow-hidden bg-[#1e3a5f]/20">
+                      <img
+                        src={item.main_picture_url}
+                        alt={item.title}
+                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                      />
+                      <div className="absolute top-3 right-3 bg-red-600 text-white px-3 py-1.5 rounded-full text-sm font-semibold flex items-center gap-1.5 shadow-lg">
+                        <Clock className="w-4 h-4" />
+                        <CountdownTimer endTime={new Date(item.end_time)} />
                       </div>
-                      <div className="text-xs text-gray-500">
-                        {item.bids.length} bids
+                      <div className="absolute top-3 left-3 bg-blue-600/90 text-white px-3 py-1 rounded-full text-xs font-medium">
+                        {item.category}
                       </div>
                     </div>
+                    <div className="p-5">
+                      <h3 className="text-white font-semibold mb-3 line-clamp-2 min-h-[3rem]">{item.title}</h3>
+                      <div className="mb-2">
+                        <span className="text-xs text-gray-400">Current Bid</span>
+                      </div>
+                      <div className="flex items-end justify-between">
+                        <div className="text-2xl font-bold text-blue-400">
+                          ₩{item.current_price.toLocaleString()}
+                        </div>
+                        <div className="text-xs text-gray-500">
+                          {item.bid_count} bids
+                        </div>
+                      </div>
+                    </div>
                   </div>
-                </div>
-              ))}
-            </div>
+                ))}
+              </div>
+            )}
 
-            {filteredAndSortedItems.length === 0 && (
+            {!isLoading && auctions.length === 0 && (
               <div className="text-center py-24 bg-[#0d1b2e] rounded-xl border border-dashed border-[#1e3a5f]">
                 <div className="bg-[#1e3a5f]/20 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
                   <Search className="w-8 h-8 text-gray-500" />

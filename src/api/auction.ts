@@ -1,0 +1,204 @@
+import { auctionDatabase } from '../data/mockData';
+import type { AuctionSummary, PaginatedResponse, ApiResponse, Category, AuctionDetail, Comment, AuctionStats } from './types';
+
+const delay = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
+
+export const auctionApi = {
+  // GET /api/v1/auctions
+  getAuctions: async (params: {
+    page?: number;
+    size?: number;
+    category?: string;
+    q?: string;
+    minPrice?: string;
+    maxPrice?: string;
+    sort?: string;
+  }): Promise<PaginatedResponse<AuctionSummary[]>> => {
+    await delay(500);
+
+    let filtered = auctionDatabase.map(item => ({
+      id: parseInt(item.id),
+      title: item.title,
+      current_price: item.current_price,
+      status: item.status,
+      main_picture_url: item.imageUrl,
+      category: item.category,
+      end_time: item.end_time.toISOString(),
+      bid_count: item.bids.length
+    }));
+
+    if (params.category && params.category !== 'All') {
+      filtered = filtered.filter(item => item.category === params.category);
+    }
+    if (params.q) {
+      const q = params.q.toLowerCase();
+      filtered = filtered.filter(item => item.title.toLowerCase().includes(q));
+    }
+    if (params.minPrice) {
+      filtered = filtered.filter(item => item.current_price >= parseInt(params.minPrice!));
+    }
+    if (params.maxPrice) {
+      filtered = filtered.filter(item => item.current_price <= parseInt(params.maxPrice!));
+    }
+
+    switch (params.sort) {
+      case 'closing-soon':
+        filtered.sort((a, b) => new Date(a.end_time).getTime() - new Date(b.end_time).getTime());
+        break;
+      case 'price-low':
+        filtered.sort((a, b) => a.current_price - b.current_price);
+        break;
+      case 'price-high':
+        filtered.sort((a, b) => b.current_price - a.current_price);
+        break;
+      default:
+        filtered.sort((a, b) => b.id - a.id);
+    }
+
+    return {
+      success: true,
+      data: filtered,
+      page_info: {
+        current_page: params.page || 0,
+        page_size: params.size || 10,
+        total_pages: 1,
+        total_elements: filtered.length,
+        is_first: true,
+        is_last: true,
+        has_next: false,
+        has_previous: false
+      },
+      timestamp: new Date().toISOString()
+    };
+  },
+
+  // GET /api/v1/categories
+  getCategories: async (): Promise<ApiResponse<Category[]>> => {
+    await delay(300);
+    return {
+      success: true,
+      data: [
+        { id: 1, code: 'DIGITAL', name: 'Digital Devices' },
+        { id: 2, code: 'APPLIANCES', name: 'Home Appliances' },
+        { id: 3, code: 'FURNITURE', name: 'Furniture/Interior' },
+        { id: 4, code: 'CLOTHING', name: 'Clothing' },
+        { id: 5, code: 'BEAUTY', name: 'Beauty/Personal Care' },
+        { id: 6, code: 'SPORTS', name: 'Sports/Leisure' },
+        { id: 7, code: 'GAMES', name: 'Games/Hobbies' },
+        { id: 8, code: 'BOOKS', name: 'Books/Tickets' },
+        { id: 9, code: 'OTHER', name: 'Other' },
+      ],
+      timestamp: new Date().toISOString()
+    };
+  },
+
+  // GET /api/v1/auctions/stats
+  getAuctionStats: async (): Promise<ApiResponse<AuctionStats>> => {
+    await delay(200);
+    const total = auctionDatabase.length;
+    const soon = auctionDatabase.filter(item => 
+      item.end_time.getTime() - Date.now() < 2 * 60 * 60 * 1000
+    ).length;
+
+    return {
+      success: true,
+      data: {
+        total_active: total,
+        ending_soon: soon
+      },
+      timestamp: new Date().toISOString()
+    };
+  },
+
+  // GET /api/v1/auctions/{id}
+  getAuctionDetail: async (id: string): Promise<ApiResponse<AuctionDetail>> => {
+    await delay(500);
+    const item = auctionDatabase.find(i => i.id === id);
+    if (!item) throw new Error('Auction not found');
+
+    return {
+      success: true,
+      data: {
+        id: parseInt(item.id),
+        title: item.title,
+        current_price: item.current_price,
+        status: item.status,
+        main_picture_url: item.imageUrl,
+        category: item.category,
+        end_time: item.end_time.toISOString(),
+        bid_count: item.bids.length,
+        seller_id: item.seller_id,
+        seller_nickname: item.seller_nickname,
+        seller_joined_at: item.seller_joined_at.toISOString(),
+        description: item.description,
+        start_price: item.start_price,
+        start_time: item.start_time.toISOString(),
+        view_count: item.view_count,
+        like_count: item.like_count,
+        pictures: item.pictures.map((url, i) => ({ url, main: i === 0 })),
+        bids: item.bids.map(b => ({
+          id: b.id,
+          bidder_id: b.bidder_id,
+          bidder_nickname: b.bidder_nickname,
+          price: b.price,
+          updated_at: b.updated_at.toISOString()
+        }))
+      },
+      timestamp: new Date().toISOString()
+    };
+  },
+
+  // POST /api/v1/auctions/{id}/bids
+  placeBid: async (id: string, amount: number): Promise<ApiResponse<{ bid_id: string; current_price: number }>> => {
+    await delay(300);
+    const item = auctionDatabase.find(i => i.id === id);
+    if (item) item.current_price = amount;
+
+    return {
+      success: true,
+      data: {
+        bid_id: `b${Date.now()}`,
+        current_price: amount
+      },
+      timestamp: new Date().toISOString()
+    };
+  },
+
+  // GET /api/v1/auctions/{id}/comments
+  getComments: async (id: string): Promise<ApiResponse<Comment[]>> => {
+    await delay(300);
+    const item = auctionDatabase.find(i => i.id === id);
+    if (!item) return { success: true, data: [], timestamp: new Date().toISOString() };
+
+    return {
+      success: true,
+      data: item.comments.map(c => ({
+        ...c,
+        created_at: c.created_at.toISOString()
+      })),
+      timestamp: new Date().toISOString()
+    };
+  },
+
+  // POST /api/v1/auctions/{id}/comments
+  postComment: async (id: string, content: string): Promise<ApiResponse<{ id: number }>> => {
+    await delay(300);
+    const idNum = Math.floor(Math.random() * 10000);
+    const item = auctionDatabase.find(i => i.id === id);
+    if (item) {
+      item.comments.push({
+        id: idNum,
+        user_id: 999,
+        nickname: 'You',
+        content,
+        created_at: new Date()
+      });
+    }
+
+    return {
+      success: true,
+      data: { id: idNum },
+      timestamp: new Date().toISOString()
+    };
+  }
+};

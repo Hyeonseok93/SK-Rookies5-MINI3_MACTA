@@ -1,130 +1,166 @@
-export interface AuctionItem {
-  id: string;
-  title: string;
-  category: 'Electronics' | 'Fashion' | 'Collectibles';
-  currentBid: number;
-  imageUrl: string;
-  endTime: Date;
-  description: string;
-  bids: Bid[];
-}
+export type CategoryType = 
+  | 'Digital Devices' 
+  | 'Home Appliances' 
+  | 'Furniture/Interior' 
+  | 'Clothing' 
+  | 'Beauty/Personal Care' 
+  | 'Sports/Leisure' 
+  | 'Games/Hobbies' 
+  | 'Books/Tickets' 
+  | 'Other';
 
 export interface Bid {
   id: string;
-  bidder: string;
-  amount: number;
-  timestamp: Date;
+  bidder_id: number;
+  bidder_nickname: string;
+  price: number;
+  updated_at: Date;
+}
+
+export interface Comment {
+  id: number;
+  user_id: number;
+  nickname: string;
+  content: string;
+  created_at: Date;
+}
+
+export interface AuctionItem {
+  id: string;
+  seller_id: number;
+  seller_nickname: string;
+  seller_joined_at: Date;
+  title: string;
+  description: string;
+  category: CategoryType;
+  start_price: number;
+  current_price: number;
+  status: 'READY' | 'LIVE' | 'FINISHED' | 'CANCEL';
+  start_time: Date;
+  end_time: Date;
+  view_count: number;
+  like_count: number;
+  imageUrl: string; // Main picture
+  pictures: string[];
+  bids: Bid[];
+  comments: Comment[];
+  created_at: Date;
+  updated_at: Date;
 }
 
 const now = new Date();
+const ONE_HOUR = 60 * 60 * 1000;
 
-export const auctionItems: AuctionItem[] = [
+export const auctionDatabase: AuctionItem[] = [
   {
     id: '1',
-    title: 'Premium Wireless Headphones',
-    category: 'Electronics',
-    currentBid: 285000,
-    imageUrl: 'https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=800&q=80',
-    endTime: new Date(now.getTime() + 2 * 60 * 60 * 1000), // 2 hours
-    description: 'High-fidelity wireless headphones with active noise cancellation and premium sound quality.',
-    bids: [
-      { id: 'b1', bidder: 'user_7821', amount: 285000, timestamp: new Date(now.getTime() - 5 * 60 * 1000) },
-      { id: 'b2', bidder: 'bidder_pro', amount: 280000, timestamp: new Date(now.getTime() - 15 * 60 * 1000) },
-      { id: 'b3', bidder: 'collector99', amount: 275000, timestamp: new Date(now.getTime() - 25 * 60 * 1000) },
-      { id: 'b4', bidder: 'user_4521', amount: 270000, timestamp: new Date(now.getTime() - 35 * 60 * 1000) },
-      { id: 'b5', bidder: 'tech_buyer', amount: 265000, timestamp: new Date(now.getTime() - 45 * 60 * 1000) },
+    seller_id: 101,
+    seller_nickname: 'TechEnthusiast',
+    seller_joined_at: new Date('2024-01-15'),
+    title: 'iPhone 15 Pro Max 256GB - Natural Titanium',
+    description: 'Selling my iPhone 15 Pro Max. Used for 3 months with a screen protector and case from day one. Battery health is 100%. Comes with the original box and unused USB-C cable.',
+    category: 'Digital Devices',
+    start_price: 1000000,
+    current_price: 1450000,
+    status: 'LIVE',
+    start_time: new Date(now.getTime() - 24 * ONE_HOUR),
+    end_time: new Date(now.getTime() + 1.5 * ONE_HOUR),
+    view_count: 1240,
+    like_count: 85,
+    imageUrl: 'https://images.unsplash.com/photo-1696446701796-da61225697cc?w=800&q=80',
+    pictures: [
+      'https://images.unsplash.com/photo-1696446701796-da61225697cc?w=800&q=80',
+      'https://images.unsplash.com/photo-1592899677977-9c10ca588bbd?w=800&q=80',
+      'https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?w=800&q=80'
     ],
+    bids: [
+      { id: 'b1_1', bidder_id: 205, bidder_nickname: 'GadgetLover', price: 1450000, updated_at: new Date(now.getTime() - 10 * 60 * 1000) },
+      { id: 'b1_2', bidder_id: 206, bidder_nickname: 'AppleFan88', price: 1420000, updated_at: new Date(now.getTime() - 30 * 60 * 1000) }
+    ],
+    comments: [
+      { id: 1001, user_id: 201, nickname: 'User_442', content: 'Is the warranty still active?', created_at: new Date(now.getTime() - 5 * ONE_HOUR) },
+      { id: 1002, user_id: 202, nickname: 'Buyer_King', content: 'Can we meet at Gangnam Station?', created_at: new Date(now.getTime() - 2 * ONE_HOUR) }
+    ],
+    created_at: new Date(now.getTime() - 25 * ONE_HOUR),
+    updated_at: new Date(now.getTime() - 10 * 60 * 1000)
   },
   {
     id: '2',
-    title: 'Vintage Leather Jacket',
-    category: 'Fashion',
-    currentBid: 420000,
-    imageUrl: 'https://images.unsplash.com/photo-1551028719-00167b16eac5?w=800&q=80',
-    endTime: new Date(now.getTime() + 4 * 60 * 60 * 1000), // 4 hours
-    description: 'Authentic vintage leather jacket in excellent condition. Rare find from the 1980s.',
-    bids: [
-      { id: 'b6', bidder: 'fashion_lover', amount: 420000, timestamp: new Date(now.getTime() - 10 * 60 * 1000) },
-      { id: 'b7', bidder: 'vintage_hunter', amount: 410000, timestamp: new Date(now.getTime() - 20 * 60 * 1000) },
-      { id: 'b8', bidder: 'style_icon', amount: 400000, timestamp: new Date(now.getTime() - 30 * 60 * 1000) },
+    seller_id: 102,
+    seller_nickname: 'MovieBuff_Seoul',
+    seller_joined_at: new Date('2024-02-10'),
+    title: 'LG OLED TV 65-inch (C3 Series)',
+    description: 'Purchased last year for 3.2M KRW. Upgrading to a larger size. The picture quality is amazing for gaming and movies. No burn-in issues.',
+    category: 'Home Appliances',
+    start_price: 1500000,
+    current_price: 1850000,
+    status: 'LIVE',
+    start_time: new Date(now.getTime() - 12 * ONE_HOUR),
+    end_time: new Date(now.getTime() + 24 * ONE_HOUR),
+    view_count: 850,
+    like_count: 42,
+    imageUrl: 'https://images.unsplash.com/photo-1593359677771-40488661665e?w=800&q=80',
+    pictures: [
+      'https://images.unsplash.com/photo-1593359677771-40488661665e?w=800&q=80',
+      'https://images.unsplash.com/photo-1558941753-a62116565af7?w=800&q=80'
     ],
+    bids: [
+      { id: 'b2_1', bidder_id: 207, bidder_nickname: 'CinemaAddict', price: 1850000, updated_at: new Date(now.getTime() - 15 * 60 * 1000) }
+    ],
+    comments: [
+      { id: 1003, user_id: 203, nickname: 'GamerX', content: 'Does it support 120Hz 4K?', created_at: new Date(now.getTime() - 8 * ONE_HOUR) }
+    ],
+    created_at: new Date(now.getTime() - 13 * ONE_HOUR),
+    updated_at: new Date(now.getTime() - 15 * 60 * 1000)
   },
   {
     id: '3',
-    title: 'Smart Watch Series X',
-    category: 'Electronics',
-    currentBid: 350000,
-    imageUrl: 'https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=800&q=80',
-    endTime: new Date(now.getTime() + 1.5 * 60 * 60 * 1000), // 1.5 hours
-    description: 'Latest generation smart watch with health tracking and fitness features.',
+    seller_id: 103,
+    seller_nickname: 'OfficeSetup',
+    seller_joined_at: new Date('2023-11-05'),
+    title: 'Vintage Herman Miller Aeron Chair (Size B)',
+    description: 'The ultimate ergonomic chair. Fully loaded model with posture fit and adjustable arms. In excellent condition, just a few minor scratches on the base.',
+    category: 'Furniture/Interior',
+    start_price: 400000,
+    current_price: 650000,
+    status: 'LIVE',
+    start_time: new Date(now.getTime() - 48 * ONE_HOUR),
+    end_time: new Date(now.getTime() + 0.5 * ONE_HOUR),
+    view_count: 2100,
+    like_count: 156,
+    imageUrl: 'https://images.unsplash.com/photo-1580480055273-228ff5388ef8?w=800&q=80',
+    pictures: ['https://images.unsplash.com/photo-1580480055273-228ff5388ef8?w=800&q=80'],
     bids: [
-      { id: 'b9', bidder: 'tech_enthusiast', amount: 350000, timestamp: new Date(now.getTime() - 8 * 60 * 1000) },
-      { id: 'b10', bidder: 'gadget_lover', amount: 340000, timestamp: new Date(now.getTime() - 18 * 60 * 1000) },
+      { id: 'b3_1', bidder_id: 208, bidder_nickname: 'DevLife', price: 650000, updated_at: new Date(now.getTime() - 5 * 60 * 1000) }
     ],
+    comments: [],
+    created_at: new Date(now.getTime() - 49 * ONE_HOUR),
+    updated_at: new Date(now.getTime() - 5 * 60 * 1000)
   },
   {
     id: '4',
-    title: 'Limited Edition Sneakers',
-    category: 'Fashion',
-    currentBid: 580000,
+    seller_id: 104,
+    seller_nickname: 'SneakerHead_KR',
+    seller_joined_at: new Date('2024-03-20'),
+    title: 'Limited Edition Nike x Travis Scott AJ1',
+    description: 'Deadstock condition, never worn. Size US 10. Authenticated by KREAM. Shipping in double box.',
+    category: 'Clothing',
+    start_price: 800000,
+    current_price: 1200000,
+    status: 'LIVE',
+    start_time: new Date(now.getTime() - 2 * ONE_HOUR),
+    end_time: new Date(now.getTime() + 48 * ONE_HOUR),
+    view_count: 5600,
+    like_count: 420,
     imageUrl: 'https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=800&q=80',
-    endTime: new Date(now.getTime() + 6 * 60 * 60 * 1000), // 6 hours
-    description: 'Limited edition sneakers from exclusive collaboration. Never worn, with original box.',
+    pictures: ['https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=800&q=80'],
     bids: [
-      { id: 'b11', bidder: 'sneaker_head', amount: 580000, timestamp: new Date(now.getTime() - 12 * 60 * 1000) },
-      { id: 'b12', bidder: 'collector_king', amount: 570000, timestamp: new Date(now.getTime() - 22 * 60 * 1000) },
+      { id: 'b4_1', bidder_id: 209, bidder_nickname: 'HypeBeast', price: 1200000, updated_at: new Date(now.getTime() - 30 * 60 * 1000) }
     ],
-  },
-  {
-    id: '5',
-    title: 'Rare Trading Card',
-    category: 'Collectibles',
-    currentBid: 1250000,
-    imageUrl: 'https://images.unsplash.com/photo-1611419010196-a360678887e8?w=800&q=80',
-    endTime: new Date(now.getTime() + 3 * 60 * 60 * 1000), // 3 hours
-    description: 'Extremely rare trading card in mint condition. Professionally graded and authenticated.',
-    bids: [
-      { id: 'b13', bidder: 'card_master', amount: 1250000, timestamp: new Date(now.getTime() - 6 * 60 * 1000) },
-      { id: 'b14', bidder: 'rare_finds', amount: 1200000, timestamp: new Date(now.getTime() - 16 * 60 * 1000) },
-    ],
-  },
-  {
-    id: '6',
-    title: '4K Professional Camera',
-    category: 'Electronics',
-    currentBid: 890000,
-    imageUrl: 'https://images.unsplash.com/photo-1526170375885-4d8ecf77b99f?w=800&q=80',
-    endTime: new Date(now.getTime() + 5 * 60 * 60 * 1000), // 5 hours
-    description: 'Professional-grade 4K camera with multiple lenses and accessories included.',
-    bids: [
-      { id: 'b15', bidder: 'photo_pro', amount: 890000, timestamp: new Date(now.getTime() - 7 * 60 * 1000) },
-      { id: 'b16', bidder: 'filmmaker_99', amount: 870000, timestamp: new Date(now.getTime() - 17 * 60 * 1000) },
-    ],
-  },
-  {
-    id: '7',
-    title: 'Designer Handbag',
-    category: 'Fashion',
-    currentBid: 1450000,
-    imageUrl: 'https://images.unsplash.com/photo-1584917865442-de89df76afd3?w=800&q=80',
-    endTime: new Date(now.getTime() + 7 * 60 * 60 * 1000), // 7 hours
-    description: 'Authentic designer handbag from latest collection. Comes with certificate of authenticity.',
-    bids: [
-      { id: 'b17', bidder: 'luxury_buyer', amount: 1450000, timestamp: new Date(now.getTime() - 9 * 60 * 1000) },
-      { id: 'b18', bidder: 'fashion_elite', amount: 1400000, timestamp: new Date(now.getTime() - 19 * 60 * 1000) },
-    ],
-  },
-  {
-    id: '8',
-    title: 'Vintage Vinyl Collection',
-    category: 'Collectibles',
-    currentBid: 320000,
-    imageUrl: 'https://images.unsplash.com/photo-1603048588665-791ca8aea617?w=800&q=80',
-    endTime: new Date(now.getTime() + 8 * 60 * 60 * 1000), // 8 hours
-    description: 'Curated collection of rare vinyl records from the 1960s-1980s. Excellent condition.',
-    bids: [
-      { id: 'b19', bidder: 'music_collector', amount: 320000, timestamp: new Date(now.getTime() - 11 * 60 * 1000) },
-      { id: 'b20', bidder: 'vinyl_lover', amount: 310000, timestamp: new Date(now.getTime() - 21 * 60 * 1000) },
-    ],
-  },
+    comments: [],
+    created_at: new Date(now.getTime() - 3 * ONE_HOUR),
+    updated_at: new Date(now.getTime() - 30 * 60 * 1000)
+  }
 ];
+
+export const auctionItems = auctionDatabase;

@@ -62,8 +62,8 @@ export function CheckoutPage() {
   }
 
   const shippingFee = 3000;
-  const serviceFee = Math.floor(item.currentBid * 0.05);
-  const totalAmount = item.currentBid + shippingFee + serviceFee;
+  const serviceFee = Math.floor(item.current_price * 0.05);
+  const totalAmount = item.current_price + shippingFee + serviceFee;
 
   return (
     <Layout>
@@ -92,7 +92,7 @@ export function CheckoutPage() {
               <div className="border-t border-[#1e3a5f] pt-4 space-y-3">
                 <div className="flex justify-between text-sm text-gray-400">
                   <span>Winning Bid</span>
-                  <span className="text-white">₩{item.currentBid.toLocaleString()}</span>
+                  <span className="text-white">₩{item.current_price.toLocaleString()}</span>
                 </div>
                 <div className="flex justify-between text-sm text-gray-400">
                   <span>Shipping</span>
