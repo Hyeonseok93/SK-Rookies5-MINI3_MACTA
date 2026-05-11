@@ -1,5 +1,5 @@
-import { useState, useEffect, useCallback } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useState, useEffect, useCallback, useMemo } from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { 
   Package, TrendingUp, Heart, ShoppingBag, 
   Settings, ChevronRight, Clock, Eye, Loader2, Trash2 
@@ -9,26 +9,91 @@ import { auctionApi } from '../api/auction';
 import type { UserDashboardStats } from '../api/types';
 import { formatPrice } from '../utils/format';
 import { useToast } from '../components/common/Toast';
+import { getAccessTokenCookie } from '../api/tokenCookie';
+
+type MyPageTab = 'auctions' | 'bids' | 'likes';
+
+interface StoredUser {
+  nickname?: string;
+  role?: string;
+}
+
+const LOGIN_REQUIRED_MESSAGE = '로그인 후 이용해주세요.';
+
+let lastLoginRequiredAlertLocationKey: string | null = null;
 
 export function MyPage() {
   const navigate = useNavigate();
+  const location = useLocation();
   const { showToast } = useToast();
   const [stats, setStats] = useState<UserDashboardStats | null>(null);
-  const [activeTab, setActiveTab] = useState<'auctions' | 'bids' | 'likes'>('auctions');
+  const [activeTab, setActiveTab] = useState<MyPageTab>('auctions');
   const [items, setItems] = useState<any[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
+
+  const user = useMemo<StoredUser | null>(() => {
+    const storedUser = localStorage.getItem('macta_user');
+
+    if (!storedUser) {
+      return null;
+    }
+
+    try {
+      return JSON.parse(storedUser) as StoredUser;
+    } catch {
+      return null;
+    }
+  }, []);
+
+  const isLoggedIn = useMemo(() => {
+    return Boolean(getAccessTokenCookie() && user);
+  }, [user]);
+
+  useEffect(() => {
+    if (isLoggedIn || lastLoginRequiredAlertLocationKey === location.key) {
+      return;
+    }
+
+    lastLoginRequiredAlertLocationKey = location.key;
+
+    window.setTimeout(() => {
+      if (window.location.pathname === '/my-page') {
+        alert(LOGIN_REQUIRED_MESSAGE);
+      }
+    }, 150);
+  }, [isLoggedIn, location.key]);
+
+  const handleProtectedClick = (callback: () => void) => {
+    if (!isLoggedIn) {
+      alert(LOGIN_REQUIRED_MESSAGE);
+      return;
+    }
+
+    callback();
+  };
 
   const fetchStats = useCallback(() => {
+    if (!isLoggedIn) {
+      setStats(null);
+      return;
+    }
+
     auctionApi.getUserStats().then(res => {
       if (res.success) setStats(res.data);
     });
-  }, []);
+  }, [isLoggedIn]);
 
   useEffect(() => {
     fetchStats();
   }, [fetchStats]);
 
   const fetchTabContent = useCallback(async () => {
+    if (!isLoggedIn) {
+      setItems([]);
+      setIsLoading(false);
+      return;
+    }
+
     setIsLoading(true);
     let res;
     if (activeTab === 'auctions') res = await auctionApi.getMyAuctions();
@@ -37,7 +102,7 @@ export function MyPage() {
 
     if (res.success) setItems(res.data);
     setIsLoading(false);
-  }, [activeTab]);
+  }, [activeTab, isLoggedIn]);
 
   useEffect(() => {
     fetchTabContent();
@@ -45,6 +110,11 @@ export function MyPage() {
 
   const handleRemoveFromWatchlist = async (e: React.MouseEvent, id: number) => {
     e.stopPropagation();
+    if (!isLoggedIn) {
+      alert(LOGIN_REQUIRED_MESSAGE);
+      return;
+    }
+
     try {
       const res = await auctionApi.toggleLike(id);
       if (res.success) {
@@ -58,6 +128,11 @@ export function MyPage() {
   };
 
   const handleClearWatchlist = async () => {
+    if (!isLoggedIn) {
+      alert(LOGIN_REQUIRED_MESSAGE);
+      return;
+    }
+
     try {
       await Promise.all(items.map(item => auctionApi.toggleLike(item.auction_id)));
       setItems([]);
@@ -75,10 +150,13 @@ export function MyPage() {
         <div className="bg-[#0d1b2e] border border-[#1e3a5f] rounded-2xl p-8 mb-8 shadow-2xl">
           <div className="flex flex-col md:flex-row items-center gap-6">
             <div className="flex-1 text-center md:text-left">
-              <h1 className="text-4xl font-black text-white mb-2 tracking-tight">You!</h1>
-              <p className="text-gray-400 font-medium">Member since May 2026</p>
+              <h1 className="text-4xl font-black text-white mb-2 tracking-tight">{isLoggedIn ? user?.nickname : ''}</h1>
+              <p className="text-gray-400 font-medium">{isLoggedIn ? user?.role : ''}</p>
               <div className="flex flex-wrap justify-center md:justify-start gap-3 mt-6">
-                <button className="px-4 py-2 bg-[#1e3a5f] hover:bg-[#2e4a6f] text-white rounded-lg text-sm font-medium transition-colors flex items-center gap-2">
+                <button
+                  onClick={() => handleProtectedClick(() => undefined)}
+                  className="px-4 py-2 bg-[#1e3a5f] hover:bg-[#2e4a6f] text-white rounded-lg text-sm font-medium transition-colors flex items-center gap-2"
+                >
                   <Settings className="w-4 h-4" /> Edit Profile
                 </button>
               </div>
@@ -113,7 +191,7 @@ export function MyPage() {
               ].map((tab) => (
                 <button
                   key={tab.id}
-                  onClick={() => setActiveTab(tab.id as any)}
+                  onClick={() => handleProtectedClick(() => setActiveTab(tab.id as MyPageTab))}
                   className={`w-full flex items-center justify-between px-4 py-3 rounded-xl transition-all ${
                     activeTab === tab.id 
                       ? 'bg-blue-600 text-white shadow-lg shadow-blue-600/20' 
@@ -159,7 +237,7 @@ export function MyPage() {
                     {items.map((item, idx) => (
                       <div 
                         key={idx} 
-                        onClick={() => navigate(`/product/${item.auction_id}`)}
+                        onClick={() => handleProtectedClick(() => navigate(`/product/${item.auction_id}`))}
                         className="p-6 hover:bg-[#1e3a5f]/10 transition-colors cursor-pointer flex items-center gap-6 group"
                       >
                         <div className="w-24 h-24 rounded-xl overflow-hidden flex-shrink-0 bg-[#0a1628] border border-[#1e3a5f] group-hover:border-blue-500 transition-colors">

@@ -45,7 +45,8 @@ export function LoginPage() {
     setIsSubmitting(true);
 
     try {
-      await login({ login_id: loginId, password });
+      const response = await login({ loginId, password });
+      alert(response.message);
       navigate('/');
     } catch (requestError) {
       alert(getAuthErrorMessage(requestError, '로그인에 실패했습니다.'));

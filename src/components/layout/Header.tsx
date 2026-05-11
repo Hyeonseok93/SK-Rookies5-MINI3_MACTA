@@ -1,14 +1,19 @@
 import { useState, useEffect, useRef } from 'react';
 import { useNavigate, Link, useSearchParams } from 'react-router-dom';
-import { Search, Bell, User, Menu, Clock, ExternalLink } from 'lucide-react';
+import { Search, Bell, User, Menu, Clock, ExternalLink, LogOut } from 'lucide-react';
 import { auctionApi } from '../../api/auction';
 import type { Notification } from '../../api/types';
+import { AUTH_STATE_CHANGED_EVENT, logout } from '../../api/auth';
+import { getAccessTokenCookie } from '../../api/tokenCookie';
+
+const isAuthenticated = () => Boolean(getAccessTokenCookie() && localStorage.getItem('macta_user'));
 
 export function Header() {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const [searchQuery, setSearchQuery] = useState(searchParams.get('q') || '');
   const [showMobileMenu, setShowMobileMenu] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(isAuthenticated);
 
   // Notification State
   const [notifications, setNotifications] = useState<Notification[]>([]);
@@ -31,6 +36,20 @@ export function Header() {
     };
     document.addEventListener('mousedown', handleClickOutside);
     return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
+
+  useEffect(() => {
+    const handleAuthStateChanged = () => {
+      setIsLoggedIn(isAuthenticated());
+    };
+
+    window.addEventListener(AUTH_STATE_CHANGED_EVENT, handleAuthStateChanged);
+    window.addEventListener('storage', handleAuthStateChanged);
+
+    return () => {
+      window.removeEventListener(AUTH_STATE_CHANGED_EVENT, handleAuthStateChanged);
+      window.removeEventListener('storage', handleAuthStateChanged);
+    };
   }, []);
 
   // Sync internal input state with URL changes (e.g., when clearing filters on HomePage)
@@ -58,6 +77,16 @@ export function Header() {
     markAsRead(id);
     setShowNotifications(false);
     navigate(targetUrl);
+  };
+
+  const handleLogout = () => {
+    if (!confirm('로그아웃 하시겠습니까?')) {
+      return;
+    }
+
+    logout();
+    setShowMobileMenu(false);
+    navigate('/');
   };
 
   return (
@@ -164,13 +193,24 @@ export function Header() {
               )}
             </div>
 
-            <Link
-              to="/login"
-              className="hidden sm:flex items-center gap-2 px-4 py-2 text-gray-300 hover:text-white transition-colors"
-            >
-              <User className="w-5 h-5" />
-              <span className="text-sm">Login</span>
-            </Link>
+            {isLoggedIn ? (
+              <button
+                type="button"
+                onClick={handleLogout}
+                className="hidden sm:flex items-center gap-2 px-4 py-2 text-gray-300 hover:text-white transition-colors"
+              >
+                <LogOut className="w-5 h-5" />
+                <span className="text-sm">Logout</span>
+              </button>
+            ) : (
+              <Link
+                to="/login"
+                className="hidden sm:flex items-center gap-2 px-4 py-2 text-gray-300 hover:text-white transition-colors"
+              >
+                <User className="w-5 h-5" />
+                <span className="text-sm">Login</span>
+              </Link>
+            )}
 
             <Link
               to="/my-page"
@@ -208,13 +248,23 @@ export function Header() {
       {showMobileMenu && (
         <div className="lg:hidden border-t border-[#1e3a5f] bg-[#0d1b2e]">
           <nav className="px-4 py-3 space-y-2">
-            <Link
-              to="/login"
-              className="block px-4 py-2 text-gray-300 hover:bg-[#1e3a5f]/30 rounded"
-              onClick={() => setShowMobileMenu(false)}
-            >
-              Login
-            </Link>
+            {isLoggedIn ? (
+              <button
+                type="button"
+                className="block w-full text-left px-4 py-2 text-gray-300 hover:bg-[#1e3a5f]/30 rounded"
+                onClick={handleLogout}
+              >
+                Logout
+              </button>
+            ) : (
+              <Link
+                to="/login"
+                className="block px-4 py-2 text-gray-300 hover:bg-[#1e3a5f]/30 rounded"
+                onClick={() => setShowMobileMenu(false)}
+              >
+                Login
+              </Link>
+            )}
             <Link
               to="/my-page"
               className="block px-4 py-2 text-gray-300 hover:bg-[#1e3a5f]/30 rounded"

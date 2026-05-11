@@ -1,6 +1,8 @@
 import type { AxiosError } from 'axios';
 import { api } from './client';
-import { setAccessTokenCookie } from './tokenCookie';
+import { clearAccessTokenCookie, setAccessTokenCookie } from './tokenCookie';
+
+export const AUTH_STATE_CHANGED_EVENT = 'macta-auth-state-changed';
 
 export interface ApiResponse<T> {
   success: boolean;
@@ -10,23 +12,19 @@ export interface ApiResponse<T> {
 }
 
 export interface LoginRequest {
-  login_id: string;
+  loginId: string;
   password: string;
 }
 
 export interface SignupRequest {
-  login_id: string;
+  loginId: string;
   password: string;
   nickname: string;
   email: string;
 }
 
-interface SignupPayload extends SignupRequest {
-  role: 'ROLE_USER';
-}
-
 export interface LoginUser {
-  id: number;
+  id: number | string;
   role: string;
   nickname: string;
   email: string;
@@ -50,16 +48,19 @@ export async function login(payload: LoginRequest) {
   const { data } = await api.post<ApiResponse<LoginData>>('/auth/login', payload);
   setAccessTokenCookie(data.data.accessToken);
   localStorage.setItem('macta_user', JSON.stringify(data.data.user));
+  window.dispatchEvent(new Event(AUTH_STATE_CHANGED_EVENT));
 
   return data;
 }
 
+export function logout() {
+  clearAccessTokenCookie();
+  localStorage.removeItem('macta_user');
+  window.dispatchEvent(new Event(AUTH_STATE_CHANGED_EVENT));
+}
+
 export async function signup(payload: SignupRequest) {
-  const signupPayload: SignupPayload = {
-    ...payload,
-    role: 'ROLE_USER',
-  };
-  const { data } = await api.post<ApiResponse<SignupData>>('/auth/signup', signupPayload);
+  const { data } = await api.post<ApiResponse<SignupData>>('/auth/signup', payload);
   return data;
 }
 
