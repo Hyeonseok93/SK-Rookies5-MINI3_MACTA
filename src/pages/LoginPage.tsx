@@ -45,7 +45,8 @@ export function LoginPage() {
     setIsSubmitting(true);
 
     try {
-      await login({ login_id: loginId, password });
+      const response = await login({ loginId, password });
+      alert(response.message);
       navigate('/');
     } catch (requestError) {
       alert(getAuthErrorMessage(requestError, '로그인에 실패했습니다.'));
@@ -74,7 +75,7 @@ export function LoginPage() {
                   onChange={(event) => setLoginId(event.target.value)}
                   autoComplete="username"
                   className="w-full rounded-lg border border-[#1e3a5f] bg-[#0a1628] py-3 pl-11 pr-4 text-white placeholder:text-gray-500 focus:border-blue-500 focus:outline-none"
-                  placeholder="login_id"
+                  placeholder="아이디"
                 />
               </div>
             </label>

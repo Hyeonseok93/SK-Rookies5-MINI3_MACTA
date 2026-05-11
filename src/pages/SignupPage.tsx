@@ -72,7 +72,7 @@ export function SignupPage() {
     setIsSubmitting(true);
 
     try {
-      await signup({ login_id: loginId, password, nickname, email });
+      await signup({ loginId, password, nickname, email });
       alert('회원가입이 완료되었습니다.');
       navigate('/login');
     } catch (requestError) {
@@ -102,7 +102,7 @@ export function SignupPage() {
                   onChange={(event) => setLoginId(event.target.value)}
                   autoComplete="username"
                   className="w-full rounded-lg border border-[#1e3a5f] bg-[#0a1628] py-3 pl-11 pr-4 text-white placeholder:text-gray-500 focus:border-blue-500 focus:outline-none"
-                  placeholder="login_id"
+                  placeholder="아이디"
                 />
               </div>
             </label>
@@ -141,7 +141,7 @@ export function SignupPage() {
                   onChange={(event) => setEmail(event.target.value)}
                   autoComplete="email"
                   className="w-full rounded-lg border border-[#1e3a5f] bg-[#0a1628] py-3 pl-11 pr-4 text-white placeholder:text-gray-500 focus:border-blue-500 focus:outline-none"
-                  placeholder="email@example.com"
+                  placeholder="email@macta.com"
                 />
               </div>
             </label>
