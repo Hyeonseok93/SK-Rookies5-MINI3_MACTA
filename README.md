@@ -21,19 +21,27 @@ flowchart TB
   acm[ACM Certificate<br/>macta.store]
   waf[AWS WAFv2<br/>Regional Web ACL]
   alb[Public ALB<br/>AWS Load Balancer Controller]
+  internet[Internet]
 
   subgraph vpc[VPC]
+    igw[Internet Gateway]
+
     subgraph public[Public Subnets]
       alb
+      nat[NAT Gateway<br/>single AZ]
+      natEip[Elastic IP<br/>for NAT Gateway]
+      publicRt[Public Route Table<br/>0.0.0.0/0 -> IGW]
     end
 
     subgraph private[Private Subnets]
+      privateRt[Private Route Table<br/>0.0.0.0/0 -> NAT GW<br/>S3 prefix -> S3 Gateway Endpoint]
+
       subgraph eks[EKS Cluster<br/>rookies5-macta-eks]
         ing[Kubernetes Ingress<br/>macta.store]
         feSvc[frontend Service<br/>ClusterIP :80]
         beSvc[backend Service<br/>ClusterIP :8080]
-        fePod[Frontend Pods<br/>Nginx static files]
-        bePod[Backend Pods<br/>Spring API]
+        fePod[React+Vite Frontend Pods<br/>Nginx static files]
+        bePod[SpringBoot Backend Pods<br/>Spring API]
         eso[External Secrets Operator]
         patch[SSM Annotation Patch Job]
       end
@@ -50,7 +58,10 @@ flowchart TB
   irsa[IRSA IAM Roles]
 
   user -->|https://macta.store| r53
-  r53 --> alb
+  r53 --> internet
+  internet <--> igw
+  igw <--> publicRt
+  publicRt --> alb
   acm -->|HTTPS listener cert| alb
   waf -->|associated by Ingress annotation| alb
   alb --> ing
@@ -58,13 +69,18 @@ flowchart TB
   ing -->|/api/v1| beSvc
   feSvc --> fePod
   beSvc --> bePod
-  fePod -->|pull image| ecr
-  bePod -->|pull image| ecr
+  natEip --> nat
+  privateRt -->|default route| nat
+  nat --> publicRt
+  internet --> ecr
+  internet --> ssm
+  fePod -->|pull image| privateRt
+  bePod -->|pull image| privateRt
   bePod -->|JDBC 3306| rds
-  bePod -->|S3 API via Gateway Endpoint| s3ep --> s3
-  eso -->|read parameters| ssm
+  bePod -->|S3 API| privateRt --> s3ep --> s3
+  eso -->|read parameters| privateRt
   eso -->|creates Kubernetes Secrets| bePod
-  patch -->|read synced Secret| ssm
+  patch -->|read synced Secret| privateRt
   patch -->|patch SA, Ingress, image| ing
   irsa --> eso
   irsa --> bePod
