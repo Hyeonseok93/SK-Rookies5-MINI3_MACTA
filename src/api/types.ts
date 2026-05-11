@@ -72,3 +72,12 @@ export interface AuctionDetail extends AuctionSummary {
   pictures: { url: string; main: boolean }[];
   bids: Bid[];
 }
+
+export interface CreateAuctionRequest {
+  title: string;
+  description: string;
+  category: CategoryType;
+  start_price: number;
+  end_time: string;
+  pictures: { url: string; main: boolean }[];
+}

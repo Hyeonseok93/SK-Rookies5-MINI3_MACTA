@@ -1,5 +1,5 @@
 import { auctionDatabase } from '../data/mockData';
-import type { AuctionSummary, PaginatedResponse, ApiResponse, Category, AuctionDetail, Comment, AuctionStats } from './types';
+import type { AuctionSummary, PaginatedResponse, ApiResponse, Category, AuctionDetail, Comment, AuctionStats, CreateAuctionRequest } from './types';
 
 const delay = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
 
@@ -68,6 +68,42 @@ export const auctionApi = {
         has_next: false,
         has_previous: false
       },
+      timestamp: new Date().toISOString()
+    };
+  },
+
+  // POST /api/v1/auctions
+  createAuction: async (data: CreateAuctionRequest): Promise<ApiResponse<{ auction_id: number }>> => {
+    await delay(800);
+    const newId = auctionDatabase.length + 1;
+    
+    // Simulate adding to DB
+    auctionDatabase.push({
+      id: newId.toString(),
+      seller_id: 999, // Current user
+      seller_nickname: 'You',
+      seller_joined_at: new Date(),
+      title: data.title,
+      description: data.description,
+      category: data.category,
+      start_price: data.start_price,
+      current_price: data.start_price,
+      status: 'LIVE',
+      start_time: new Date(),
+      end_time: new Date(data.end_time),
+      view_count: 0,
+      like_count: 0,
+      imageUrl: data.pictures.find(p => p.main)?.url || data.pictures[0]?.url || '',
+      pictures: data.pictures.map(p => p.url),
+      bids: [],
+      comments: [],
+      created_at: new Date(),
+      updated_at: new Date()
+    });
+
+    return {
+      success: true,
+      data: { auction_id: newId },
       timestamp: new Date().toISOString()
     };
   },
