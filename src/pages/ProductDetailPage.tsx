@@ -5,10 +5,12 @@ import { Layout } from '../components/layout/Layout';
 import { CountdownTimer } from '../components/common/CountdownTimer';
 import { auctionApi } from '../api/auction';
 import type { AuctionDetail, Bid, Comment } from '../api/types';
+import { useToast } from '../components/common/Toast';
 
 export function ProductDetailPage() {
   const { id } = useParams();
   const navigate = useNavigate();
+  const { showToast } = useToast();
   
   const [item, setItem] = useState<AuctionDetail | null>(null);
   const [comments, setComments] = useState<Comment[]>([]);
@@ -35,20 +37,21 @@ export function ProductDetailPage() {
 
         if (detailRes.success) setItem(detailRes.data);
         if (commentsRes.success) setComments(commentsRes.data);
-      } catch (err) {
+      } catch {
         setError('Failed to load auction details');
+        showToast('Failed to load auction details', 'error');
       } finally {
         setIsLoading(false);
       }
     };
 
     fetchData();
-  }, [id]);
+  }, [id, showToast]);
 
   const handlePlaceBid = async () => {
     const amount = parseInt(bidAmount.replace(/,/g, ''));
     if (!item || !amount || amount <= item.current_price) {
-      alert('Bid must be higher than current bid');
+      showToast('Bid must be higher than current bid', 'error');
       return;
     }
 
@@ -56,7 +59,6 @@ export function ProductDetailPage() {
     try {
       const res = await auctionApi.placeBid(item.id.toString(), amount);
       if (res.success) {
-        // Optimistic update or refetch
         const newBid: Bid = {
           id: res.data.bid_id,
           bidder_id: 999,
@@ -72,10 +74,11 @@ export function ProductDetailPage() {
         } : null);
         setBidAmount('');
         setFlash(true);
+        showToast('Bid placed successfully!', 'success');
         setTimeout(() => setFlash(false), 500);
       }
-    } catch (err) {
-      alert('Failed to place bid');
+    } catch {
+      showToast('Failed to place bid', 'error');
     } finally {
       setIsBidding(false);
     }
@@ -98,10 +101,10 @@ export function ProductDetailPage() {
         };
         setComments(prev => [newComment, ...prev]);
         setNewQuestion('');
-        alert('Question submitted!');
+        showToast('Question submitted!', 'success');
       }
-    } catch (err) {
-      alert('Failed to submit question');
+    } catch {
+      showToast('Failed to submit question', 'error');
     } finally {
       setIsSubmittingQuestion(false);
     }
