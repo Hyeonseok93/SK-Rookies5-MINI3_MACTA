@@ -4,6 +4,8 @@ import { ProductDetailPage } from './pages/ProductDetailPage';
 import { CheckoutPage } from './pages/CheckoutPage';
 import { MyPage } from './pages/MyPage';
 import { RegisterAuctionPage } from './pages/RegisterAuctionPage';
+import { LoginPage } from './pages/LoginPage';
+import { SignupPage } from './pages/SignupPage';
 
 export default function App() {
   return (
@@ -14,6 +16,8 @@ export default function App() {
         <Route path="/checkout/:id" element={<CheckoutPage />} />
         <Route path="/my-page" element={<MyPage />} />
         <Route path="/register-auction" element={<RegisterAuctionPage />} />
+        <Route path="/login" element={<LoginPage />} />
+        <Route path="/signup" element={<SignupPage />} />
         <Route path="*" element={
           <div className="min-h-screen bg-[#0a1628] flex items-center justify-center text-white">
             <div className="text-center">
