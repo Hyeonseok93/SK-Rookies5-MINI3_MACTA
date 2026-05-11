@@ -63,31 +63,11 @@ jobs:
             --region ${{ env.AWS_REGION }} \
             --name "${{ secrets.EKS_CLUSTER_NAME }}"
 
-      - name: Checkout Infra Repository
-        uses: actions/checkout@v4
-        with:
-          repository: SK-Rookies5-Auction/infra
-          token: ${{ secrets.ARGOCD_GIT_TOKEN }}
-          path: infra-repo
-
-      - name: Refresh ExternalSecret and Run Patch Job
+      - name: Deploy Frontend Image
         run: |
-          kubectl annotate externalsecret rookies5-macta-infra-config \
-            -n ${{ env.NAMESPACE }} \
-            force-sync="$(date +%s)" \
-            --overwrite
-          
-          sleep 15
-          
-          kubectl delete job ssm-annotation-patcher \
-            -n ${{ env.NAMESPACE }} \
-            --ignore-not-found
-          
-          kubectl apply -f infra-repo/k8s/ssm-annotation-patch-job.yaml
-          
-          kubectl wait --for=condition=complete job/ssm-annotation-patcher \
-            -n ${{ env.NAMESPACE }} \
-            --timeout=120s
+          kubectl set image deployment/rookies5-macta-frontend \
+            frontend="${{ steps.build-image.outputs.image }}" \
+            -n ${{ env.NAMESPACE }}
 
       - name: Check Frontend Rollout
         run: |
