@@ -24,5 +24,10 @@ dist-ssr
 *.sw?
 
 *.md
+!.github/**/*.md
 docs
 Realtimeauctionplatformhomepage-main
+
+.env
+.env.*
+!.env.example
