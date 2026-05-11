@@ -53,11 +53,11 @@ export function Header() {
     }
   };
 
-  const handleNavigate = (e: React.MouseEvent, referenceId: number, id: number) => {
+  const handleNavigate = (e: React.MouseEvent, targetUrl: string, id: number) => {
     e.stopPropagation();
     markAsRead(id);
     setShowNotifications(false);
-    navigate(`/product/${referenceId}`);
+    navigate(targetUrl);
   };
 
   return (
