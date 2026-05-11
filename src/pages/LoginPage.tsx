@@ -74,7 +74,7 @@ export function LoginPage() {
                   onChange={(event) => setLoginId(event.target.value)}
                   autoComplete="username"
                   className="w-full rounded-lg border border-[#1e3a5f] bg-[#0a1628] py-3 pl-11 pr-4 text-white placeholder:text-gray-500 focus:border-blue-500 focus:outline-none"
-                  placeholder="login_id"
+                  placeholder="아이디"
                 />
               </div>
             </label>

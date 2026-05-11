@@ -65,7 +65,8 @@ export function Header() {
       <div className="max-w-7xl mx-auto px-4">
         <div className="flex items-center justify-between h-16">
           {/* Logo */}
-          <Link to="/" className="flex items-center gap-2 flex-shrink-0 group">
+          <Link to="/" className="flex items-center gap-1.5 flex-shrink-0 group">
+            <img src="/icons.png" alt="MACTA Logo" className="w-10 h-10 object-contain drop-shadow-xl group-hover:scale-110 transition-transform duration-300" />
             <div className="flex flex-col">
               <div className="text-2xl font-black text-white tracking-tighter leading-none flex items-baseline gap-0.5">
                 MACTA
