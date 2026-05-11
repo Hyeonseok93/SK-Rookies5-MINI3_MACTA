@@ -1,5 +1,5 @@
 import { auctionDatabase } from '../data/mockData';
-import type { AuctionSummary, PaginatedResponse, ApiResponse, Category, AuctionDetail, Comment, AuctionStats, CreateAuctionRequest } from './types';
+import type { AuctionSummary, PaginatedResponse, ApiResponse, Category, AuctionDetail, Comment, AuctionStats, CreateAuctionRequest, Notification } from './types';
 
 const delay = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
 
@@ -76,7 +76,7 @@ export const auctionApi = {
   createAuction: async (data: CreateAuctionRequest): Promise<ApiResponse<{ auction_id: number }>> => {
     await delay(800);
     const newId = auctionDatabase.length + 1;
-    
+
     // Simulate adding to DB
     auctionDatabase.push({
       id: newId.toString(),
@@ -132,7 +132,7 @@ export const auctionApi = {
   getAuctionStats: async (): Promise<ApiResponse<AuctionStats>> => {
     await delay(200);
     const total = auctionDatabase.length;
-    const soon = auctionDatabase.filter(item => 
+    const soon = auctionDatabase.filter(item =>
       item.end_time.getTime() - Date.now() < 2 * 60 * 60 * 1000
     ).length;
 
@@ -236,5 +236,58 @@ export const auctionApi = {
       data: { id: idNum },
       timestamp: new Date().toISOString()
     };
+  },
+
+  // GET /api/v1/notifications
+  getNotifications: async (): Promise<ApiResponse<Notification[]>> => {
+    await delay(300);
+    return {
+      success: true,
+      data: [
+        {
+          id: 101,
+          type: 'OUTBID',
+          content: "[Price Update] Someone placed a higher bid on iPhone 15 Pro Max!",
+          target_url: "/product/1",
+          is_read: false,
+          created_at: new Date(Date.now() - 1000 * 60 * 5).toISOString()
+        },
+        {
+          id: 102,
+          type: 'NEW_ANSWER',
+          content: "[Q&A] Seller replied to your question about the LG OLED TV.",
+          target_url: "/product/2",
+          is_read: false,
+          created_at: new Date(Date.now() - 1000 * 60 * 60 * 2).toISOString()
+        },
+        {
+          id: 103,
+          type: 'CLOSING_SOON',
+          content: "[Closing Soon] The auction for \"Vintage Herman Miller Chair\" has only 1 hour left!",
+          target_url: "/product/3",
+          is_read: true,
+          created_at: new Date(Date.now() - 1000 * 60 * 60 * 24).toISOString()
+        }
+      ],
+      timestamp: new Date().toISOString()
+    };
+  },
+
+  // PATCH /api/v1/notifications/{id}
+  markNotificationAsRead: async (_id: number): Promise<ApiResponse<void>> => {
+    await delay(100);
+    return { success: true, data: undefined, timestamp: new Date().toISOString() };
+  },
+
+  // DELETE /api/v1/notifications/{id}
+  deleteNotification: async (_id: number): Promise<ApiResponse<void>> => {
+    await delay(100);
+    return { success: true, data: undefined, timestamp: new Date().toISOString() };
+  },
+
+  // DELETE /api/v1/notifications/read
+  deleteReadNotifications: async (): Promise<ApiResponse<void>> => {
+    await delay(200);
+    return { success: true, data: undefined, timestamp: new Date().toISOString() };
   }
 };
