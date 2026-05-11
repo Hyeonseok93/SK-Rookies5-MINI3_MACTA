@@ -8,6 +8,7 @@ import { NotificationsPage } from './pages/NotificationsPage';
 import { LoginPage } from './pages/LoginPage';
 import { SignupPage } from './pages/SignupPage';
 import { ToastProvider } from './components/common/Toast';
+import { AuthGuard } from './components/common/AuthGuard';
 
 export default function App() {
   return (
@@ -16,12 +17,32 @@ export default function App() {
         <Routes>
           <Route path="/" element={<HomePage />} />
           <Route path="/product/:id" element={<ProductDetailPage />} />
-          <Route path="/checkout/:id" element={<CheckoutPage />} />
-          <Route path="/my-page" element={<MyPage />} />
-          <Route path="/register-auction" element={<RegisterAuctionPage />} />
-          <Route path="/notifications" element={<NotificationsPage />} />
+          <Route path="/checkout/:id" element={
+            <AuthGuard>
+              <CheckoutPage />
+            </AuthGuard>
+          } />
+          
+          {/* Protected Routes */}
+          <Route path="/my-page" element={
+            <AuthGuard>
+              <MyPage />
+            </AuthGuard>
+          } />
+          <Route path="/register-auction" element={
+            <AuthGuard>
+              <RegisterAuctionPage />
+            </AuthGuard>
+          } />
+          <Route path="/notifications" element={
+            <AuthGuard>
+              <NotificationsPage />
+            </AuthGuard>
+          } />
+
           <Route path="/login" element={<LoginPage />} />
           <Route path="/signup" element={<SignupPage />} />
+          
           <Route path="*" element={
             <div className="min-h-screen bg-[#0a1628] flex items-center justify-center text-white">
               <div className="text-center">

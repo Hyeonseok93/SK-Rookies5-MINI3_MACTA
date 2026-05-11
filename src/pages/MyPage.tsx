@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback, useMemo } from 'react';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { 
   Package, TrendingUp, Heart, ShoppingBag, 
   Settings, ChevronRight, Clock, Eye, Loader2, Trash2 
@@ -9,7 +9,6 @@ import { auctionApi } from '../api/auction';
 import type { UserDashboardStats } from '../api/types';
 import { formatPrice } from '../utils/format';
 import { useToast } from '../components/common/Toast';
-import { getAccessTokenCookie } from '../api/tokenCookie';
 
 type MyPageTab = 'auctions' | 'bids' | 'likes';
 
@@ -18,13 +17,8 @@ interface StoredUser {
   role?: string;
 }
 
-const LOGIN_REQUIRED_MESSAGE = '로그인 후 이용해주세요.';
-
-let lastLoginRequiredAlertLocationKey: string | null = null;
-
 export function MyPage() {
   const navigate = useNavigate();
-  const location = useLocation();
   const { showToast } = useToast();
   const [stats, setStats] = useState<UserDashboardStats | null>(null);
   const [activeTab, setActiveTab] = useState<MyPageTab>('auctions');
@@ -33,11 +27,7 @@ export function MyPage() {
 
   const user = useMemo<StoredUser | null>(() => {
     const storedUser = localStorage.getItem('macta_user');
-
-    if (!storedUser) {
-      return null;
-    }
-
+    if (!storedUser) return null;
     try {
       return JSON.parse(storedUser) as StoredUser;
     } catch {
@@ -45,55 +35,17 @@ export function MyPage() {
     }
   }, []);
 
-  const isLoggedIn = useMemo(() => {
-    return Boolean(getAccessTokenCookie() && user);
-  }, [user]);
-
-  useEffect(() => {
-    if (isLoggedIn || lastLoginRequiredAlertLocationKey === location.key) {
-      return;
-    }
-
-    lastLoginRequiredAlertLocationKey = location.key;
-
-    window.setTimeout(() => {
-      if (window.location.pathname === '/my-page') {
-        alert(LOGIN_REQUIRED_MESSAGE);
-      }
-    }, 150);
-  }, [isLoggedIn, location.key]);
-
-  const handleProtectedClick = (callback: () => void) => {
-    if (!isLoggedIn) {
-      alert(LOGIN_REQUIRED_MESSAGE);
-      return;
-    }
-
-    callback();
-  };
-
   const fetchStats = useCallback(() => {
-    if (!isLoggedIn) {
-      setStats(null);
-      return;
-    }
-
     auctionApi.getUserStats().then(res => {
       if (res.success) setStats(res.data);
     });
-  }, [isLoggedIn]);
+  }, []);
 
   useEffect(() => {
     fetchStats();
   }, [fetchStats]);
 
   const fetchTabContent = useCallback(async () => {
-    if (!isLoggedIn) {
-      setItems([]);
-      setIsLoading(false);
-      return;
-    }
-
     setIsLoading(true);
     let res;
     if (activeTab === 'auctions') res = await auctionApi.getMyAuctions();
@@ -102,7 +54,7 @@ export function MyPage() {
 
     if (res.success) setItems(res.data);
     setIsLoading(false);
-  }, [activeTab, isLoggedIn]);
+  }, [activeTab]);
 
   useEffect(() => {
     fetchTabContent();
@@ -110,11 +62,6 @@ export function MyPage() {
 
   const handleRemoveFromWatchlist = async (e: React.MouseEvent, id: number) => {
     e.stopPropagation();
-    if (!isLoggedIn) {
-      alert(LOGIN_REQUIRED_MESSAGE);
-      return;
-    }
-
     try {
       const res = await auctionApi.toggleLike(id);
       if (res.success) {
@@ -128,11 +75,6 @@ export function MyPage() {
   };
 
   const handleClearWatchlist = async () => {
-    if (!isLoggedIn) {
-      alert(LOGIN_REQUIRED_MESSAGE);
-      return;
-    }
-
     try {
       await Promise.all(items.map(item => auctionApi.toggleLike(item.auction_id)));
       setItems([]);
@@ -146,22 +88,21 @@ export function MyPage() {
   return (
     <Layout>
       <div className="max-w-7xl mx-auto px-4 py-8">
-        {/* Profile Header - Simplified as requested */}
+        {/* Profile Header */}
         <div className="bg-[#0d1b2e] border border-[#1e3a5f] rounded-2xl p-8 mb-8 shadow-2xl">
           <div className="flex flex-col md:flex-row items-center gap-6">
             <div className="flex-1 text-center md:text-left">
-              <h1 className="text-4xl font-black text-white mb-2 tracking-tight">{isLoggedIn ? user?.nickname : ''}</h1>
-              <p className="text-gray-400 font-medium">{isLoggedIn ? user?.role : ''}</p>
+              <h1 className="text-4xl font-black text-white mb-2 tracking-tight">{user?.nickname || 'User'}!</h1>
+              <p className="text-gray-400 font-medium">{user?.role || 'Active Member'}</p>
               <div className="flex flex-wrap justify-center md:justify-start gap-3 mt-6">
                 <button
-                  onClick={() => handleProtectedClick(() => undefined)}
                   className="px-4 py-2 bg-[#1e3a5f] hover:bg-[#2e4a6f] text-white rounded-lg text-sm font-medium transition-colors flex items-center gap-2"
                 >
                   <Settings className="w-4 h-4" /> Edit Profile
                 </button>
               </div>
             </div>
-            
+
             {/* Quick Stats Grid */}
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 w-full md:w-auto">
               {[
@@ -191,10 +132,10 @@ export function MyPage() {
               ].map((tab) => (
                 <button
                   key={tab.id}
-                  onClick={() => handleProtectedClick(() => setActiveTab(tab.id as MyPageTab))}
+                  onClick={() => setActiveTab(tab.id as MyPageTab)}
                   className={`w-full flex items-center justify-between px-4 py-3 rounded-xl transition-all ${
-                    activeTab === tab.id 
-                      ? 'bg-blue-600 text-white shadow-lg shadow-blue-600/20' 
+                    activeTab === tab.id
+                      ? 'bg-blue-600 text-white shadow-lg shadow-blue-600/20'
                       : 'text-gray-400 hover:bg-[#1e3a5f]/30'
                   }`}
                 >
@@ -216,7 +157,7 @@ export function MyPage() {
                 <div className="flex items-center gap-4">
                   <div className="text-sm text-gray-500">{items.length} items found</div>
                   {activeTab === 'likes' && items.length > 0 && (
-                    <button 
+                    <button
                       onClick={handleClearWatchlist}
                       className="text-xs bg-red-500/10 text-red-400 border border-red-500/30 px-3 py-1.5 rounded-lg hover:bg-red-500/20 transition-colors flex items-center gap-2 font-bold uppercase tracking-wider"
                     >
@@ -235,9 +176,9 @@ export function MyPage() {
                 ) : items.length > 0 ? (
                   <div className="divide-y divide-[#1e3a5f]">
                     {items.map((item, idx) => (
-                      <div 
-                        key={idx} 
-                        onClick={() => handleProtectedClick(() => navigate(`/product/${item.auction_id}`))}
+                      <div
+                        key={idx}
+                        onClick={() => navigate(`/product/${item.auction_id}`)}
                         className="p-6 hover:bg-[#1e3a5f]/10 transition-colors cursor-pointer flex items-center gap-6 group"
                       >
                         <div className="w-24 h-24 rounded-xl overflow-hidden flex-shrink-0 bg-[#0a1628] border border-[#1e3a5f] group-hover:border-blue-500 transition-colors">
@@ -268,7 +209,7 @@ export function MyPage() {
                         {activeTab === 'likes' && (
                           <button
                             onClick={(e) => handleRemoveFromWatchlist(e, item.auction_id)}
-                            className="p-3 text-gray-500 hover:text-red-400 transition-colors rounded-xl hover:bg-red-500/10 flex-shrink-0"
+                            className="p-3 text-gray-500 hover:text-red-400 transition-colors rounded-xl hover:bg-red-500/10 flex-shrink-0"        
                             title="Remove from Watchlist"
                           >
                             <Trash2 className="w-6 h-6" />
