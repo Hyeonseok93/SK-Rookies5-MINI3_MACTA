@@ -57,6 +57,10 @@ spec:
               value: regional
             - name: AWS_EC2_METADATA_DISABLED
               value: "true"
+            - name: SPRING_DATASOURCE_HIKARI_MAXIMUM_POOL_SIZE
+              value: "5"
+            - name: SPRING_DATASOURCE_HIKARI_MINIMUM_IDLE
+              value: "1"
             - name: JWT_SECRET
               valueFrom:
                 secretKeyRef:

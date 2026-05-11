@@ -74,16 +74,6 @@ spec:
                 secretKeyRef:
                   name: rookies5-macta-infra-config
                   key: ACM_CERTIFICATE_ARN
-            - name: BACKEND_IMAGE
-              valueFrom:
-                secretKeyRef:
-                  name: rookies5-macta-infra-config
-                  key: BACKEND_IMAGE
-            - name: FRONTEND_IMAGE
-              valueFrom:
-                secretKeyRef:
-                  name: rookies5-macta-infra-config
-                  key: FRONTEND_IMAGE
           command:
             - /bin/sh
             - -c
@@ -99,13 +89,5 @@ spec:
                 alb.ingress.kubernetes.io/listen-ports='[{"HTTP":80},{"HTTPS":443}]' \
                 alb.ingress.kubernetes.io/ssl-redirect="443" \
                 -n rookies5-macta --overwrite
-
-              kubectl set image deployment/rookies5-macta-backend \
-                backend="${BACKEND_IMAGE}" \
-                -n rookies5-macta
-
-              kubectl set image deployment/rookies5-macta-frontend \
-                frontend="${FRONTEND_IMAGE}" \
-                -n rookies5-macta
 
               kubectl rollout restart deployment rookies5-macta-backend -n rookies5-macta
