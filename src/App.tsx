@@ -4,28 +4,31 @@ import { ProductDetailPage } from './pages/ProductDetailPage';
 import { CheckoutPage } from './pages/CheckoutPage';
 import { MyPage } from './pages/MyPage';
 import { RegisterAuctionPage } from './pages/RegisterAuctionPage';
+import { ToastProvider } from './components/common/Toast';
 
 export default function App() {
   return (
-    <BrowserRouter>
-      <Routes>
-        <Route path="/" element={<HomePage />} />
-        <Route path="/product/:id" element={<ProductDetailPage />} />
-        <Route path="/checkout/:id" element={<CheckoutPage />} />
-        <Route path="/my-page" element={<MyPage />} />
-        <Route path="/register-auction" element={<RegisterAuctionPage />} />
-        <Route path="*" element={
-          <div className="min-h-screen bg-[#0a1628] flex items-center justify-center text-white">
-            <div className="text-center">
-              <h1 className="text-6xl font-bold mb-4">404</h1>
-              <p className="text-xl text-gray-400 mb-8">Page Not Found</p>
-              <a href="/" className="px-6 py-3 bg-blue-600 rounded-lg hover:bg-blue-700 transition-colors">
-                Back to Home
-              </a>
+    <ToastProvider>
+      <BrowserRouter>
+        <Routes>
+          <Route path="/" element={<HomePage />} />
+          <Route path="/product/:id" element={<ProductDetailPage />} />
+          <Route path="/checkout/:id" element={<CheckoutPage />} />
+          <Route path="/my-page" element={<MyPage />} />
+          <Route path="/register-auction" element={<RegisterAuctionPage />} />
+          <Route path="*" element={
+            <div className="min-h-screen bg-[#0a1628] flex items-center justify-center text-white">
+              <div className="text-center">
+                <h1 className="text-6xl font-bold mb-4">404</h1>
+                <p className="text-xl text-gray-400 mb-8">Page Not Found</p>
+                <a href="/" className="px-6 py-3 bg-blue-600 rounded-lg hover:bg-blue-700 transition-colors">
+                  Back to Home
+                </a>
+              </div>
             </div>
-          </div>
-        } />
-      </Routes>
-    </BrowserRouter>
+          } />
+        </Routes>
+      </BrowserRouter>
+    </ToastProvider>
   );
 }
