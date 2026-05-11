@@ -1,0 +1,96 @@
+name: Frontend Deploy
+
+on:
+  push:
+    branches:
+      - main
+      - ci/cd
+  workflow_dispatch:
+
+env:
+  AWS_REGION: ap-northeast-2
+  NAMESPACE: rookies5-macta
+  FRONTEND_IMAGE_PARAM: /rookies5-macta/dev/infra/FRONTEND_IMAGE
+
+jobs:
+  deploy:
+    name: Build & Deploy Frontend
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Frontend Repository
+        uses: actions/checkout@v4
+
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ env.AWS_REGION }}
+
+      - name: Login to Amazon ECR
+        uses: aws-actions/amazon-ecr-login@v2
+
+      - name: Docker Build & Push
+        id: build-image
+        env:
+          ECR: ${{ secrets.ECR_FRONTEND_URI }}
+          TAG: ${{ github.sha }}
+          VITE_API_BASE_URL: ${{ secrets.VITE_API_BASE_URL }}
+        run: |
+          IMAGE="$ECR:$TAG"
+          docker build \
+            --build-arg VITE_API_BASE_URL="$VITE_API_BASE_URL" \
+            -t "$IMAGE" \
+            -t "$ECR:latest" \
+            .
+          docker push "$IMAGE"
+          docker push "$ECR:latest"
+          echo "image=$IMAGE" >> "$GITHUB_OUTPUT"
+
+      - name: Update Frontend Image in SSM
+        run: |
+          aws ssm put-parameter \
+            --region ${{ env.AWS_REGION }} \
+            --name "${{ env.FRONTEND_IMAGE_PARAM }}" \
+            --type SecureString \
+            --value "${{ steps.build-image.outputs.image }}" \
+            --overwrite
+
+      - name: Update kubeconfig
+        run: |
+          aws eks update-kubeconfig \
+            --region ${{ env.AWS_REGION }} \
+            --name "${{ secrets.EKS_CLUSTER_NAME }}"
+
+      - name: Checkout Infra Repository
+        uses: actions/checkout@v4
+        with:
+          repository: SK-Rookies5-Auction/infra
+          token: ${{ secrets.ARGOCD_GIT_TOKEN }}
+          path: infra-repo
+
+      - name: Refresh ExternalSecret and Run Patch Job
+        run: |
+          kubectl annotate externalsecret rookies5-macta-infra-config \
+            -n ${{ env.NAMESPACE }} \
+            force-sync="$(date +%s)" \
+            --overwrite
+          
+          sleep 15
+          
+          kubectl delete job ssm-annotation-patcher \
+            -n ${{ env.NAMESPACE }} \
+            --ignore-not-found
+          
+          kubectl apply -f infra-repo/k8s/ssm-annotation-patch-job.yaml
+          
+          kubectl wait --for=condition=complete job/ssm-annotation-patcher \
+            -n ${{ env.NAMESPACE }} \
+            --timeout=120s
+
+      - name: Check Frontend Rollout
+        run: |
+          kubectl rollout status deployment/rookies5-macta-frontend \
+            -n ${{ env.NAMESPACE }} \
+            --timeout=180s
