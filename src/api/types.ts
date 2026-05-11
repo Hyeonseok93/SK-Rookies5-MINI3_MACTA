@@ -73,6 +73,15 @@ export interface AuctionDetail extends AuctionSummary {
   bids: Bid[];
 }
 
+export interface Notification {
+  id: number;
+  type: 'OUTBID' | 'AUCTION_WON' | 'AUCTION_ENDED' | 'NEW_QUESTION' | 'NEW_ANSWER' | 'CLOSING_SOON';
+  content: string;
+  target_url: string;
+  is_read: boolean;
+  created_at: string;
+}
+
 export interface CreateAuctionRequest {
   title: string;
   description: string;
