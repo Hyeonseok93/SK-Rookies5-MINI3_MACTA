@@ -156,7 +156,7 @@ export function HomePage() {
                       type="text"
                       inputMode="numeric"
                       placeholder="Min"
-                      value={minPriceInput}
+                      value={minPriceInput ? Number(minPriceInput).toLocaleString() : ''}
                       onChange={(e) => {
                         const value = e.target.value.replace(/[^0-9]/g, '');
                         setMinPriceInput(value);
@@ -168,7 +168,7 @@ export function HomePage() {
                       type="text"
                       inputMode="numeric"
                       placeholder="Max"
-                      value={maxPriceInput}
+                      value={maxPriceInput ? Number(maxPriceInput).toLocaleString() : ''}
                       onChange={(e) => {
                         const value = e.target.value.replace(/[^0-9]/g, '');
                         setMaxPriceInput(value);
