@@ -72,14 +72,12 @@ spec:
                   name: backend-secret
                   key: S3_BUCKET_NAME
           readinessProbe:
-            httpGet:
-              path: /health
+            tcpSocket:
               port: 8080
             initialDelaySeconds: 30
             periodSeconds: 10
           livenessProbe:
-            httpGet:
-              path: /health
+            tcpSocket:
               port: 8080
             initialDelaySeconds: 60
             periodSeconds: 30
