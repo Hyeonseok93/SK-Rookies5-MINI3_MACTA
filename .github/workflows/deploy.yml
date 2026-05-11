@@ -1,17 +1,11 @@
-name: Frontend ArgoCD Deploy
+name: Frontend Deploy
 
 on:
   push:
-    branches: [main]
+    branches:
+      - main
+      - ci/cd
   workflow_dispatch:
-
-# Required GitHub Secrets:
-#   AWS_ACCESS_KEY_ID
-#   AWS_SECRET_ACCESS_KEY
-#   ECR_FRONTEND_URI
-#   EKS_CLUSTER_NAME
-#   ARGOCD_GIT_TOKEN
-#   VITE_API_BASE_URL
 
 env:
   AWS_REGION: ap-northeast-2
