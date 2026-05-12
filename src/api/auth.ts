@@ -63,6 +63,27 @@ export async function signup(payload: SignupRequest) {
   return data;
 }
 
+export async function checkLoginId(loginId: string) {
+  const { data } = await api.get<ApiResponse<boolean>>('/auth/check-login-id', {
+    params: { loginId },
+  });
+  return data;
+}
+
+export async function checkEmail(email: string) {
+  const { data } = await api.get<ApiResponse<boolean>>('/auth/check-email', {
+    params: { email },
+  });
+  return data;
+}
+
+export async function checkNickname(nickname: string) {
+  const { data } = await api.get<ApiResponse<boolean>>('/auth/check-nickname', {
+    params: { nickname },
+  });
+  return data;
+}
+
 export function getAuthErrorMessage(error: unknown, fallback: string) {
   const axiosError = error as AxiosError<ErrorResponse>;
   const status = axiosError.response?.status;
