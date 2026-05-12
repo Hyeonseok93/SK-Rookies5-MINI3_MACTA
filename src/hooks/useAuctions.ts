@@ -1,6 +1,14 @@
 import { useState, useEffect, useCallback } from 'react';
 import { auctionApi } from '../api/auction';
-import type { AuctionSummary, PageInfo } from '../api/types';
+import type { AuctionListResponse, AuctionSummary, PageInfo } from '../api/types';
+
+const getAuctionItems = (response: AuctionListResponse): AuctionSummary[] => {
+  if (Array.isArray(response.data)) {
+    return response.data;
+  }
+
+  return response.data?.content ?? [];
+};
 
 export function useAuctions({
   category,
@@ -41,8 +49,8 @@ export function useAuctions({
       });
       
       if (response.success) {
-        setAuctions(response.data.content);
-        setPageInfo(response.page_info);
+        setAuctions(getAuctionItems(response));
+        setPageInfo(response.page_info ?? null);
       } else {
         setError(response.message || 'Failed to fetch auctions');
       }

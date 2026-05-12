@@ -25,12 +25,6 @@ export function Header() {
   const unreadCount = notifications.filter(n => !n.is_read).length;
 
   useEffect(() => {
-    // Fetch notifications
-    auctionApi.getNotifications().then(res => {
-      if (res.success) setNotifications(res.data);
-    });
-
-    // Close dropdown on outside click
     const handleClickOutside = (event: MouseEvent) => {
       if (notificationRef.current && !notificationRef.current.contains(event.target as Node)) {
         setShowNotifications(false);
@@ -39,6 +33,24 @@ export function Header() {
     document.addEventListener('mousedown', handleClickOutside);
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
+
+  useEffect(() => {
+    if (!isLoggedIn) {
+      setNotifications([]);
+      setShowNotifications(false);
+      return;
+    }
+
+    let ignore = false;
+
+    auctionApi.getNotifications().then(res => {
+      if (!ignore && res.success) setNotifications(res.data);
+    });
+
+    return () => {
+      ignore = true;
+    };
+  }, [isLoggedIn]);
 
   useEffect(() => {
     const handleAuthStateChanged = () => {
