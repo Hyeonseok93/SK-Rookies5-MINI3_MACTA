@@ -1,7 +1,6 @@
 import type { AxiosError } from 'axios';
 import { api } from './client';
 import { clearAccessTokenCookie, setAccessTokenCookie } from './tokenCookie';
-import { MOCK_USERS } from '../data/mockData';
 
 export const AUTH_STATE_CHANGED_EVENT = 'macta-auth-state-changed';
 
@@ -46,42 +45,11 @@ interface ErrorResponse {
 }
 
 export async function login(payload: LoginRequest) {
-  try {
-    const { data } = await api.post<ApiResponse<LoginData>>('/auth/login', payload);
-    setAccessTokenCookie(data.data.accessToken);
-    localStorage.setItem('macta_user', JSON.stringify(data.data.user));
-    window.dispatchEvent(new Event(AUTH_STATE_CHANGED_EVENT));
-    return data;
-  } catch (error) {
-    // FALLBACK: If API fails (e.g., local dev without backend), check MOCK_USERS
-    const mockUser = MOCK_USERS.find(
-      u => u.loginId === payload.loginId && u.password === payload.password
-    );
-
-    if (mockUser) {
-      const mockResponse: ApiResponse<LoginData> = {
-        success: true,
-        message: '로그인에 성공했습니다.',
-        timestamp: new Date().toISOString(),
-        data: {
-          accessToken: 'mock-access-token-' + Date.now(),
-          user: {
-            id: 'mock-id-' + mockUser.loginId,
-            nickname: mockUser.nickname,
-            email: mockUser.email,
-            role: mockUser.role
-          }
-        }
-      };
-      
-      setAccessTokenCookie(mockResponse.data.accessToken);
-      localStorage.setItem('macta_user', JSON.stringify(mockResponse.data.user));
-      window.dispatchEvent(new Event(AUTH_STATE_CHANGED_EVENT));
-      return mockResponse;
-    }
-    
-    throw error;
-  }
+  const { data } = await api.post<ApiResponse<LoginData>>('/auth/login', payload);
+  setAccessTokenCookie(data.data.accessToken);
+  localStorage.setItem('macta_user', JSON.stringify(data.data.user));
+  window.dispatchEvent(new Event(AUTH_STATE_CHANGED_EVENT));
+  return data;
 }
 
 export function logout() {
@@ -91,22 +59,8 @@ export function logout() {
 }
 
 export async function signup(payload: SignupRequest) {
-  try {
-    const { data } = await api.post<ApiResponse<SignupData>>('/auth/signup', payload);
-    return data;
-  } catch (_error) {
-    // FALLBACK: Simulate success for demonstration
-    const mockResponse: ApiResponse<SignupData> = {
-      success: true,
-      message: '회원가입이 완료되었습니다.',
-      timestamp: new Date().toISOString(),
-      data: {
-        id: Date.now(),
-        nickname: payload.nickname
-      }
-    };
-    return mockResponse;
-  }
+  const { data } = await api.post<ApiResponse<SignupData>>('/auth/signup', payload);
+  return data;
 }
 
 export function getAuthErrorMessage(error: unknown, fallback: string) {

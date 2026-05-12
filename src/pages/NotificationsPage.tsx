@@ -3,38 +3,56 @@ import { useNavigate } from 'react-router-dom';
 import { ArrowLeft, Bell, Clock, Check, ExternalLink, Trash2 } from 'lucide-react';
 import { Layout } from '../components/layout/Layout';
 import { auctionApi } from '../api/auction';
-import type { Notification } from '../api/types';
+import type { Notification, PageInfo } from '../api/types';
 import { useToast } from '../components/common/Toast';
+import { Pagination } from '../components/common/Pagination';
+import { ErrorState } from '../components/common/ErrorState';
 
 export function NotificationsPage() {
   const navigate = useNavigate();
   const { showToast } = useToast();
   const [notifications, setNotifications] = useState<Notification[]>([]);
+  const [pageInfo, setPageInfo] = useState<PageInfo | null>(null);
   const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
   const [filter, setFilter] = useState<'all' | 'unread'>('all');
+  const [currentPage, setCurrentPage] = useState(0);
+  const PAGE_SIZE = 20;
+
+  const fetchNotifications = async () => {
+    await Promise.resolve();
+    setIsLoading(true);
+    setError(null);
+    try {
+      const res = await auctionApi.getNotifications({ 
+        page: currentPage, 
+        size: PAGE_SIZE 
+      });
+      if (res.success) {
+        setNotifications(res.data);
+        setPageInfo(res.page_info);
+      }
+    } catch {
+      setError('알림을 불러오는데 실패했습니다.');
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   useEffect(() => {
-    let ignore = false;
-
-    const fetchNotifications = async () => {
-      try {
-        const res = await auctionApi.getNotifications();
-        if (!ignore && res.success) {
-          setNotifications(res.data);
-        }
-      } catch {
-        if (!ignore) showToast('알림을 불러오는데 실패했습니다.', 'error');
-      } finally {
-        if (!ignore) setIsLoading(false);
-      }
-    };
-
-    fetchNotifications();
+    const timer = setTimeout(() => {
+      fetchNotifications();
+    }, 0);
 
     return () => {
-      ignore = true;
+      clearTimeout(timer);
     };
-  }, [showToast]);
+  }, [currentPage]);
+
+  const handleFilterChange = (newFilter: 'all' | 'unread') => {
+    setFilter(newFilter);
+    setCurrentPage(0);
+  };
 
   const handleMarkAsRead = async (id: number) => {
     const res = await auctionApi.markNotificationAsRead(id);
@@ -124,7 +142,7 @@ export function NotificationsPage() {
         {/* Filters */}
         <div className="flex gap-2 mb-6">
           <button
-            onClick={() => setFilter('all')}
+            onClick={() => handleFilterChange('all')}
             className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
               filter === 'all' ? 'bg-blue-600 text-white' : 'text-gray-400 hover:bg-[#1e3a5f]/30'
             }`}
@@ -132,7 +150,7 @@ export function NotificationsPage() {
             전체
           </button>
           <button
-            onClick={() => setFilter('unread')}
+            onClick={() => handleFilterChange('unread')}
             className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
               filter === 'unread' ? 'bg-blue-600 text-white' : 'text-gray-400 hover:bg-[#1e3a5f]/30'
             }`}
@@ -146,6 +164,10 @@ export function NotificationsPage() {
             <div className="py-20 flex flex-col items-center justify-center text-blue-400">
               <div className="w-10 h-10 border-4 border-blue-600 border-t-transparent rounded-full animate-spin mb-4" />
               <p className="text-gray-400">알림을 불러오는 중입니다...</p>
+            </div>
+          ) : error ? (
+            <div className="p-8">
+              <ErrorState message={error} onRetry={fetchNotifications} />
             </div>
           ) : filteredNotifications.length > 0 ? (
             <div className="divide-y divide-[#1e3a5f]">
@@ -203,6 +225,14 @@ export function NotificationsPage() {
             </div>
           )}
         </div>
+
+        {!isLoading && pageInfo && (
+          <Pagination 
+            currentPage={currentPage} 
+            totalPages={pageInfo.total_pages} 
+            onPageChange={setCurrentPage} 
+          />
+        )}
       </div>
     </Layout>
   );
