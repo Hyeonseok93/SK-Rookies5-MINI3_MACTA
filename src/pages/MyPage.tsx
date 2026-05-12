@@ -6,7 +6,7 @@ import {
 } from 'lucide-react';
 import { Layout } from '../components/layout/Layout';
 import { auctionApi } from '../api/auction';
-import type { UserDashboardStats } from '../api/types';
+import type { UserDashboardStats, UserAuctionItem, UserBidItem } from '../api/types';
 import { formatPrice } from '../utils/format';
 import { useToast } from '../components/common/Toast';
 
@@ -22,7 +22,7 @@ export function MyPage() {
   const { showToast } = useToast();
   const [stats, setStats] = useState<UserDashboardStats | null>(null);
   const [activeTab, setActiveTab] = useState<MyPageTab>('auctions');
-  const [items, setItems] = useState<any[]>([]);
+  const [items, setItems] = useState<(UserAuctionItem | UserBidItem)[]>([]);
   const [isLoading, setIsLoading] = useState(false);
 
   const user = useMemo<StoredUser | null>(() => {
@@ -42,23 +42,34 @@ export function MyPage() {
   }, []);
 
   useEffect(() => {
-    fetchStats();
-  }, [fetchStats]);
-
-  const fetchTabContent = useCallback(async () => {
-    setIsLoading(true);
-    let res;
-    if (activeTab === 'auctions') res = await auctionApi.getMyAuctions();
-    else if (activeTab === 'bids') res = await auctionApi.getMyBids();
-    else res = await auctionApi.getMyWatchlist();
-
-    if (res.success) setItems(res.data);
-    setIsLoading(false);
-  }, [activeTab]);
+    let ignore = false;
+    auctionApi.getUserStats().then(res => {
+      if (!ignore && res.success) setStats(res.data);
+    });
+    return () => { ignore = true; };
+  }, []);
 
   useEffect(() => {
+    let ignore = false;
+    const fetchTabContent = async () => {
+      setIsLoading(true);
+      try {
+        let res;
+        if (activeTab === 'auctions') res = await auctionApi.getMyAuctions();
+        else if (activeTab === 'bids') res = await auctionApi.getMyBids();
+        else res = await auctionApi.getMyWatchlist();
+
+        if (!ignore && res.success) {
+          setItems(res.data);
+        }
+      } finally {
+        if (!ignore) setIsLoading(false);
+      }
+    };
+
     fetchTabContent();
-  }, [fetchTabContent]);
+    return () => { ignore = true; };
+  }, [activeTab]);
 
   const handleRemoveFromWatchlist = async (e: React.MouseEvent, id: number) => {
     e.stopPropagation();
@@ -196,7 +207,7 @@ export function MyPage() {
                                 {activeTab === 'bids' ? 'Your Bid' : 'Current Price'}
                               </div>
                               <div className="text-xl font-black text-blue-400">
-                                ₩{formatPrice(activeTab === 'bids' ? item.my_bid_price : item.current_price)}
+                                ₩{formatPrice(activeTab === 'bids' ? (item as UserBidItem).my_bid_price : item.current_price)}
                               </div>
                             </div>
                             <span className={`px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider ${
