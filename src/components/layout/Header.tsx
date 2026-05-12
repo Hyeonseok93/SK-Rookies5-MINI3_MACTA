@@ -121,76 +121,78 @@ export function Header() {
 
           {/* Actions */}
           <div className="flex items-center gap-4">
-            <div className="relative" ref={notificationRef}>
-              <button
-                onClick={() => setShowNotifications(!showNotifications)}
-                className={`relative p-2 text-gray-400 hover:text-white transition-colors rounded-lg ${showNotifications ? 'bg-[#1e3a5f]/50 text-white' : ''}`}
-              >
-                <Bell className="w-6 h-6" />
-                {unreadCount > 0 && (
-                  <span className="absolute top-1.5 right-1.5 w-4 h-4 bg-red-500 text-white text-[10px] font-bold rounded-full flex items-center justify-center ring-2 ring-[#0d1b2e]">
-                    {unreadCount}
-                  </span>
-                )}
-              </button>
+            {isLoggedIn && (
+              <div className="relative" ref={notificationRef}>
+                <button
+                  onClick={() => setShowNotifications(!showNotifications)}
+                  className={`relative p-2 text-gray-400 hover:text-white transition-colors rounded-lg ${showNotifications ? 'bg-[#1e3a5f]/50 text-white' : ''}`}
+                >
+                  <Bell className="w-6 h-6" />
+                  {unreadCount > 0 && (
+                    <span className="absolute top-1.5 right-1.5 w-4 h-4 bg-red-500 text-white text-[10px] font-bold rounded-full flex items-center justify-center ring-2 ring-[#0d1b2e]">
+                      {unreadCount}
+                    </span>
+                  )}
+                </button>
 
-              {/* Notification Dropdown */}
-              {showNotifications && (
-                <div className="absolute right-0 mt-2 w-80 bg-[#0d1b2e] border border-[#1e3a5f] rounded-xl shadow-2xl overflow-hidden animate-in fade-in zoom-in-95 duration-200">
-                  <div className="p-4 border-b border-[#1e3a5f] flex justify-between items-center bg-[#0a1628]/50">
-                    <h3 className="text-white font-semibold">Notifications</h3>
-                    <span className="text-[10px] bg-blue-600/20 text-blue-400 px-2 py-0.5 rounded-full font-bold uppercase">Live</span>
-                  </div>
-                  <div className="max-h-[400px] overflow-y-auto">
-                    {notifications.length > 0 ? (
-                      <div className="divide-y border-[#1e3a5f]">
-                        {notifications.slice(0, 5).map((n) => (
-                          <div 
-                            key={n.id} 
-                            className={`p-4 hover:bg-[#1e3a5f]/20 transition-colors cursor-pointer group flex items-start gap-3 ${!n.is_read ? 'bg-blue-600/5' : ''}`}
-                            onClick={() => markAsRead(n.id)}
-                          >
-                            <div className={`mt-1 p-2 rounded-lg flex-shrink-0 ${!n.is_read ? 'bg-blue-600/20 text-blue-400' : 'bg-gray-800 text-gray-500'}`}>
-                              <Bell className="w-4 h-4" />
-                            </div>
-                            <div className="flex-1 min-w-0">
-                              <p className={`text-sm leading-snug mb-1 ${!n.is_read ? 'text-white font-medium' : 'text-gray-400'}`}>
-                                {n.content}
-                              </p>
-                              <div className="flex items-center gap-2 text-[10px] text-gray-500">
-                                <Clock className="w-3 h-3" />
-                                {new Date(n.created_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
-                              </div>
-                            </div>
-                            <button
-                              onClick={(e) => handleNavigate(e, n.target_url, n.id)}
-                              className="mt-1 p-1.5 rounded-md hover:bg-blue-600 hover:text-white text-gray-500 transition-all"
-                              title="Go to Auction"
+                {/* Notification Dropdown */}
+                {showNotifications && (
+                  <div className="absolute right-0 mt-2 w-80 bg-[#0d1b2e] border border-[#1e3a5f] rounded-xl shadow-2xl overflow-hidden animate-in fade-in zoom-in-95 duration-200">
+                    <div className="p-4 border-b border-[#1e3a5f] flex justify-between items-center bg-[#0a1628]/50">
+                      <h3 className="text-white font-semibold">Notifications</h3>
+                      <span className="text-[10px] bg-blue-600/20 text-blue-400 px-2 py-0.5 rounded-full font-bold uppercase">Live</span>
+                    </div>
+                    <div className="max-h-[400px] overflow-y-auto">
+                      {notifications.length > 0 ? (
+                        <div className="divide-y border-[#1e3a5f]">
+                          {notifications.slice(0, 5).map((n) => (
+                            <div 
+                              key={n.id} 
+                              className={`p-4 hover:bg-[#1e3a5f]/20 transition-colors cursor-pointer group flex items-start gap-3 ${!n.is_read ? 'bg-blue-600/5' : ''}`}
+                              onClick={() => markAsRead(n.id)}
                             >
-                              <ExternalLink className="w-3.5 h-3.5" />
-                            </button>
-                          </div>
-                        ))}
-                      </div>
-                    ) : (
-                      <div className="py-12 px-4 text-center">
-                        <Bell className="w-12 h-12 text-gray-600 mx-auto mb-3 opacity-20" />
-                        <p className="text-gray-500 text-sm">No new notifications</p>
-                      </div>
+                              <div className={`mt-1 p-2 rounded-lg flex-shrink-0 ${!n.is_read ? 'bg-blue-600/20 text-blue-400' : 'bg-gray-800 text-gray-500'}`}>
+                                <Bell className="w-4 h-4" />
+                              </div>
+                              <div className="flex-1 min-w-0">
+                                <p className={`text-sm leading-snug mb-1 ${!n.is_read ? 'text-white font-medium' : 'text-gray-400'}`}>
+                                  {n.content}
+                                </p>
+                                <div className="flex items-center gap-2 text-[10px] text-gray-500">
+                                  <Clock className="w-3 h-3" />
+                                  {new Date(n.created_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                                </div>
+                              </div>
+                              <button
+                                onClick={(e) => handleNavigate(e, n.target_url, n.id)}
+                                className="mt-1 p-1.5 rounded-md hover:bg-blue-600 hover:text-white text-gray-500 transition-all"
+                                title="Go to Auction"
+                              >
+                                <ExternalLink className="w-3.5 h-3.5" />
+                              </button>
+                            </div>
+                          ))}
+                        </div>
+                      ) : (
+                        <div className="py-12 px-4 text-center">
+                          <Bell className="w-12 h-12 text-gray-600 mx-auto mb-3 opacity-20" />
+                          <p className="text-gray-500 text-sm">No new notifications</p>
+                        </div>
+                      )}
+                    </div>
+                    {notifications.length > 0 && (
+                      <Link 
+                        to="/notifications"
+                        onClick={() => setShowNotifications(false)}
+                        className="block w-full py-3 bg-[#0a1628]/50 text-gray-400 hover:text-white text-xs font-medium border-t border-[#1e3a5f] transition-colors text-center"
+                      >
+                        View All Notifications
+                      </Link>
                     )}
                   </div>
-                  {notifications.length > 0 && (
-                    <Link 
-                      to="/notifications"
-                      onClick={() => setShowNotifications(false)}
-                      className="block w-full py-3 bg-[#0a1628]/50 text-gray-400 hover:text-white text-xs font-medium border-t border-[#1e3a5f] transition-colors text-center"
-                    >
-                      View All Notifications
-                    </Link>
-                  )}
-                </div>
-              )}
-            </div>
+                )}
+              </div>
+            )}
 
             {isLoggedIn ? (
               <button

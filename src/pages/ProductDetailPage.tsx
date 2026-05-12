@@ -7,6 +7,10 @@ import { auctionApi } from '../api/auction';
 import type { AuctionDetail, Bid, Comment } from '../api/types';
 import { useToast } from '../components/common/Toast';
 import { formatPrice, sanitizeNumeric } from '../utils/format';
+import { getAccessTokenCookie } from '../api/tokenCookie';
+import { AUTH_STATE_CHANGED_EVENT } from '../api/auth';
+
+const isAuthenticated = () => Boolean(getAccessTokenCookie() && localStorage.getItem('macta_user'));
 
 export function ProductDetailPage() {
   const { id } = useParams();
@@ -17,6 +21,7 @@ export function ProductDetailPage() {
   const [comments, setComments] = useState<Comment[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [isLoggedIn, setIsLoggedIn] = useState(isAuthenticated);
   
   const [bidAmount, setBidAmount] = useState('');
   const [isBidding, setIsBidding] = useState(false);
@@ -24,6 +29,20 @@ export function ProductDetailPage() {
   const [selectedImage, setSelectedImage] = useState(0);
   const [newQuestion, setNewQuestion] = useState('');
   const [isSubmittingQuestion, setIsSubmittingQuestion] = useState(false);
+
+  useEffect(() => {
+    const handleAuthStateChanged = () => {
+      setIsLoggedIn(isAuthenticated());
+    };
+
+    window.addEventListener(AUTH_STATE_CHANGED_EVENT, handleAuthStateChanged);
+    window.addEventListener('storage', handleAuthStateChanged);
+
+    return () => {
+      window.removeEventListener(AUTH_STATE_CHANGED_EVENT, handleAuthStateChanged);
+      window.removeEventListener('storage', handleAuthStateChanged);
+    };
+  }, []);
 
   useEffect(() => {
     if (!id) return;
@@ -210,16 +229,18 @@ export function ProductDetailPage() {
             <div className="bg-[#0d1b2e] border border-[#1e3a5f] rounded-lg p-6 sticky top-24">
               <div className="flex justify-between items-start mb-2 gap-4">
                 <h1 className="text-2xl font-bold text-white leading-tight">{item.title}</h1>
-                <button 
-                  onClick={handleToggleLike}
-                  className={`p-3 rounded-xl transition-all shadow-lg flex-shrink-0 ${
-                    item.is_liked 
-                      ? 'bg-red-500 text-white' 
-                      : 'bg-[#1e3a5f]/50 text-gray-400 hover:text-red-400'
-                  }`}
-                >
-                  <Heart className={`w-6 h-6 ${item.is_liked ? 'fill-current' : ''}`} />
-                </button>
+                {isLoggedIn && (
+                  <button 
+                    onClick={handleToggleLike}
+                    className={`p-3 rounded-xl transition-all shadow-lg flex-shrink-0 ${
+                      item.is_liked 
+                        ? 'bg-red-500 text-white' 
+                        : 'bg-[#1e3a5f]/50 text-gray-400 hover:text-red-400'
+                    }`}
+                  >
+                    <Heart className={`w-6 h-6 ${item.is_liked ? 'fill-current' : ''}`} />
+                  </button>
+                )}
               </div>
               <div className="flex items-center gap-2 mb-6">
                 <span className="px-3 py-1 bg-blue-600/20 text-blue-400 rounded-lg text-sm">{item.category}</span>
