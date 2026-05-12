@@ -6,10 +6,12 @@ import { CountdownTimer } from '../components/common/CountdownTimer';
 import { useAuctions } from '../hooks/useAuctions';
 import { auctionApi } from '../api/auction';
 import type { Category, AuctionStats } from '../api/types';
+import { ErrorState } from '../components/common/ErrorState';
 import { formatPrice } from '../utils/format';
 import { useToast } from '../components/common/Toast';
 import { getAccessTokenCookie } from '../api/tokenCookie';
 import { AUTH_STATE_CHANGED_EVENT } from '../api/auth';
+import { Pagination } from '../components/common/Pagination';
 
 type SortOption = 'newest' | 'closing-soon' | 'price-low' | 'price-high';
 
@@ -27,14 +29,18 @@ export function HomePage() {
   const minPrice = searchParams.get('minPrice') || '';
   const maxPrice = searchParams.get('maxPrice') || '';
   const [sortBy, setSortBy] = useState<SortOption>('newest');
+  const [currentPage, setCurrentPage] = useState(0);
+  const PAGE_SIZE = 30;
   
   // API Data
-  const { auctions, setAuctions, isLoading, error } = useAuctions({
+  const { auctions, setAuctions, pageInfo, isLoading, error, refetch } = useAuctions({
     category: selectedCategory,
     q: searchQuery,
     minPrice,
     maxPrice,
-    sort: sortBy
+    sort: sortBy,
+    page: currentPage,
+    size: PAGE_SIZE
   });
 
   const [apiCategories, setApiCategories] = useState<Category[]>([]);
@@ -84,6 +90,12 @@ export function HomePage() {
       }
     });
     setSearchParams(newParams);
+    setCurrentPage(0); // Reset page when filters change
+  };
+
+  const handleSortChange = (option: SortOption) => {
+    setSortBy(option);
+    setCurrentPage(0); // Reset page when sort changes
   };
 
   const handlePriceApply = () => {
@@ -241,7 +253,7 @@ export function HomePage() {
                   ].map(option => (
                     <button
                       key={option.id}
-                      onClick={() => setSortBy(option.id as SortOption)}
+                      onClick={() => handleSortChange(option.id as SortOption)}
                       className={`w-full text-left px-3 py-2 rounded-lg text-sm transition-colors ${
                         sortBy === option.id
                           ? 'bg-blue-600 text-white'
@@ -294,62 +306,66 @@ export function HomePage() {
                 <p className="text-gray-400">Fetching latest auctions...</p>
               </div>
             ) : error ? (
-              <div className="text-center py-24 bg-red-500/10 border border-red-500/20 rounded-xl">
-                <p className="text-red-400">{error}</p>
-                <button onClick={() => window.location.reload()} className="mt-4 text-white underline">Try again</button>
-              </div>
+              <ErrorState message={error} onRetry={refetch} />
+            ) : auctions.length > 0 ? (
+              <>
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                  {auctions.map(item => (
+                    <div
+                      key={item.id}
+                      onClick={() => navigate(`/product/${item.id}`)}
+                      className="bg-[#0d1b2e] rounded-lg overflow-hidden border border-[#1e3a5f] hover:border-blue-500 transition-all cursor-pointer group"
+                    >
+                      <div className="relative aspect-square overflow-hidden bg-[#1e3a5f]/20">
+                        <img
+                          src={item.main_picture_url}
+                          alt={item.title}
+                          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                        />
+                        {isLoggedIn && (
+                          <button 
+                            onClick={(e) => handleToggleLike(e, item.id)}
+                            className={`absolute bottom-3 right-3 p-2 rounded-full backdrop-blur-md transition-all shadow-lg z-10 ${
+                              item.is_liked ? 'bg-red-500 text-white' : 'bg-black/40 text-white hover:bg-white hover:text-red-500'
+                            }`}
+                          >
+                            <Heart className={`w-4 h-4 ${item.is_liked ? 'fill-current' : ''}`} />
+                          </button>
+                        )}
+                        <div className="absolute top-3 right-3 bg-red-600 text-white px-3 py-1.5 rounded-full text-sm font-semibold flex items-center gap-1.5 shadow-lg">
+                          <Clock className="w-4 h-4" />
+                          <CountdownTimer endTime={new Date(item.end_time)} />
+                        </div>
+                        <div className="absolute top-3 left-3 bg-blue-600/90 text-white px-3 py-1 rounded-full text-xs font-medium">
+                          {item.category}
+                        </div>
+                      </div>
+                      <div className="p-5">
+                        <h3 className="text-white font-semibold mb-3 line-clamp-2 min-h-[3rem]">{item.title}</h3>
+                        <div className="mb-2">
+                          <span className="text-xs text-gray-400">Current Bid</span>
+                        </div>
+                        <div className="flex items-end justify-between">
+                          <div className="text-2xl font-bold text-blue-400">
+                            ₩{formatPrice(item.current_price)}
+                          </div>
+                          <div className="text-xs text-gray-500">
+                            {item.bid_count} bids
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+                {pageInfo && (
+                  <Pagination 
+                    currentPage={currentPage} 
+                    totalPages={pageInfo.total_pages} 
+                    onPageChange={setCurrentPage} 
+                  />
+                )}
+              </>
             ) : (
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-                {auctions.map(item => (
-                  <div
-                    key={item.id}
-                    onClick={() => navigate(`/product/${item.id}`)}
-                    className="bg-[#0d1b2e] rounded-lg overflow-hidden border border-[#1e3a5f] hover:border-blue-500 transition-all cursor-pointer group"
-                  >
-                    <div className="relative aspect-square overflow-hidden bg-[#1e3a5f]/20">
-                      <img
-                        src={item.main_picture_url}
-                        alt={item.title}
-                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-                      />
-                      {isLoggedIn && (
-                        <button 
-                          onClick={(e) => handleToggleLike(e, item.id)}
-                          className={`absolute bottom-3 right-3 p-2 rounded-full backdrop-blur-md transition-all shadow-lg z-10 ${
-                            item.is_liked ? 'bg-red-500 text-white' : 'bg-black/40 text-white hover:bg-white hover:text-red-500'
-                          }`}
-                        >
-                          <Heart className={`w-4 h-4 ${item.is_liked ? 'fill-current' : ''}`} />
-                        </button>
-                      )}
-                      <div className="absolute top-3 right-3 bg-red-600 text-white px-3 py-1.5 rounded-full text-sm font-semibold flex items-center gap-1.5 shadow-lg">
-                        <Clock className="w-4 h-4" />
-                        <CountdownTimer endTime={new Date(item.end_time)} />
-                      </div>
-                      <div className="absolute top-3 left-3 bg-blue-600/90 text-white px-3 py-1 rounded-full text-xs font-medium">
-                        {item.category}
-                      </div>
-                    </div>
-                    <div className="p-5">
-                      <h3 className="text-white font-semibold mb-3 line-clamp-2 min-h-[3rem]">{item.title}</h3>
-                      <div className="mb-2">
-                        <span className="text-xs text-gray-400">Current Bid</span>
-                      </div>
-                      <div className="flex items-end justify-between">
-                        <div className="text-2xl font-bold text-blue-400">
-                          ₩{formatPrice(item.current_price)}
-                        </div>
-                        <div className="text-xs text-gray-500">
-                          {item.bid_count} bids
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            )}
-
-            {!isLoading && auctions.length === 0 && (
               <div className="text-center py-24 bg-[#0d1b2e] rounded-xl border border-dashed border-[#1e3a5f]">
                 <div className="bg-[#1e3a5f]/20 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
                   <Search className="w-8 h-8 text-gray-500" />

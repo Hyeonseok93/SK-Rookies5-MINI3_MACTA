@@ -1,4 +1,13 @@
-import type { CategoryType } from '../data/mockData';
+export type CategoryType = 
+  | 'Digital Devices' 
+  | 'Home Appliances' 
+  | 'Furniture/Interior' 
+  | 'Clothing' 
+  | 'Beauty/Personal Care' 
+  | 'Sports/Leisure' 
+  | 'Games/Hobbies' 
+  | 'Books/Tickets' 
+  | 'Other';
 
 export interface ApiResponse<T> {
   success: boolean;
@@ -19,6 +28,12 @@ export interface PageInfo {
 }
 
 export interface PaginatedResponse<T> extends ApiResponse<T> {
+  page_info: PageInfo;
+}
+
+export interface AuctionListResponse extends ApiResponse<{
+  content: AuctionSummary[];
+}> {
   page_info: PageInfo;
 }
 

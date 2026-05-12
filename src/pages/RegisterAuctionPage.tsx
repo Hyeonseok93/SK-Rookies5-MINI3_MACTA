@@ -3,8 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { ArrowLeft, Camera, X, Plus, Calendar, Coins, Package, Loader2, AlertCircle } from 'lucide-react';
 import { Layout } from '../components/layout/Layout';
 import { auctionApi } from '../api/auction';
-import type { Category } from '../api/types';
-import type { CategoryType } from '../data/mockData';
+import type { Category, CategoryType } from '../api/types';
 import { useToast } from '../components/common/Toast';
 import { formatPrice, sanitizeNumeric } from '../utils/format';
 
@@ -53,17 +52,8 @@ export function RegisterAuctionPage() {
   };
 
   const handleImageAdd = () => {
-    const mockImages = [
-      'https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=800&q=80',
-      'https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=800&q=80',
-      'https://images.unsplash.com/photo-1491553895911-0055eca6402d?w=800&q=80'
-    ];
-    const randomUrl = mockImages[Math.floor(Math.random() * mockImages.length)];
-    
-    if (images.length < 5) {
-      setPictures([...images, { url: randomUrl, main: images.length === 0 }]);
-      if (errors.images) setErrors({ ...errors, images: undefined });
-    }
+    // In production, this would open a file picker and upload to S3/Cloud Storage
+    showToast('Image upload feature will be connected to the backend soon.', 'info');
   };
 
   const handleRemoveImage = (index: number) => {

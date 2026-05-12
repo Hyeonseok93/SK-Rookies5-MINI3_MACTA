@@ -7,10 +7,12 @@ import {
 import { Layout } from '../components/layout/Layout';
 import { auctionApi } from '../api/auction';
 import { userApi } from '../api/user';
-import type { UserSummaryResponse, UserAuctionItem, UserBidItem, UserInfoResponse } from '../api/types';
+import type { UserSummaryResponse, UserAuctionItem, UserBidItem, UserInfoResponse, PageInfo } from '../api/types';
+import { ErrorState } from '../components/common/ErrorState';
 import { formatPrice } from '../utils/format';
 import { useToast } from '../components/common/Toast';
 import { AUTH_STATE_CHANGED_EVENT } from '../api/auth';
+import { Pagination } from '../components/common/Pagination';
 
 type MyPageTab = 'auctions' | 'bids' | 'likes';
 
@@ -58,7 +60,11 @@ export function MyPage() {
   const [stats, setStats] = useState<UserSummaryResponse | null>(null);
   const [activeTab, setActiveTab] = useState<MyPageTab>('auctions');
   const [items, setItems] = useState<(UserAuctionItem | UserBidItem)[]>([]);
+  const [pageInfo, setPageInfo] = useState<PageInfo | null>(null);
+  const [currentPage, setCurrentPage] = useState(0);
+  const PAGE_SIZE = 10;
   const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
   const [user, setUser] = useState<StoredUser | null>(() => getStoredUser());
   const [profile, setProfile] = useState<UserInfoResponse | null>(null);
   const [nickname, setNickname] = useState('');
@@ -91,24 +97,40 @@ export function MyPage() {
   useEffect(() => {
     let ignore = false;
     const fetchTabContent = async () => {
+      await Promise.resolve();
       setIsLoading(true);
+      setError(null);
       try {
         let res;
-        if (activeTab === 'auctions') res = await userApi.getMyAuctions();
-        else if (activeTab === 'bids') res = await userApi.getMyBids();
-        else res = await userApi.getMyWatchlist();
+        const params = { page: currentPage, size: PAGE_SIZE };
+        if (activeTab === 'auctions') res = await userApi.getMyAuctions(params);
+        else if (activeTab === 'bids') res = await userApi.getMyBids(params);
+        else res = await userApi.getMyWatchlist(params);
 
         if (!ignore && res.success) {
           setItems(res.data);
+          setPageInfo(res.page_info);
         }
+      } catch {
+        if (!ignore) setError('Failed to load your items.');
       } finally {
         if (!ignore) setIsLoading(false);
       }
     };
 
-    fetchTabContent();
-    return () => { ignore = true; };
-  }, [activeTab]);
+    const timer = setTimeout(() => {
+      fetchTabContent();
+    }, 0);
+    return () => { 
+      ignore = true; 
+      clearTimeout(timer);
+    };
+  }, [activeTab, currentPage]);
+
+  const handleTabChange = (tab: MyPageTab) => {
+    setActiveTab(tab);
+    setCurrentPage(0);
+  };
 
   const handleOpenProfile = async () => {
     setIsProfileOpen(true);
@@ -295,7 +317,7 @@ export function MyPage() {
               ].map((tab) => (
                 <button
                   key={tab.id}
-                  onClick={() => setActiveTab(tab.id as MyPageTab)}
+                  onClick={() => handleTabChange(tab.id as MyPageTab)}
                   className={`w-full flex items-center justify-between px-4 py-3 rounded-xl transition-all ${
                     activeTab === tab.id
                       ? 'bg-blue-600 text-white shadow-lg shadow-blue-600/20'
@@ -314,11 +336,13 @@ export function MyPage() {
 
           {/* Main Content Area */}
           <div className="flex-1">
-            <div className="bg-[#0d1b2e] border border-[#1e3a5f] rounded-2xl overflow-hidden min-h-[500px]">
+            <div className="bg-[#0d1b2e] border border-[#1e3a5f] rounded-2xl overflow-hidden min-h-[500px] mb-6">
               <div className="p-6 border-b border-[#1e3a5f] flex justify-between items-center">
                 <h2 className="text-xl font-bold text-white capitalize">{activeTab === 'likes' ? 'Watchlist' : activeTab}</h2>
                 <div className="flex items-center gap-4">
-                  <div className="text-sm text-gray-500">{items.length} items found</div>
+                  <div className="text-sm text-gray-500">
+                    {pageInfo ? `${pageInfo.total_elements} items found` : `${items.length} items found`}
+                  </div>
                   {activeTab === 'likes' && items.length > 0 && (
                     <button
                       onClick={handleClearWatchlist}
@@ -335,6 +359,10 @@ export function MyPage() {
                   <div className="flex flex-col items-center justify-center py-32 text-blue-400">
                     <Loader2 className="w-10 h-10 animate-spin mb-4" />
                     <p className="text-gray-500">Loading details...</p>
+                  </div>
+                ) : error ? (
+                  <div className="p-8">
+                    <ErrorState message={error} onRetry={() => setCurrentPage(0)} />
                   </div>
                 ) : items.length > 0 ? (
                   <div className="divide-y divide-[#1e3a5f]">
@@ -389,6 +417,14 @@ export function MyPage() {
                 )}
               </div>
             </div>
+
+            {!isLoading && pageInfo && (
+              <Pagination 
+                currentPage={currentPage} 
+                totalPages={pageInfo.total_pages} 
+                onPageChange={setCurrentPage} 
+              />
+            )}
           </div>
         </div>
       </div>
