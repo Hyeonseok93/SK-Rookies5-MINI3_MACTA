@@ -7,6 +7,7 @@ import type {
   UserAuctionItem,
   UserBidItem,
   UserInfoResponse,
+  PasswordUpdateRequest,
   UserSummaryResponse,
   UserUpdateRequest,
 } from './types';
@@ -29,6 +30,12 @@ export const userApi = {
   // PUT /api/v1/users/me
   updateUserInfo: async (payload: UserUpdateRequest): Promise<ApiResponse<null>> => {
     const { data } = await api.put<ApiResponse<null>>('/users/me', payload);
+    return data;
+  },
+
+  // PATCH /api/v1/users/password
+  updatePassword: async (payload: PasswordUpdateRequest): Promise<ApiResponse<null>> => {
+    const { data } = await api.patch<ApiResponse<null>>('/users/password', payload);
     return data;
   },
 

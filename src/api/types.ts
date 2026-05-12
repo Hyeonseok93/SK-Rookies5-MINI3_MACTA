@@ -62,6 +62,12 @@ export interface UserUpdateRequest {
   nickname: string;
 }
 
+export interface PasswordUpdateRequest {
+  currentPassword: string;
+  newPassword: string;
+  confirmPassword: string;
+}
+
 export interface UserAuctionItem {
   auction_id: number;
   title: string;

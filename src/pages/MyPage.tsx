@@ -2,7 +2,7 @@ import { useState, useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { 
   Package, TrendingUp, Heart, ShoppingBag, 
-  Settings, ChevronRight, Clock, Eye, Loader2, Trash2, X, Save, Mail, UserRound
+  Settings, ChevronRight, Clock, Eye, Loader2, Trash2, X, Save, Mail, UserRound, KeyRound, Lock
 } from 'lucide-react';
 import { Layout } from '../components/layout/Layout';
 import { auctionApi } from '../api/auction';
@@ -21,6 +21,13 @@ interface StoredUser {
   role?: string;
 }
 
+interface ApiErrorBody {
+  message?: string;
+  error?: {
+    message?: string;
+  };
+}
+
 const getStoredUser = (): StoredUser | null => {
   const storedUser = localStorage.getItem('macta_user');
   if (!storedUser) return null;
@@ -29,6 +36,20 @@ const getStoredUser = (): StoredUser | null => {
   } catch {
     return null;
   }
+};
+
+const getApiErrorMessage = (error: unknown, fallback: string) => {
+  const apiError = error as {
+    response?: {
+      data?: ApiErrorBody;
+    };
+    message?: string;
+  };
+
+  return apiError.response?.data?.message
+    || apiError.response?.data?.error?.message
+    || apiError.message
+    || fallback;
 };
 
 export function MyPage() {
@@ -45,6 +66,13 @@ export function MyPage() {
   const [isProfileLoading, setIsProfileLoading] = useState(false);
   const [isSavingProfile, setIsSavingProfile] = useState(false);
   const [profileError, setProfileError] = useState('');
+  const [isPasswordOpen, setIsPasswordOpen] = useState(false);
+  const [isChangingPassword, setIsChangingPassword] = useState(false);
+  const [passwordForm, setPasswordForm] = useState({
+    currentPassword: '',
+    newPassword: '',
+    confirmPassword: '',
+  });
 
   const fetchStats = useCallback(() => {
     userApi.getUserSummary().then(res => {
@@ -94,7 +122,7 @@ export function MyPage() {
         setNickname(res.data.nickname);
       }
     } catch (error) {
-      const message = error instanceof Error ? error.message : 'Failed to load profile.';
+      const message = getApiErrorMessage(error, 'Failed to load profile.');
       setProfileError(message);
       showToast(message, 'error');
     } finally {
@@ -138,11 +166,51 @@ export function MyPage() {
         showToast(res.message || 'Profile updated.', 'success');
       }
     } catch (error) {
-      const message = error instanceof Error ? error.message : 'Failed to update profile.';
+      const message = getApiErrorMessage(error, 'Failed to update profile.');
       setProfileError(message);
       showToast(message, 'error');
     } finally {
       setIsSavingProfile(false);
+    }
+  };
+
+  const handleOpenPassword = () => {
+    setPasswordForm({
+      currentPassword: '',
+      newPassword: '',
+      confirmPassword: '',
+    });
+    setIsPasswordOpen(true);
+  };
+
+  const handleClosePassword = () => {
+    if (isChangingPassword) return;
+    setIsPasswordOpen(false);
+  };
+
+  const handlePasswordChange = (field: keyof typeof passwordForm, value: string) => {
+    setPasswordForm(prev => ({ ...prev, [field]: value }));
+  };
+
+  const handleSubmitPassword = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setIsChangingPassword(true);
+
+    try {
+      const res = await userApi.updatePassword(passwordForm);
+      if (res.success) {
+        setIsPasswordOpen(false);
+        setPasswordForm({
+          currentPassword: '',
+          newPassword: '',
+          confirmPassword: '',
+        });
+        showToast(res.message || 'Password changed.', 'success');
+      }
+    } catch (error) {
+      showToast(getApiErrorMessage(error, 'Failed to change password.'), 'error');
+    } finally {
+      setIsChangingPassword(false);
     }
   };
 
@@ -187,6 +255,13 @@ export function MyPage() {
                   className="px-4 py-2 bg-[#1e3a5f] hover:bg-[#2e4a6f] text-white rounded-lg text-sm font-medium transition-colors flex items-center gap-2"
                 >
                   <Settings className="w-4 h-4" /> Edit Profile
+                </button>
+                <button
+                  type="button"
+                  onClick={handleOpenPassword}
+                  className="px-4 py-2 bg-[#0a1628] hover:bg-[#1e3a5f] border border-[#1e3a5f] text-white rounded-lg text-sm font-medium transition-colors flex items-center gap-2"
+                >
+                  <KeyRound className="w-4 h-4" /> Change Password
                 </button>
               </div>
             </div>
@@ -394,6 +469,70 @@ export function MyPage() {
                 </div>
               </form>
             )}
+          </div>
+        </div>
+      )}
+
+      {isPasswordOpen && (
+        <div className="fixed inset-0 z-[70] flex items-center justify-center bg-black/70 px-4">
+          <div className="w-full max-w-md rounded-xl border border-[#1e3a5f] bg-[#0d1b2e] shadow-2xl">
+            <div className="flex items-center justify-between border-b border-[#1e3a5f] px-6 py-4">
+              <h2 className="text-lg font-bold text-white">Change Password</h2>
+              <button
+                type="button"
+                onClick={handleClosePassword}
+                className="rounded-lg p-2 text-gray-400 transition-colors hover:bg-[#1e3a5f]/50 hover:text-white"
+                disabled={isChangingPassword}
+                title="Close"
+              >
+                <X className="h-5 w-5" />
+              </button>
+            </div>
+
+            <form onSubmit={handleSubmitPassword} className="space-y-5 px-6 py-5">
+              {[
+                { id: 'currentPassword', label: 'Current Password', value: passwordForm.currentPassword },
+                { id: 'newPassword', label: 'New Password', value: passwordForm.newPassword },
+                { id: 'confirmPassword', label: 'Confirm Password', value: passwordForm.confirmPassword },
+              ].map((field) => (
+                <div key={field.id}>
+                  <label htmlFor={field.id} className="mb-2 block text-xs font-bold uppercase tracking-wider text-gray-500">
+                    {field.label}
+                  </label>
+                  <div className="relative">
+                    <Lock className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-500" />
+                    <input
+                      id={field.id}
+                      type="password"
+                      value={field.value}
+                      onChange={(e) => handlePasswordChange(field.id as keyof typeof passwordForm, e.target.value)}
+                      className="h-11 w-full rounded-lg border border-[#1e3a5f] bg-[#0a1628] pl-10 pr-3 text-white outline-none transition-colors placeholder:text-gray-600 focus:border-blue-500"
+                      placeholder={field.label}
+                      disabled={isChangingPassword}
+                    />
+                  </div>
+                </div>
+              ))}
+
+              <div className="flex justify-end gap-3 pt-2">
+                <button
+                  type="button"
+                  onClick={handleClosePassword}
+                  className="rounded-lg px-4 py-2 text-sm font-medium text-gray-300 transition-colors hover:bg-[#1e3a5f]/50 hover:text-white"
+                  disabled={isChangingPassword}
+                >
+                  Cancel
+                </button>
+                <button
+                  type="submit"
+                  className="flex items-center gap-2 rounded-lg bg-blue-600 px-4 py-2 text-sm font-bold text-white transition-colors hover:bg-blue-500 disabled:cursor-not-allowed disabled:opacity-60"
+                  disabled={isChangingPassword}
+                >
+                  {isChangingPassword ? <Loader2 className="h-4 w-4 animate-spin" /> : <Save className="h-4 w-4" />}
+                  Save
+                </button>
+              </div>
+            </form>
           </div>
         </div>
       )}
