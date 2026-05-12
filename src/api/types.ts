@@ -91,10 +91,20 @@ export interface UserAuctionItem {
   view_count: number;
   created_at: string;
   preview_url: string;
+  like_count?: number;
 }
 
 export interface UserBidItem extends UserAuctionItem {
   my_bid_price: number;
+}
+
+export interface UserLikeListResponse {
+  auctionId: number;
+  title: string;
+  currentPrice: number;
+  status: 'READY' | 'LIVE' | 'FINISHED' | 'CANCEL';
+  likeCount: number;
+  mainPictureUrl: string;
 }
 
 export interface LikeToggleResponse {
