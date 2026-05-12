@@ -368,7 +368,7 @@ export function MyPage() {
                   <div className="divide-y divide-[#1e3a5f]">
                     {items.map((item, idx) => (
                       <div
-                        key={idx}
+                        key={`${activeTab}-${item.auction_id}-${idx}`}
                         onClick={() => navigate(`/product/${item.auction_id}`)}
                         className="p-6 hover:bg-[#1e3a5f]/10 transition-colors cursor-pointer flex items-center gap-6 group"
                       >
@@ -378,8 +378,13 @@ export function MyPage() {
                         <div className="flex-1 min-w-0">
                           <h3 className="text-white font-semibold text-lg mb-1 truncate">{item.title}</h3>
                           <div className="flex flex-wrap gap-4 text-sm text-gray-500 mb-3">
-                            <div className="flex items-center gap-1.5"><Clock className="w-4 h-4" /> {new Date(item.created_at).toLocaleDateString()}</div>
-                            <div className="flex items-center gap-1.5"><Eye className="w-4 h-4" /> {item.view_count} views</div>
+                            {item.created_at && (
+                              <div className="flex items-center gap-1.5"><Clock className="w-4 h-4" /> {new Date(item.created_at).toLocaleDateString()}</div>
+                            )}
+                            <div className="flex items-center gap-1.5">
+                              {activeTab === 'likes' ? <Heart className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                              {activeTab === 'likes' ? `${item.like_count ?? 0} likes` : `${item.view_count} views`}
+                            </div>
                           </div>
                           <div className="flex items-end justify-between">
                             <div>
