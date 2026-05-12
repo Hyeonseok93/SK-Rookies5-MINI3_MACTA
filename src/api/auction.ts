@@ -1,20 +1,12 @@
 import { auctionDatabase } from '../data/mockData';
+import { sessionData } from './mockSession';
 import type { 
   AuctionSummary, PaginatedResponse, ApiResponse, Category, 
   AuctionDetail, Comment, AuctionStats, CreateAuctionRequest, 
-  Notification, UserDashboardStats, UserAuctionItem, UserBidItem, 
-  LikeToggleResponse 
+  Notification, LikeToggleResponse 
 } from './types';
 
 const delay = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
-
-// Simulating session storage for likes and user data
-const sessionData = {
-  likedAuctionIds: new Set<number>([1, 4]), // Initial likes
-  myBids: [
-    { auction_id: 1, bid_price: 1450000, timestamp: new Date().toISOString() }
-  ]
-};
 
 export const auctionApi = {
   // GET /api/v1/auctions
@@ -250,87 +242,6 @@ export const auctionApi = {
         like_count: item.like_count,
         is_liked: !isLiked
       },
-      timestamp: new Date().toISOString()
-    };
-  },
-
-  // GET /api/v1/users/me/stats
-  getUserStats: async (): Promise<ApiResponse<UserDashboardStats>> => {
-    await delay(300);
-    return {
-      success: true,
-      data: {
-        bidding_count: sessionData.myBids.length,
-        won_count: 1,
-        hosted_count: auctionDatabase.filter(a => a.seller_id === 999).length,
-        watchlist_count: sessionData.likedAuctionIds.size
-      },
-      timestamp: new Date().toISOString()
-    };
-  },
-
-  // GET /api/v1/users/me/auctions
-  getMyAuctions: async (): Promise<PaginatedResponse<UserAuctionItem[]>> => {
-    await delay(400);
-    const myItems = auctionDatabase.filter(a => a.seller_id === 999).map(a => ({
-      auction_id: parseInt(a.id),
-      title: a.title,
-      current_price: a.current_price,
-      status: a.status,
-      view_count: a.view_count,
-      created_at: a.created_at.toISOString(),
-      preview_url: a.imageUrl
-    }));
-    return {
-      success: true,
-      data: myItems,
-      page_info: { current_page: 0, page_size: 10, total_pages: 1, total_elements: myItems.length, is_first: true, is_last: true, has_next: false, has_previous: false },
-      timestamp: new Date().toISOString()
-    };
-  },
-
-  // GET /api/v1/users/me/bids
-  getMyBids: async (): Promise<PaginatedResponse<UserBidItem[]>> => {
-    await delay(400);
-    const myBidItems: UserBidItem[] = sessionData.myBids.map(mb => {
-      const auction = auctionDatabase.find(a => parseInt(a.id) === mb.auction_id)!;
-      return {
-        auction_id: parseInt(auction.id),
-        title: auction.title,
-        my_bid_price: mb.bid_price,
-        current_price: auction.current_price,
-        status: auction.status,
-        view_count: auction.view_count,
-        created_at: mb.timestamp,
-        preview_url: auction.imageUrl
-      };
-    });
-    return {
-      success: true,
-      data: myBidItems,
-      page_info: { current_page: 0, page_size: 10, total_pages: 1, total_elements: myBidItems.length, is_first: true, is_last: true, has_next: false, has_previous: false },
-      timestamp: new Date().toISOString()
-    };
-  },
-
-  // GET /api/v1/users/me/likes
-  getMyWatchlist: async (): Promise<PaginatedResponse<UserAuctionItem[]>> => {
-    await delay(400);
-    const watchlist = auctionDatabase
-      .filter(a => sessionData.likedAuctionIds.has(parseInt(a.id)))
-      .map(a => ({
-        auction_id: parseInt(a.id),
-        title: a.title,
-        current_price: a.current_price,
-        status: a.status,
-        view_count: a.view_count,
-        created_at: a.created_at.toISOString(),
-        preview_url: a.imageUrl
-      }));
-    return {
-      success: true,
-      data: watchlist,
-      page_info: { current_page: 0, page_size: 10, total_pages: 1, total_elements: watchlist.length, is_first: true, is_last: true, has_next: false, has_previous: false },
       timestamp: new Date().toISOString()
     };
   },

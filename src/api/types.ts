@@ -45,11 +45,21 @@ export interface AuctionStats {
   ending_soon: number;
 }
 
-export interface UserDashboardStats {
-  bidding_count: number;
-  won_count: number;
-  hosted_count: number;
-  watchlist_count: number;
+export interface UserSummaryResponse {
+  biddingCount: number;
+  wonCount: number;
+  hostedCount: number;
+  watchlistCount: number;
+}
+
+export interface UserInfoResponse {
+  id: number;
+  email: string;
+  nickname: string;
+}
+
+export interface UserUpdateRequest {
+  nickname: string;
 }
 
 export interface UserAuctionItem {
