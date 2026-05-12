@@ -182,9 +182,9 @@ export function HomePage() {
                   >
                     All
                   </button>
-                  {apiCategories.map(cat => (
+                  {apiCategories.map((cat, index) => (
                     <button
-                      key={cat.id}
+                      key={cat.id ?? cat.code ?? `${cat.name}-${index}`}
                       onClick={() => updateFilters({ category: cat.name })}
                       className={`w-full text-left px-3 py-2 rounded-lg text-sm transition-colors ${
                         selectedCategory === cat.name
