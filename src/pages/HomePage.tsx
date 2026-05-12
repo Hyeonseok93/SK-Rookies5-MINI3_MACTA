@@ -60,22 +60,22 @@ export function HomePage() {
     const fetchData = async () => {
       try {
         const [catRes, statsRes] = await Promise.all([
-          auctionApi.getCategories().catch(err => ({ success: false, data: [], error: err })),
-          auctionApi.getAuctionStats().catch(err => ({ success: false, data: null, error: err }))
+          auctionApi.getCategories().catch(err => ({ success: false, data: [] as Category[], _error: err })),
+          auctionApi.getAuctionStats().catch(err => ({ success: false, data: null, _error: err }))
         ]);
 
         if (catRes.success) {
           setApiCategories(catRes.data);
         } else {
-          console.warn('Failed to fetch categories:', catRes.error);
-          setApiCategories([]); // Fallback to empty list
+          console.warn('Failed to fetch categories');
+          setApiCategories([]);
         }
 
         if (statsRes.success) {
           setStats(statsRes.data);
         } else {
-          console.warn('Failed to fetch stats:', statsRes.error);
-          setStats(null); // Fallback to null
+          console.warn('Failed to fetch stats');
+          setStats(null);
         }
       } catch (err) {
         console.error('Unexpected error in HomePage data fetching:', err);
