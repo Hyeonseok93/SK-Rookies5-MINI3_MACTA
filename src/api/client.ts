@@ -18,3 +18,73 @@ api.interceptors.request.use((config) => {
 
   return config;
 });
+
+// Response Interceptor for Global Error Handling
+api.interceptors.response.use(
+  (response) => response,
+  (error) => {
+    if (!error.response) {
+      return Promise.reject({
+        ...error,
+        message: '서버와 통신할 수 없습니다. 네트워크 상태를 확인해주세요.',
+      });
+    }
+
+    const { status, data } = error.response;
+    const errorCode = data?.error?.code;
+    let customMessage = data?.message || data?.error?.message;
+
+    switch (status) {
+      case 400:
+        if (errorCode === 'INVALID_BID_PRICE') {
+          customMessage = '현재 최고가보다 높은 금액을 입력해야 합니다.';
+        } else if (errorCode === 'INVALID_INPUT_VALUE') {
+          customMessage = '입력 형식이 올바르지 않습니다.';
+        }
+        break;
+
+      case 401:
+        // Unauthorized: Clear tokens and redirect
+        customMessage = '세션이 만료되었습니다. 다시 로그인해주세요.';
+        document.cookie = 'macta_access_token=; Max-Age=0; Path=/; SameSite=Lax';
+        localStorage.removeItem('macta_user');
+        if (!window.location.pathname.includes('/login')) {
+          window.location.href = '/login?expired=true';
+        }
+        break;
+
+      case 403:
+        customMessage = '해당 작업에 대한 권한이 없습니다.';
+        break;
+
+      case 404:
+        if (errorCode === 'RESOURCE_NOT_FOUND') {
+          customMessage = '요청하신 데이터를 찾을 수 없습니다.';
+        }
+        break;
+
+      case 409:
+        if (errorCode === 'BID_CONFLICT') {
+          customMessage = '다른 사용자가 해당 입찰가로 먼저 입찰을 완료했습니다. 다시 시도해주세요.';
+        } else if (errorCode === 'ALREADY_PROCESSED') {
+          customMessage = '이미 처리가 완료된 요청입니다.';
+        }
+        break;
+
+      case 500:
+        customMessage = '서버 내부 오류가 발생했습니다. 잠시 후 다시 시도해주세요.';
+        break;
+
+      default:
+        customMessage = customMessage || '알 수 없는 오류가 발생했습니다.';
+    }
+
+    // Wrap the error with our custom message
+    return Promise.reject({
+      ...error,
+      status,
+      errorCode,
+      message: customMessage,
+    });
+  }
+);

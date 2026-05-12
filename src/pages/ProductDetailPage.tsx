@@ -9,6 +9,7 @@ import { useToast } from '../components/common/Toast';
 import { formatPrice, sanitizeNumeric } from '../utils/format';
 import { getAccessTokenCookie } from '../api/tokenCookie';
 import { AUTH_STATE_CHANGED_EVENT } from '../api/auth';
+import { ErrorPage } from './ErrorPage';
 
 const isAuthenticated = () => Boolean(getAccessTokenCookie() && localStorage.getItem('macta_user'));
 
@@ -156,17 +157,11 @@ export function ProductDetailPage() {
 
   if (error || !item) {
     return (
-      <Layout>
-        <div className="max-w-7xl mx-auto px-4 py-16 text-center text-white">
-          <p className="text-xl">{error || 'Item not found'}</p>
-          <button
-            onClick={() => navigate('/')}
-            className="mt-4 px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
-          >
-            Back to Home
-          </button>
-        </div>
-      </Layout>
+      <ErrorPage 
+        code="404" 
+        title="Auction Not Found" 
+        message="요청하신 경매 상품을 찾을 수 없거나 이미 종료되었습니다." 
+      />
     );
   }
 

@@ -14,22 +14,27 @@ export function NotificationsPage() {
   const [filter, setFilter] = useState<'all' | 'unread'>('all');
 
   useEffect(() => {
-    fetchNotifications();
-  }, []);
+    let ignore = false;
 
-  const fetchNotifications = async () => {
-    setIsLoading(true);
-    try {
-      const res = await auctionApi.getNotifications();
-      if (res.success) {
-        setNotifications(res.data);
+    const fetchNotifications = async () => {
+      try {
+        const res = await auctionApi.getNotifications();
+        if (!ignore && res.success) {
+          setNotifications(res.data);
+        }
+      } catch {
+        if (!ignore) showToast('알림을 불러오는데 실패했습니다.', 'error');
+      } finally {
+        if (!ignore) setIsLoading(false);
       }
-    } catch {
-      showToast('Failed to load notifications', 'error');
-    } finally {
-      setIsLoading(false);
-    }
-  };
+    };
+
+    fetchNotifications();
+
+    return () => {
+      ignore = true;
+    };
+  }, [showToast]);
 
   const handleMarkAsRead = async (id: number) => {
     const res = await auctionApi.markNotificationAsRead(id);
@@ -49,7 +54,7 @@ export function NotificationsPage() {
     const res = await auctionApi.deleteNotification(id);
     if (res.success) {
       setNotifications(prev => prev.filter(n => n.id !== id));
-      showToast('Notification deleted', 'info');
+      showToast('알림이 삭제되었습니다.', 'info');
     }
   };
 
@@ -59,20 +64,20 @@ export function NotificationsPage() {
     
     await Promise.all(unreadIds.map(id => auctionApi.markNotificationAsRead(id)));
     setNotifications(prev => prev.map(n => ({ ...n, is_read: true })));
-    showToast('All notifications marked as read', 'success');
+    showToast('모든 알림을 읽음 처리했습니다.', 'success');
   };
 
   const handleDeleteRead = async () => {
     const readIds = notifications.filter(n => n.is_read).map(n => n.id);
     if (readIds.length === 0) {
-      showToast('No read notifications to delete', 'info');
+      showToast('삭제할 읽은 알림이 없습니다.', 'info');
       return;
     }
 
     const res = await auctionApi.deleteReadNotifications();
     if (res.success) {
       setNotifications(prev => prev.filter(n => !n.is_read));
-      showToast('Read notifications cleared', 'success');
+      showToast('읽은 알림을 모두 삭제했습니다.', 'success');
     }
   };
 
@@ -91,7 +96,7 @@ export function NotificationsPage() {
             >
               <ArrowLeft className="w-6 h-6" />
             </button>
-            <h1 className="text-3xl font-bold text-white">Notifications</h1>
+            <h1 className="text-3xl font-bold text-white">알림함</h1>
           </div>
           
           <div className="flex gap-3">
@@ -101,16 +106,16 @@ export function NotificationsPage() {
                 className="text-xs bg-blue-600/10 text-blue-400 border border-blue-600/30 px-3 py-1.5 rounded-lg hover:bg-blue-600/20 transition-colors flex items-center gap-2"
               >
                 <Check className="w-4 h-4" />
-                Mark all as read
+                모두 읽음 처리
               </button>
             )}
             {notifications.some(n => n.is_read) && (
               <button 
                 onClick={handleDeleteRead}
-                className="text-xs bg-red-600/10 text-red-400 border border-red-600/30 px-3 py-1.5 rounded-lg hover:bg-red-600/20 transition-colors flex items-center gap-2"
+                className="text-xs bg-red-600/10 text-red-400 border border-red-600/30 px-3 py-1.5 rounded-lg hover:bg-red-500/20 transition-colors flex items-center gap-2"
               >
                 <Trash2 className="w-4 h-4" />
-                Clear read messages
+                읽은 메시지 삭제
               </button>
             )}
           </div>
@@ -124,7 +129,7 @@ export function NotificationsPage() {
               filter === 'all' ? 'bg-blue-600 text-white' : 'text-gray-400 hover:bg-[#1e3a5f]/30'
             }`}
           >
-            All
+            전체
           </button>
           <button
             onClick={() => setFilter('unread')}
@@ -132,7 +137,7 @@ export function NotificationsPage() {
               filter === 'unread' ? 'bg-blue-600 text-white' : 'text-gray-400 hover:bg-[#1e3a5f]/30'
             }`}
           >
-            Unread ({notifications.filter(n => !n.is_read).length})
+            읽지 않음 ({notifications.filter(n => !n.is_read).length})
           </button>
         </div>
 
@@ -140,7 +145,7 @@ export function NotificationsPage() {
           {isLoading ? (
             <div className="py-20 flex flex-col items-center justify-center text-blue-400">
               <div className="w-10 h-10 border-4 border-blue-600 border-t-transparent rounded-full animate-spin mb-4" />
-              <p className="text-gray-400">Loading your notifications...</p>
+              <p className="text-gray-400">알림을 불러오는 중입니다...</p>
             </div>
           ) : filteredNotifications.length > 0 ? (
             <div className="divide-y divide-[#1e3a5f]">
@@ -165,7 +170,7 @@ export function NotificationsPage() {
                         {new Date(n.created_at).toLocaleString()}
                       </div>
                       <span className="px-2 py-0.5 rounded-md bg-[#1e3a5f]/50 text-[10px] uppercase font-bold tracking-wider">
-                        {n.type.replace('_', ' ')}
+                        {n.type === 'OUTBID' ? '입찰 상회' : n.type === 'AUCTION_ENDED' ? '경매 종료' : n.type.replace('_', ' ')}
                       </span>
                     </div>
                   </div>
@@ -174,13 +179,13 @@ export function NotificationsPage() {
                       onClick={(e) => handleNavigate(e, n.target_url, n.id)}
                       className="flex items-center gap-2 px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg text-sm font-semibold transition-all shadow-lg shadow-blue-500/10"
                     >
-                      <span>View</span>
+                      <span>보기</span>
                       <ExternalLink className="w-4 h-4" />
                     </button>
                     <button 
                       onClick={(e) => handleDelete(e, n.id)}
                       className="p-2 text-gray-500 hover:text-red-400 transition-colors"
-                      title="Delete"
+                      title="삭제"
                     >
                       <Trash2 className="w-5 h-5" />
                     </button>
@@ -193,8 +198,8 @@ export function NotificationsPage() {
               <div className="w-20 h-20 bg-[#1e3a5f]/20 rounded-full flex items-center justify-center mx-auto mb-6">
                 <Bell className="w-10 h-10 text-gray-600 opacity-30" />
               </div>
-              <h2 className="text-xl font-semibold text-white mb-2">No notifications found</h2>
-              <p className="text-gray-500">When you receive updates about your auctions, they will appear here.</p>
+              <h2 className="text-xl font-semibold text-white mb-2">새로운 알림이 없습니다.</h2>
+              <p className="text-gray-500">경매와 관련된 새로운 소식이 있으면 여기에 표시됩니다.</p>
             </div>
           )}
         </div>

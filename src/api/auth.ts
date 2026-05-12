@@ -94,7 +94,7 @@ export async function signup(payload: SignupRequest) {
   try {
     const { data } = await api.post<ApiResponse<SignupData>>('/auth/signup', payload);
     return data;
-  } catch (error) {
+  } catch (_error) {
     // FALLBACK: Simulate success for demonstration
     const mockResponse: ApiResponse<SignupData> = {
       success: true,

@@ -7,55 +7,52 @@ import { RegisterAuctionPage } from './pages/RegisterAuctionPage';
 import { NotificationsPage } from './pages/NotificationsPage';
 import { LoginPage } from './pages/LoginPage';
 import { SignupPage } from './pages/SignupPage';
+import { ErrorPage } from './pages/ErrorPage';
 import { ToastProvider } from './components/common/Toast';
 import { AuthGuard } from './components/common/AuthGuard';
+import { ErrorBoundary } from './components/common/ErrorBoundary';
 
 export default function App() {
   return (
-    <ToastProvider>
-      <BrowserRouter>
-        <Routes>
-          <Route path="/" element={<HomePage />} />
-          <Route path="/product/:id" element={<ProductDetailPage />} />
-          <Route path="/checkout/:id" element={
-            <AuthGuard>
-              <CheckoutPage />
-            </AuthGuard>
-          } />
-          
-          {/* Protected Routes */}
-          <Route path="/my-page" element={
-            <AuthGuard>
-              <MyPage />
-            </AuthGuard>
-          } />
-          <Route path="/register-auction" element={
-            <AuthGuard>
-              <RegisterAuctionPage />
-            </AuthGuard>
-          } />
-          <Route path="/notifications" element={
-            <AuthGuard>
-              <NotificationsPage />
-            </AuthGuard>
-          } />
+    <ErrorBoundary>
+      <ToastProvider>
+        <BrowserRouter>
+          <Routes>
+            <Route path="/" element={<HomePage />} />
+            <Route path="/product/:id" element={<ProductDetailPage />} />
+            <Route path="/checkout/:id" element={
+              <AuthGuard>
+                <CheckoutPage />
+              </AuthGuard>
+            } />
+            
+            {/* Protected Routes */}
+            <Route path="/my-page" element={
+              <AuthGuard>
+                <MyPage />
+              </AuthGuard>
+            } />
+            <Route path="/register-auction" element={
+              <AuthGuard>
+                <RegisterAuctionPage />
+              </AuthGuard>
+            } />
+            <Route path="/notifications" element={
+              <AuthGuard>
+                <NotificationsPage />
+              </AuthGuard>
+            } />
 
-          <Route path="/login" element={<LoginPage />} />
-          <Route path="/signup" element={<SignupPage />} />
-          
-          <Route path="*" element={
-            <div className="min-h-screen bg-[#0a1628] flex items-center justify-center text-white">
-              <div className="text-center">
-                <h1 className="text-6xl font-bold mb-4">404</h1>
-                <p className="text-xl text-gray-400 mb-8">Page Not Found</p>
-                <a href="/" className="px-6 py-3 bg-blue-600 rounded-lg hover:bg-blue-700 transition-colors">
-                  Back to Home
-                </a>
-              </div>
-            </div>
-          } />
-        </Routes>
-      </BrowserRouter>
-    </ToastProvider>
+            <Route path="/login" element={<LoginPage />} />
+            <Route path="/signup" element={<SignupPage />} />
+            
+            {/* Error Pages */}
+            <Route path="/forbidden" element={<ErrorPage code="403" />} />
+            <Route path="/error" element={<ErrorPage code="500" />} />
+            <Route path="*" element={<ErrorPage code="404" />} />
+          </Routes>
+        </BrowserRouter>
+      </ToastProvider>
+    </ErrorBoundary>
   );
 }

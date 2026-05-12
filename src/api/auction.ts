@@ -292,10 +292,10 @@ export const auctionApi = {
   // GET /api/v1/users/me/bids
   getMyBids: async (): Promise<PaginatedResponse<UserBidItem[]>> => {
     await delay(400);
-    const myBidItems = sessionData.myBids.map(mb => {
+    const myBidItems: UserBidItem[] = sessionData.myBids.map(mb => {
       const auction = auctionDatabase.find(a => parseInt(a.id) === mb.auction_id)!;
       return {
-        auction_id: auction.id,
+        auction_id: parseInt(auction.id),
         title: auction.title,
         my_bid_price: mb.bid_price,
         current_price: auction.current_price,
@@ -304,7 +304,7 @@ export const auctionApi = {
         created_at: mb.timestamp,
         preview_url: auction.imageUrl
       };
-    }) as any; // Temporary cast due to ID type difference
+    });
     return {
       success: true,
       data: myBidItems,
@@ -409,13 +409,13 @@ export const auctionApi = {
   },
 
   // PATCH /api/v1/notifications/{id}
-  markNotificationAsRead: async (_id: number): Promise<ApiResponse<void>> => {
+  markNotificationAsRead: async (_: number): Promise<ApiResponse<void>> => {
     await delay(100);
     return { success: true, data: undefined, timestamp: new Date().toISOString() };
   },
 
   // DELETE /api/v1/notifications/{id}
-  deleteNotification: async (_id: number): Promise<ApiResponse<void>> => {
+  deleteNotification: async (_: number): Promise<ApiResponse<void>> => {
     await delay(100);
     return { success: true, data: undefined, timestamp: new Date().toISOString() };
   },
