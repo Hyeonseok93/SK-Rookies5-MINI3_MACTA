@@ -14,9 +14,9 @@ import { ErrorBoundary } from './components/common/ErrorBoundary';
 
 export default function App() {
   return (
-    <ErrorBoundary>
-      <ToastProvider>
-        <BrowserRouter>
+    <BrowserRouter>
+      <ErrorBoundary>
+        <ToastProvider>
           <Routes>
             <Route path="/" element={<HomePage />} />
             <Route path="/product/:id" element={<ProductDetailPage />} />
@@ -51,8 +51,8 @@ export default function App() {
             <Route path="/error" element={<ErrorPage code="500" />} />
             <Route path="*" element={<ErrorPage code="404" />} />
           </Routes>
-        </BrowserRouter>
-      </ToastProvider>
-    </ErrorBoundary>
+        </ToastProvider>
+      </ErrorBoundary>
+    </BrowserRouter>
   );
 }
