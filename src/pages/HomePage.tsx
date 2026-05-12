@@ -56,14 +56,33 @@ export function HomePage() {
   const [maxPriceInput, setMaxPriceInput] = useState(maxPrice);
 
   useEffect(() => {
-    // Fetch categories and stats from API
-    Promise.all([
-      auctionApi.getCategories(),
-      auctionApi.getAuctionStats()
-    ]).then(([catRes, statsRes]) => {
-      if (catRes.success) setApiCategories(catRes.data);
-      if (statsRes.success) setStats(statsRes.data);
-    });
+    // Fetch categories and stats from API with error handling
+    const fetchData = async () => {
+      try {
+        const [catRes, statsRes] = await Promise.all([
+          auctionApi.getCategories().catch(err => ({ success: false, data: [], error: err })),
+          auctionApi.getAuctionStats().catch(err => ({ success: false, data: null, error: err }))
+        ]);
+
+        if (catRes.success) {
+          setApiCategories(catRes.data);
+        } else {
+          console.warn('Failed to fetch categories:', catRes.error);
+          setApiCategories([]); // Fallback to empty list
+        }
+
+        if (statsRes.success) {
+          setStats(statsRes.data);
+        } else {
+          console.warn('Failed to fetch stats:', statsRes.error);
+          setStats(null); // Fallback to null
+        }
+      } catch (err) {
+        console.error('Unexpected error in HomePage data fetching:', err);
+      }
+    };
+
+    fetchData();
   }, []);
 
   useEffect(() => {
