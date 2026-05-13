@@ -40,7 +40,7 @@ export function ProductDetailPage() {
   // 현재 로그인한 유저 정보 (localStorage에서 가져옴)
   const currentUserStr = localStorage.getItem('macta_user');
   const currentUser = currentUserStr ? JSON.parse(currentUserStr) : null;
-  const isSeller = currentUser && item && currentUser.id === item.sellerId;
+  const isSeller = currentUser && item && currentUser.id == item.sellerId;
 
   useEffect(() => {
     const handleAuthStateChanged = () => {
