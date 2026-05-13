@@ -34,7 +34,7 @@ export function ProductDetailPage() {
   const [replyContent, setReplyContent] = useState('');
   const [isSubmittingReply, setIsSubmittingReply] = useState(false);
 
-  const isSeller = user && item && user.id == item.sellerId;
+  const isSeller = user && item && user.id === item.sellerId;
 
   useEffect(() => {
     if (!id) return;
