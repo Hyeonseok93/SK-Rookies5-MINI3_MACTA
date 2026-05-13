@@ -114,6 +114,21 @@ export const auctionApi = {
   },
 
   /**
+   * 이미지 업로드
+   * POST /images
+   */
+  uploadImage: async (file: File): Promise<ApiResponse<{ imageUrl: string; imageKey: string }>> => {
+    const formData = new FormData();
+    formData.append('file', file);
+    const { data } = await api.post<ApiResponse<{ imageUrl: string; imageKey: string }>>('/images', formData, {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+      },
+    });
+    return data;
+  },
+
+  /**
    * 4.5 알림 목록 조회
    * GET /notifications
    */
