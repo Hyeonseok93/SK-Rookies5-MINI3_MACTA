@@ -6,7 +6,7 @@ import { CountdownTimer } from '../components/common/CountdownTimer';
 import { auctionApi } from '../api/auction';
 import type { AuctionDetail, Bid, Comment } from '../api/types';
 import { useToast } from '../components/common/Toast';
-import { formatPrice, sanitizeNumeric } from '../utils/format';
+import { formatPrice, sanitizeNumeric, formatDate, parseDate, formatTime } from '../utils/format';
 import { formatCategoryDisplay } from '../utils/category';
 import { ErrorPage } from './ErrorPage';
 import { getRenderableImageUrl } from '../utils/image';
@@ -214,7 +214,7 @@ export function ProductDetailPage() {
   const biddingHistory = Array.isArray(item.biddingHistory) ? item.biddingHistory : [];
   const selectedPicture = pictures[selectedImage];
   const sellerJoinedDate = item.sellerJoinedAt
-    ? new Date(item.sellerJoinedAt).toLocaleDateString('en-US', { month: 'short', year: 'numeric' })
+    ? formatDate(item.sellerJoinedAt)
     : '-';
 
   return (
@@ -303,7 +303,7 @@ export function ProductDetailPage() {
                   <span className="text-white text-sm font-medium">Time Remaining</span>
                 </div>
                 <div className="text-4xl font-bold text-white">
-                  <CountdownTimer endTime={new Date(item.endTime)} showSeconds />
+                  <CountdownTimer endTime={parseDate(item.endTime)} showSeconds />
                 </div>
               </div>
 
@@ -360,7 +360,7 @@ export function ProductDetailPage() {
               >
                 <div className="text-white font-medium mb-1">{bid.bidderNickname}</div>
                 <div className="text-blue-400 font-bold text-lg mb-1">₩{bid.price.toLocaleString()}</div>
-                <div className="text-xs text-gray-500">{new Date(bid.bidTime).toLocaleTimeString()}</div>
+                <div className="text-xs text-gray-500">{formatTime(bid.bidTime)}</div>
               </div>
             ))}
           </div>
@@ -404,7 +404,7 @@ export function ProductDetailPage() {
                           <div>
                             <div className="text-white font-medium mb-1">Q: {comment.content}</div>
                             <div className="text-gray-400 text-sm">
-                              Asked by {comment.nickname} • {new Date(comment.createdAt).toLocaleDateString()}
+                              Asked by {comment.nickname} • {formatDate(comment.createdAt)}
                             </div>
                           </div>
                           {isSeller && (!comment.children || comment.children.length === 0) && (
@@ -456,7 +456,7 @@ export function ProductDetailPage() {
                             <div>
                               <div className="text-blue-100 font-medium mb-1">A: {reply.content}</div>
                               <div className="text-gray-500 text-xs">
-                                Replied by <span className="text-blue-400 font-medium">{reply.nickname}</span> (Seller) • {new Date(reply.createdAt).toLocaleDateString()}
+                                Replied by <span className="text-blue-400 font-medium">{reply.nickname}</span> (Seller) • {formatDate(reply.createdAt)}
                               </div>
                             </div>
                           </div>

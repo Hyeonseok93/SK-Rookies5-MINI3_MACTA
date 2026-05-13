@@ -9,7 +9,7 @@ import { auctionApi } from '../api/auction';
 import { userApi } from '../api/user';
 import type { UserSummaryResponse, UserAuctionItem, UserBidItem, UserInfoResponse, PageInfo } from '../api/types';
 import { ErrorState } from '../components/common/ErrorState';
-import { formatPrice } from '../utils/format';
+import { formatPrice, formatDate } from '../utils/format';
 import { useToast } from '../components/common/Toast';
 import { AUTH_STATE_CHANGED_EVENT } from '../api/auth';
 import { Pagination } from '../components/common/Pagination';
@@ -458,7 +458,7 @@ export function MyPage() {
                           <h3 className="text-white font-semibold text-lg mb-1 truncate">{item.title}</h3>
                           <div className="flex flex-wrap gap-4 text-sm text-gray-500 mb-3">
                             {item.createdAt && (
-                              <div className="flex items-center gap-1.5"><Clock className="w-4 h-4" /> {new Date(item.createdAt).toLocaleDateString()}</div>
+                              <div className="flex items-center gap-1.5"><Clock className="w-4 h-4" /> {formatDate(item.createdAt)}</div>
                             )}
                             <div className="flex items-center gap-1.5">
                               {activeTab === 'likes' ? <Heart className="w-4 h-4" /> : <Eye className="w-4 h-4" />}

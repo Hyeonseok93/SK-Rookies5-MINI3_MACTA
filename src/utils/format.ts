@@ -23,3 +23,40 @@ export const sanitizeNumeric = (value: string): string => {
 export const calculateServiceFee = (price: number): number => {
   return Math.floor(price * 0.05);
 };
+
+/**
+ * Parses a date string from the backend.
+ * Appends 'Z' if timezone info is missing to treat it as UTC.
+ */
+export const parseDate = (dateStr: string | Date | null | undefined): Date => {
+  if (!dateStr) return new Date();
+  if (dateStr instanceof Date) return dateStr;
+  
+  // If it's a string and doesn't have timezone info, assume UTC
+  if (typeof dateStr === 'string' && !dateStr.includes('Z') && !dateStr.includes('+')) {
+    return new Date(`${dateStr}Z`);
+  }
+  
+  return new Date(dateStr);
+};
+
+/**
+ * Formats a date string to a localized date (e.g., "2023. 10. 27.")
+ */
+export const formatDate = (dateStr: string | Date | null | undefined): string => {
+  return parseDate(dateStr).toLocaleDateString();
+};
+
+/**
+ * Formats a date string to a localized time (e.g., "오후 7:00:00")
+ */
+export const formatTime = (dateStr: string | Date | null | undefined): string => {
+  return parseDate(dateStr).toLocaleTimeString();
+};
+
+/**
+ * Formats a date string to a full localized string (e.g., "2023. 10. 27. 오후 7:00:00")
+ */
+export const formatDateTime = (dateStr: string | Date | null | undefined): string => {
+  return parseDate(dateStr).toLocaleString();
+};

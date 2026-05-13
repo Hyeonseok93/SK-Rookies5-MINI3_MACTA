@@ -7,7 +7,7 @@ import { useAuctions } from '../hooks/useAuctions';
 import { auctionApi } from '../api/auction';
 import type { Category, AuctionStats } from '../api/types';
 import { ErrorState } from '../components/common/ErrorState';
-import { formatPrice } from '../utils/format';
+import { formatPrice, parseDate } from '../utils/format';
 import { toAuctionCategoryCode, formatCategoryDisplay } from '../utils/category';
 import { useToast } from '../components/common/Toast';
 import { Pagination } from '../components/common/Pagination';
@@ -339,7 +339,7 @@ export function HomePage() {
                         )}
                         <div className="absolute top-3 right-3 bg-red-600 text-white px-3 py-1.5 rounded-full text-sm font-semibold flex items-center gap-1.5 shadow-lg">
                           <Clock className="w-4 h-4" />
-                          <CountdownTimer endTime={new Date(item.endTime)} />
+                          <CountdownTimer endTime={parseDate(item.endTime)} />
                         </div>
                         <div className="absolute top-3 left-3 bg-blue-600/90 text-white px-3 py-1 rounded-full text-xs font-medium">
                           {formatCategoryDisplay(item.category)}

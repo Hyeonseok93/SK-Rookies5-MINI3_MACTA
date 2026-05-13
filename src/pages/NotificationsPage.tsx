@@ -7,6 +7,7 @@ import type { Notification, PageInfo } from '../api/types';
 import { useToast } from '../components/common/Toast';
 import { Pagination } from '../components/common/Pagination';
 import { ErrorState } from '../components/common/ErrorState';
+import { formatDateTime } from '../utils/format';
 
 export function NotificationsPage() {
   const navigate = useNavigate();
@@ -189,7 +190,7 @@ export function NotificationsPage() {
                     <div className="flex items-center gap-4 text-sm text-gray-500">
                       <div className="flex items-center gap-1.5">
                         <Clock className="w-4 h-4" />
-                        {new Date(n.createdAt).toLocaleString()}
+                        {formatDateTime(n.createdAt)}
                       </div>
                       <span className="px-2 py-0.5 rounded-md bg-[#1e3a5f]/50 text-[10px] uppercase font-bold tracking-wider">
                         {n.type === 'OUTBID' ? '입찰 상회' : n.type === 'AUCTION_ENDED' ? '경매 종료' : n.type.replace('_', ' ')}
