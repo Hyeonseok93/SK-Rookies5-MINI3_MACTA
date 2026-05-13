@@ -8,7 +8,7 @@ import { auctionApi } from '../api/auction';
 import type { Category, AuctionStats } from '../api/types';
 import { ErrorState } from '../components/common/ErrorState';
 import { formatPrice } from '../utils/format';
-import { toAuctionCategoryCode } from '../utils/category';
+import { toAuctionCategoryCode, formatCategoryDisplay } from '../utils/category';
 import { useToast } from '../components/common/Toast';
 import { Pagination } from '../components/common/Pagination';
 import { getRenderableImageUrl } from '../utils/image';
@@ -342,7 +342,7 @@ export function HomePage() {
                           <CountdownTimer endTime={new Date(item.endTime)} />
                         </div>
                         <div className="absolute top-3 left-3 bg-blue-600/90 text-white px-3 py-1 rounded-full text-xs font-medium">
-                          {item.category}
+                          {formatCategoryDisplay(item.category)}
                         </div>
                       </div>
                       <div className="p-5">

@@ -7,6 +7,7 @@ import { auctionApi } from '../api/auction';
 import type { AuctionDetail, Bid, Comment } from '../api/types';
 import { useToast } from '../components/common/Toast';
 import { formatPrice, sanitizeNumeric } from '../utils/format';
+import { formatCategoryDisplay } from '../utils/category';
 import { ErrorPage } from './ErrorPage';
 import { getRenderableImageUrl } from '../utils/image';
 import { useAuthStore } from '../store/useAuthStore';
@@ -289,7 +290,7 @@ export function ProductDetailPage() {
                 )}
               </div>
               <div className="flex items-center gap-2 mb-6">
-                <span className="px-3 py-1 bg-blue-600/20 text-blue-400 rounded-lg text-sm">{item.category}</span>
+                <span className="px-3 py-1 bg-blue-600/20 text-blue-400 rounded-lg text-sm">{formatCategoryDisplay(item.category)}</span>
                 <div className="flex items-center gap-1 text-gray-400 text-sm">
                   <Package className="w-4 h-4" />
                   <span>Free Shipping</span>
