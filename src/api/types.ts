@@ -17,24 +17,24 @@ export interface ApiResponse<T> {
 }
 
 export interface PageInfo {
-  current_page: number;
-  page_size: number;
-  total_pages: number;
-  total_elements: number;
-  is_first: boolean;
-  is_last: boolean;
-  has_next: boolean;
-  has_previous: boolean;
+  currentPage: number;
+  pageSize: number;
+  totalPages: number;
+  totalElements: number;
+  isFirst: boolean;
+  isLast: boolean;
+  hasNext: boolean;
+  hasPrevious: boolean;
 }
 
 export interface PaginatedResponse<T> extends ApiResponse<T> {
-  page_info: PageInfo;
+  pageInfo: PageInfo;
 }
 
 export interface AuctionListResponse extends ApiResponse<{
   content: AuctionSummary[];
 }> {
-  page_info: PageInfo;
+  pageInfo: PageInfo;
 }
 
 export interface AuctionSummary {

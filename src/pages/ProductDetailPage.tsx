@@ -208,11 +208,11 @@ export function ProductDetailPage() {
                 </div>
                 <div>
                   <div className="flex items-center gap-1.5">
-                    <span className="text-white font-bold">{item.seller_nickname}</span>
+                    <span className="text-white font-bold">{item.sellerNickname}</span>
                     <CheckCircle className="w-4 h-4 text-green-400" />
                   </div>
                   <div className="text-xs text-gray-400">
-                    Member since {new Date(item.seller_joined_at).toLocaleDateString('en-US', { month: 'short', year: 'numeric' })}
+                    Member since {new Date(item.sellerJoinedAt).toLocaleDateString('en-US', { month: 'short', year: 'numeric' })}
                   </div>
                 </div>
               </div>
@@ -228,12 +228,12 @@ export function ProductDetailPage() {
                   <button 
                     onClick={handleToggleLike}
                     className={`p-3 rounded-xl transition-all shadow-lg flex-shrink-0 ${
-                      item.is_liked 
+                      item.isLiked 
                         ? 'bg-red-500 text-white' 
                         : 'bg-[#1e3a5f]/50 text-gray-400 hover:text-red-400'
                     }`}
                   >
-                    <Heart className={`w-6 h-6 ${item.is_liked ? 'fill-current' : ''}`} />
+                    <Heart className={`w-6 h-6 ${item.isLiked ? 'fill-current' : ''}`} />
                   </button>
                 )}
               </div>
@@ -251,16 +251,16 @@ export function ProductDetailPage() {
                   <span className="text-white text-sm font-medium">Time Remaining</span>
                 </div>
                 <div className="text-4xl font-bold text-white">
-                  <CountdownTimer endTime={new Date(item.end_time)} showSeconds />
+                  <CountdownTimer endTime={new Date(item.endTime)} showSeconds />
                 </div>
               </div>
 
               <div className={`bg-[#1e3a5f]/30 rounded-lg p-6 mb-6 transition-all duration-500 ${flash ? 'ring-4 ring-red-500 bg-red-500/20' : ''}`}>
                 <div className="text-sm text-gray-400 mb-2">Current Highest Bid</div>
                 <div className="text-4xl font-bold text-blue-400 mb-1">
-                  ₩{formatPrice(item.current_price)}
+                  ₩{formatPrice(item.currentPrice)}
                 </div>
-                <div className="text-xs text-gray-500">by {item.bids[0]?.bidder_nickname || 'Initial Bid'}</div>
+                <div className="text-xs text-gray-500">by {item.bids[0]?.bidderNickname || 'Initial Bid'}</div>
               </div>
 
               <div className="mb-6">
@@ -270,13 +270,13 @@ export function ProductDetailPage() {
                   inputMode="numeric"
                   value={formatPrice(bidAmount)}
                   onChange={(e) => setBidAmount(sanitizeNumeric(e.target.value))}
-                  placeholder={`Minimum: ₩${formatPrice(item.current_price + 1000)}`}
+                  placeholder={`Minimum: ₩${formatPrice(item.currentPrice + 1000)}`}
                   className="w-full px-4 py-3 bg-[#0a1628] border border-[#1e3a5f] rounded-lg text-white placeholder-gray-600 focus:outline-none focus:border-blue-500 mb-3"
                 />
                 <button
                   onClick={handlePlaceBid}
                   disabled={isBidding}
-                  className="w-full bg-gradient-to-r from-blue-600 to-blue-700 text-white py-4 rounded-lg font-bold text-lg hover:from-blue-700 hover:to-blue-800 transition-all shadow-lg shadow-blue-500/20 disabled:opacity-50"
+                  className="w-full bg-gradient-to-r from-blue-600 to-blue-700 text-white py-4 rounded-lg font-bold text-lg hover:from-blue-700 hover:to-blue-800 transition-all shadow-lg shadow-blue-500/10 disabled:opacity-50"
                 >
                   {isBidding ? 'Placing Bid...' : 'Place Bid'}
                 </button>

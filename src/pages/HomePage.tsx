@@ -379,7 +379,7 @@ export function HomePage() {
                 {pageInfo && (
                   <Pagination 
                     currentPage={currentPage} 
-                    totalPages={pageInfo.total_pages} 
+                    totalPages={pageInfo.totalPages} 
                     onPageChange={setCurrentPage} 
                   />
                 )}

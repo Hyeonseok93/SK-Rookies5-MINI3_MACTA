@@ -109,7 +109,7 @@ export function MyPage() {
 
         if (!ignore && res.success) {
           setItems(res.data);
-          setPageInfo(res.page_info);
+          setPageInfo(res.pageInfo);
         }
       } catch {
         if (!ignore) setError('Failed to load your items.');
@@ -341,7 +341,7 @@ export function MyPage() {
                 <h2 className="text-xl font-bold text-white capitalize">{activeTab === 'likes' ? 'Watchlist' : activeTab}</h2>
                 <div className="flex items-center gap-4">
                   <div className="text-sm text-gray-500">
-                    {pageInfo ? `${pageInfo.total_elements} items found` : `${items.length} items found`}
+                    {pageInfo ? `${pageInfo.totalElements} items found` : `${items.length} items found`}
                   </div>
                   {activeTab === 'likes' && items.length > 0 && (
                     <button
@@ -426,7 +426,7 @@ export function MyPage() {
             {!isLoading && pageInfo && (
               <Pagination 
                 currentPage={currentPage} 
-                totalPages={pageInfo.total_pages} 
+                totalPages={pageInfo.totalPages} 
                 onPageChange={setCurrentPage} 
               />
             )}

@@ -13,7 +13,7 @@ import type {
 
 interface UserLikesResponseData {
   data: UserLikeListResponse[];
-  page_info: PaginatedResponse<UserAuctionItem[]>['page_info'];
+  pageInfo: PaginatedResponse<UserAuctionItem[]>['pageInfo'];
 }
 
 const toUserAuctionItem = (item: UserLikeListResponse): UserAuctionItem => ({
@@ -72,7 +72,7 @@ export const userApi = {
       data: data.data.data.map(toUserAuctionItem),
       message: data.message,
       timestamp: data.timestamp,
-      page_info: data.data.page_info,
+      pageInfo: data.data.pageInfo,
     };
   },
 };
