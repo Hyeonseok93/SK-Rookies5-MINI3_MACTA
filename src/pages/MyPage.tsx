@@ -13,8 +13,10 @@ import { formatPrice } from '../utils/format';
 import { useToast } from '../components/common/Toast';
 import { AUTH_STATE_CHANGED_EVENT } from '../api/auth';
 import { Pagination } from '../components/common/Pagination';
+import { getRenderableImageUrl } from '../utils/image';
 
 type MyPageTab = 'auctions' | 'bids' | 'likes';
+type MyPageStatusFilter = 'ALL' | 'OUTBID' | 'WON' | 'SOLD';
 
 interface StoredUser {
   id?: number | string;
@@ -29,6 +31,34 @@ interface ApiErrorBody {
     message?: string;
   };
 }
+
+const STATUS_FILTERS: { value: MyPageStatusFilter; label: string }[] = [
+  { value: 'ALL', label: '전체' },
+  { value: 'OUTBID', label: '상위 입찰 발생' },
+  { value: 'WON', label: '낙찰 성공' },
+  { value: 'SOLD', label: '판매성공' },
+];
+
+const TAB_TITLES: Record<MyPageTab, string> = {
+  auctions: 'My Auctions',
+  bids: 'Bidding History',
+  likes: 'Watchlist',
+};
+
+const getStatusBadgeClass = (status: string) => {
+  switch (status) {
+    case 'LIVE':
+      return 'bg-green-600/20 text-green-400';
+    case 'OUTBID':
+      return 'bg-amber-500/20 text-amber-300';
+    case 'WON':
+      return 'bg-blue-600/20 text-blue-300';
+    case 'SOLD':
+      return 'bg-purple-600/20 text-purple-300';
+    default:
+      return 'bg-gray-700 text-gray-400';
+  }
+};
 
 const getStoredUser = (): StoredUser | null => {
   const storedUser = localStorage.getItem('macta_user');
@@ -62,6 +92,7 @@ export function MyPage() {
   const [items, setItems] = useState<(UserAuctionItem | UserBidItem)[]>([]);
   const [pageInfo, setPageInfo] = useState<PageInfo | null>(null);
   const [currentPage, setCurrentPage] = useState(0);
+  const [statusFilter, setStatusFilter] = useState<MyPageStatusFilter>('ALL');
   const PAGE_SIZE = 10;
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -102,7 +133,11 @@ export function MyPage() {
       setError(null);
       try {
         let res;
-        const params = { page: currentPage, size: PAGE_SIZE };
+        const params = {
+          page: currentPage,
+          size: PAGE_SIZE,
+          ...(activeTab !== 'likes' ? { status: statusFilter } : {}),
+        };
         if (activeTab === 'auctions') res = await userApi.getMyAuctions(params);
         else if (activeTab === 'bids') res = await userApi.getMyBids(params);
         else res = await userApi.getMyWatchlist(params);
@@ -125,10 +160,15 @@ export function MyPage() {
       ignore = true; 
       clearTimeout(timer);
     };
-  }, [activeTab, currentPage]);
+  }, [activeTab, currentPage, statusFilter]);
 
   const handleTabChange = (tab: MyPageTab) => {
     setActiveTab(tab);
+    setCurrentPage(0);
+  };
+
+  const handleStatusFilterChange = (status: MyPageStatusFilter) => {
+    setStatusFilter(status);
     setCurrentPage(0);
   };
 
@@ -337,8 +377,28 @@ export function MyPage() {
           {/* Main Content Area */}
           <div className="flex-1">
             <div className="bg-[#0d1b2e] border border-[#1e3a5f] rounded-2xl overflow-hidden min-h-[500px] mb-6">
-              <div className="p-6 border-b border-[#1e3a5f] flex justify-between items-center">
-                <h2 className="text-xl font-bold text-white capitalize">{activeTab === 'likes' ? 'Watchlist' : activeTab}</h2>
+              <div className="p-6 border-b border-[#1e3a5f] flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
+                <div>
+                  <h2 className="text-xl font-bold text-white">{TAB_TITLES[activeTab]}</h2>
+                  {activeTab !== 'likes' && (
+                    <div className="mt-4 flex flex-wrap gap-2">
+                      {STATUS_FILTERS.map((filter) => (
+                        <button
+                          key={filter.value}
+                          type="button"
+                          onClick={() => handleStatusFilterChange(filter.value)}
+                          className={`h-9 rounded-lg border px-3 text-sm font-semibold transition-colors ${
+                            statusFilter === filter.value
+                              ? 'border-blue-500 bg-blue-600 text-white'
+                              : 'border-[#1e3a5f] bg-[#0a1628] text-gray-400 hover:border-blue-500/60 hover:text-white'
+                          }`}
+                        >
+                          {filter.label}
+                        </button>
+                      ))}
+                    </div>
+                  )}
+                </div>
                 <div className="flex items-center gap-4">
                   <div className="text-sm text-gray-500">
                     {pageInfo ? `${pageInfo.totalElements} items found` : `${items.length} items found`}
@@ -373,7 +433,7 @@ export function MyPage() {
                         className="p-6 hover:bg-[#1e3a5f]/10 transition-colors cursor-pointer flex items-center gap-6 group"
                       >
                         <div className="w-24 h-24 rounded-xl overflow-hidden flex-shrink-0 bg-[#0a1628] border border-[#1e3a5f] group-hover:border-blue-500 transition-colors">
-                          <img src={item.previewUrl} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" alt="" />
+                          <img src={getRenderableImageUrl(item.previewUrl)} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" alt="" />
                         </div>
                         <div className="flex-1 min-w-0">
                           <h3 className="text-white font-semibold text-lg mb-1 truncate">{item.title}</h3>
@@ -392,12 +452,10 @@ export function MyPage() {
                                 {activeTab === 'bids' ? 'Your Bid' : 'Current Price'}
                               </div>
                               <div className="text-xl font-black text-blue-400">
-                                ₩{formatPrice(activeTab === 'bids' ? (item as UserBidItem).myBidPrice : item.currentPrice)}
+                                &#8361;{formatPrice(activeTab === 'bids' ? (item as UserBidItem).myBidPrice : item.currentPrice)}
                               </div>
                             </div>
-                            <span className={`px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider ${
-                              item.status === 'LIVE' ? 'bg-green-600/20 text-green-400' : 'bg-gray-700 text-gray-400'
-                            }`}>
+                            <span className={`px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider ${getStatusBadgeClass(item.status)}`}>
                               {item.status}
                             </span>
                           </div>

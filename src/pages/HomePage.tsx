@@ -8,10 +8,12 @@ import { auctionApi } from '../api/auction';
 import type { Category, AuctionStats } from '../api/types';
 import { ErrorState } from '../components/common/ErrorState';
 import { formatPrice } from '../utils/format';
+import { toAuctionCategoryCode } from '../utils/category';
 import { useToast } from '../components/common/Toast';
 import { getAccessTokenCookie } from '../api/tokenCookie';
 import { AUTH_STATE_CHANGED_EVENT } from '../api/auth';
 import { Pagination } from '../components/common/Pagination';
+import { getRenderableImageUrl } from '../utils/image';
 
 type SortOption = 'newest' | 'closing-soon' | 'price-low' | 'price-high';
 
@@ -185,9 +187,9 @@ export function HomePage() {
                   {apiCategories.map((cat, index) => (
                     <button
                       key={cat.id ?? cat.code ?? `${cat.name}-${index}`}
-                      onClick={() => updateFilters({ category: cat.name })}
+                      onClick={() => updateFilters({ category: toAuctionCategoryCode(cat.code || cat.name) })}
                       className={`w-full text-left px-3 py-2 rounded-lg text-sm transition-colors ${
-                        selectedCategory === cat.name
+                        selectedCategory === toAuctionCategoryCode(cat.code || cat.name)
                           ? 'bg-blue-600 text-white'
                           : 'text-gray-300 hover:bg-[#1e3a5f]/30'
                       }`}
@@ -337,7 +339,7 @@ export function HomePage() {
                     >
                       <div className="relative aspect-square overflow-hidden bg-[#1e3a5f]/20">
                         <img
-                          src={item.mainPictureUrl}
+                          src={getRenderableImageUrl(item.mainPictureUrl)}
                           alt={item.title}
                           className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
                         />
