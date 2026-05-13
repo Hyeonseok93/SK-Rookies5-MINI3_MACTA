@@ -36,6 +36,8 @@ export function ProductDetailPage() {
   const [isSubmittingReply, setIsSubmittingReply] = useState(false);
 
   const isSeller = user && item && user.id === item.sellerId;
+  const isEnded = item ? new Date(parseDate(item.endTime)).getTime() <= new Date().getTime() : false;
+  const isFinished = item?.status === 'FINISHED';
 
   useEffect(() => {
     if (!id) return;
@@ -71,6 +73,11 @@ export function ProductDetailPage() {
     const amount = parseInt(bidAmount.replace(/,/g, ''));
     if (!item || !amount || amount <= item.currentPrice) {
       showToast('현재 입찰가보다 높은 금액을 입력해야 합니다.', 'error');
+      return;
+    }
+
+    if (item.status !== 'LIVE' || isEnded) {
+      showToast('이미 종료된 경매입니다.', 'error');
       return;
     }
 
@@ -297,42 +304,72 @@ export function ProductDetailPage() {
                 </div>
               </div>
 
-              <div className="bg-gradient-to-r from-red-600 to-red-700 rounded-lg p-6 mb-6">
-                <div className="flex items-center gap-3 mb-2">
-                  <Clock className="w-6 h-6 text-white" />
-                  <span className="text-white text-sm font-medium">Time Remaining</span>
+              {isFinished ? (
+                <div className="bg-gradient-to-r from-blue-600 to-blue-700 rounded-lg p-6 mb-6 text-center">
+                  <div className="text-white text-sm font-bold uppercase tracking-wider mb-2">Auction Ended</div>
+                  {item.winnerNickname ? (
+                    <>
+                      <div className="text-3xl font-black text-white mb-1">Winner: {item.winnerNickname}</div>
+                      <div className="text-blue-200 text-sm">Final Price: ₩{formatPrice(item.currentPrice)}</div>
+                    </>
+                  ) : (
+                    <div className="text-2xl font-bold text-white">No winning bids</div>
+                  )}
                 </div>
-                <div className="text-4xl font-bold text-white">
-                  <CountdownTimer endTime={parseDate(item.endTime)} showSeconds />
+              ) : (
+                <div className={`bg-gradient-to-r ${isEnded ? 'from-gray-600 to-gray-700' : 'from-red-600 to-red-700'} rounded-lg p-6 mb-6`}>
+                  <div className="flex items-center gap-3 mb-2">
+                    <Clock className="w-6 h-6 text-white" />
+                    <span className="text-white text-sm font-medium">
+                      {isEnded ? 'Auction Ended' : 'Time Remaining'}
+                    </span>
+                  </div>
+                  <div className="text-4xl font-bold text-white">
+                    <CountdownTimer endTime={parseDate(item.endTime)} showSeconds />
+                  </div>
                 </div>
-              </div>
+              )}
 
               <div className={`bg-[#1e3a5f]/30 rounded-lg p-6 mb-6 transition-all duration-500 ${flash ? 'ring-4 ring-red-500 bg-red-500/20' : ''}`}>
-                <div className="text-sm text-gray-400 mb-2">Current Highest Bid</div>
+                <div className="text-sm text-gray-400 mb-2">
+                  {isFinished ? 'Final Price' : 'Current Highest Bid'}
+                </div>
                 <div className="text-4xl font-bold text-blue-400 mb-1">
                   ₩{formatPrice(item.currentPrice)}
                 </div>
-                <div className="text-xs text-gray-500">by {biddingHistory[0]?.bidderNickname || 'Initial Bid'}</div>
+                <div className="text-xs text-gray-500">
+                  {biddingHistory.length > 0 
+                    ? `by ${biddingHistory[0].bidderNickname}` 
+                    : 'Initial Bid'}
+                </div>
               </div>
 
-              <div className="mb-6">
-                <label className="block text-sm text-gray-400 mb-2">Your Bid Amount (KRW)</label>
-                <input
-                  type="text"
-                  inputMode="numeric"
-                  value={formatPrice(bidAmount)}
-                  onChange={(e) => setBidAmount(sanitizeNumeric(e.target.value))}
-                  placeholder={`Minimum: ₩${formatPrice(item.currentPrice + 1000)}`}
-                  className="w-full px-4 py-3 bg-[#0a1628] border border-[#1e3a5f] rounded-lg text-white placeholder-gray-600 focus:outline-none focus:border-blue-500 mb-3"
-                />
-                <button
-                  onClick={handlePlaceBid}
-                  disabled={isBidding}
-                  className="w-full bg-gradient-to-r from-blue-600 to-blue-700 text-white py-4 rounded-lg font-bold text-lg hover:from-blue-700 hover:to-blue-800 transition-all shadow-lg shadow-blue-500/10 disabled:opacity-50"
-                >
-                  {isBidding ? 'Placing Bid...' : 'Place Bid'}
-                </button>
-              </div>
+              {!isFinished && !isEnded && (
+                <div className="mb-6">
+                  <label className="block text-sm text-gray-400 mb-2">Your Bid Amount (KRW)</label>
+                  <input
+                    type="text"
+                    inputMode="numeric"
+                    value={formatPrice(bidAmount)}
+                    onChange={(e) => setBidAmount(sanitizeNumeric(e.target.value))}
+                    placeholder={`Minimum: ₩${formatPrice(item.currentPrice + 1000)}`}
+                    className="w-full px-4 py-3 bg-[#0a1628] border border-[#1e3a5f] rounded-lg text-white placeholder-gray-600 focus:outline-none focus:border-blue-500 mb-3"
+                  />
+                  <button
+                    onClick={handlePlaceBid}
+                    disabled={isBidding}
+                    className="w-full bg-gradient-to-r from-blue-600 to-blue-700 text-white py-4 rounded-lg font-bold text-lg hover:from-blue-700 hover:to-blue-800 transition-all shadow-lg shadow-blue-500/10 disabled:opacity-50"
+                  >
+                    {isBidding ? 'Placing Bid...' : 'Place Bid'}
+                  </button>
+                </div>
+              )}
+
+              {isEnded && !isFinished && (
+                <div className="bg-gray-800/50 border border-gray-700 p-4 rounded-lg text-center mb-6">
+                  <p className="text-gray-400 text-sm">Processing final results...</p>
+                </div>
+              )}
 
               <div className="flex items-center justify-center gap-2 text-xs text-gray-400 bg-[#1e3a5f]/20 px-4 py-3 rounded-lg border border-[#1e3a5f]">
                 <Shield className="w-4 h-4 text-green-400" />
