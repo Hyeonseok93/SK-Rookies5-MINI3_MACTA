@@ -3,11 +3,8 @@ import { useNavigate, Link, useSearchParams } from 'react-router-dom';
 import { Search, Bell, User, Menu, Clock, ExternalLink, LogOut } from 'lucide-react';
 import { auctionApi } from '../../api/auction';
 import type { Notification } from '../../api/types';
-import { AUTH_STATE_CHANGED_EVENT, logout } from '../../api/auth';
-import { getAccessTokenCookie } from '../../api/tokenCookie';
+import { useAuthStore } from '../../store/useAuthStore';
 import { useToast } from '../common/Toast';
-
-const isAuthenticated = () => Boolean(getAccessTokenCookie() && localStorage.getItem('macta_user'));
 
 export function Header() {
   const navigate = useNavigate();
@@ -15,7 +12,7 @@ export function Header() {
   const [searchParams] = useSearchParams();
   const [searchQuery, setSearchQuery] = useState(searchParams.get('q') || '');
   const [showMobileMenu, setShowMobileMenu] = useState(false);
-  const [isLoggedIn, setIsLoggedIn] = useState(isAuthenticated);
+  const { isLoggedIn, logout: storeLogout } = useAuthStore();
 
   // Notification State
   const [notifications, setNotifications] = useState<Notification[]>([]);
@@ -37,7 +34,6 @@ export function Header() {
   useEffect(() => {
     const initializeNotifications = async () => {
       if (!isLoggedIn) {
-        // Use functional updates and check to avoid unnecessary cascading renders
         setNotifications(prev => prev.length > 0 ? [] : prev);
         setShowNotifications(prev => prev ? false : prev);
         return;
@@ -46,7 +42,6 @@ export function Header() {
       try {
         const res = await auctionApi.getNotifications();
         if (res.success && res.data) {
-          // res.data is { content: Notification[] } per NotificationListResponse
           const notificationList = res.data.content || [];
           setNotifications(notificationList);
         }
@@ -58,21 +53,7 @@ export function Header() {
     initializeNotifications();
   }, [isLoggedIn]);
 
-  useEffect(() => {
-    const handleAuthStateChanged = () => {
-      setIsLoggedIn(isAuthenticated());
-    };
-
-    window.addEventListener(AUTH_STATE_CHANGED_EVENT, handleAuthStateChanged);
-    window.addEventListener('storage', handleAuthStateChanged);
-
-    return () => {
-      window.removeEventListener(AUTH_STATE_CHANGED_EVENT, handleAuthStateChanged);
-      window.removeEventListener('storage', handleAuthStateChanged);
-    };
-  }, []);
-
-  // Sync internal input state with URL changes (e.g., when clearing filters on HomePage)
+  // Sync internal input state with URL changes
   const urlQuery = searchParams.get('q') || '';
 
   const handleSearch = (e: React.FormEvent) => {
@@ -100,7 +81,7 @@ export function Header() {
   };
 
   const handleLogout = () => {
-    logout();
+    storeLogout();
     showToast('로그아웃 되었습니다.', 'success');
     setShowMobileMenu(false);
     navigate('/');

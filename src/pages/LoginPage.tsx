@@ -5,6 +5,7 @@ import { LockKeyhole, LogIn, User } from 'lucide-react';
 import { Layout } from '../components/layout/Layout';
 import { getAuthErrorMessage, login } from '../api/auth';
 import { useToast } from '../components/common/Toast';
+import { useAuthStore } from '../store/useAuthStore';
 
 const MAX_FIELD_LENGTH = 50;
 
@@ -12,6 +13,7 @@ export function LoginPage() {
   const navigate = useNavigate();
   const location = useLocation();
   const { showToast } = useToast();
+  const { setUser } = useAuthStore();
   const [loginId, setLoginId] = useState('');
   const [password, setPassword] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -58,6 +60,7 @@ export function LoginPage() {
 
     try {
       const response = await login({ loginId, password });
+      setUser(response.data.user);
       showToast(response.message, 'success');
       
       // Redirect back to original destination if exists, otherwise home
