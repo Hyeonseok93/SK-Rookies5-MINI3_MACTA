@@ -3,7 +3,7 @@ import type { FormEvent } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { Mail, UserPlus, UserRound, Lock, ArrowLeft, AlertCircle, CheckCircle2, Loader2 } from 'lucide-react';
 import { Layout } from '../components/layout/Layout';
-import { getAuthErrorMessage, signup } from '../api/auth';
+import { getAuthErrorMessage, signup, checkLoginId, checkNickname, checkEmail } from '../api/auth';
 import { useToast } from '../components/common/Toast';
 
 const MAX_FIELD_LENGTH = 50;
@@ -82,17 +82,25 @@ export function SignupPage() {
       return;
     }
     setIsCheckingLoginId(true);
-    // 임시: API 호출 대신 성공 시뮬레이션
-    setTimeout(() => {
-      setCheckedLoginId(loginId);
-      showToast('사용 가능한 아이디입니다.', 'success');
-      setErrors(prev => {
-        const next = { ...prev };
-        delete next.loginId;
-        return next;
-      });
+    try {
+      const response = await checkLoginId(loginId);
+      if (response.data) {
+        setCheckedLoginId(loginId);
+        showToast('사용 가능한 아이디입니다.', 'success');
+        setErrors(prev => {
+          const next = { ...prev };
+          delete next.loginId;
+          return next;
+        });
+      } else {
+        setErrors(prev => ({ ...prev, loginId: '이미 사용 중인 아이디입니다.' }));
+        showToast('이미 사용 중인 아이디입니다.', 'error');
+      }
+    } catch (error) {
+      showToast(getAuthErrorMessage(error, '아이디 중복 확인에 실패했습니다.'), 'error');
+    } finally {
       setIsCheckingLoginId(false);
-    }, 500);
+    }
   };
 
   const handleCheckNickname = async () => {
@@ -101,17 +109,25 @@ export function SignupPage() {
       return;
     }
     setIsCheckingNickname(true);
-    // 임시: API 호출 대신 성공 시뮬레이션
-    setTimeout(() => {
-      setCheckedNickname(nickname);
-      showToast('사용 가능한 닉네임입니다.', 'success');
-      setErrors(prev => {
-        const next = { ...prev };
-        delete next.nickname;
-        return next;
-      });
+    try {
+      const response = await checkNickname(nickname);
+      if (response.data) {
+        setCheckedNickname(nickname);
+        showToast('사용 가능한 닉네임입니다.', 'success');
+        setErrors(prev => {
+          const next = { ...prev };
+          delete next.nickname;
+          return next;
+        });
+      } else {
+        setErrors(prev => ({ ...prev, nickname: '이미 사용 중인 닉네임입니다.' }));
+        showToast('이미 사용 중인 닉네임입니다.', 'error');
+      }
+    } catch (error) {
+      showToast(getAuthErrorMessage(error, '닉네임 중복 확인에 실패했습니다.'), 'error');
+    } finally {
       setIsCheckingNickname(false);
-    }, 500);
+    }
   };
 
   const handleCheckEmail = async () => {
@@ -120,17 +136,25 @@ export function SignupPage() {
       return;
     }
     setIsCheckingEmail(true);
-    // 임시: API 호출 대신 성공 시뮬레이션
-    setTimeout(() => {
-      setCheckedEmail(email);
-      showToast('사용 가능한 이메일입니다.', 'success');
-      setErrors(prev => {
-        const next = { ...prev };
-        delete next.email;
-        return next;
-      });
+    try {
+      const response = await checkEmail(email);
+      if (response.data) {
+        setCheckedEmail(email);
+        showToast('사용 가능한 이메일입니다.', 'success');
+        setErrors(prev => {
+          const next = { ...prev };
+          delete next.email;
+          return next;
+        });
+      } else {
+        setErrors(prev => ({ ...prev, email: '이미 사용 중인 이메일입니다.' }));
+        showToast('이미 사용 중인 이메일입니다.', 'error');
+      }
+    } catch (error) {
+      showToast(getAuthErrorMessage(error, '이메일 중복 확인에 실패했습니다.'), 'error');
+    } finally {
       setIsCheckingEmail(false);
-    }, 500);
+    }
   };
 
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {

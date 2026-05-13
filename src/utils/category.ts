@@ -10,6 +10,11 @@ const CATEGORY_CODE_MAP: Record<string, string> = {
   Other: 'OTHER',
 };
 
+const CATEGORY_DISPLAY_MAP: Record<string, string> = Object.entries(CATEGORY_CODE_MAP).reduce(
+  (acc, [display, code]) => ({ ...acc, [code]: display }),
+  {}
+);
+
 export const toAuctionCategoryCode = (category: string) => {
   const trimmed = category.trim();
   const mapped = CATEGORY_CODE_MAP[trimmed];
@@ -21,4 +26,8 @@ export const toAuctionCategoryCode = (category: string) => {
     .replace(/^_+|_+$/g, '')
     .replace(/_+/g, '_')
     .toUpperCase();
+};
+
+export const formatCategoryDisplay = (code: string) => {
+  return CATEGORY_DISPLAY_MAP[code] || code;
 };

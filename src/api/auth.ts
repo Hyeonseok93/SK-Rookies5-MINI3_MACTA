@@ -65,7 +65,7 @@ export async function signup(payload: SignupRequest) {
 
 export async function checkLoginId(loginId: string) {
   const { data } = await api.get<ApiResponse<boolean>>('/auth/check-login-id', {
-    params: { loginId },
+    params: { login_id: loginId },
   });
   return data;
 }
