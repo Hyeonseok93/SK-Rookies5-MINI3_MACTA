@@ -5,6 +5,11 @@ import type {
   Notification, LikeToggleResponse 
 } from './types';
 
+const getSafeImageFileName = (file: File) => {
+  const extension = file.name.split('.').pop()?.replace(/[^a-zA-Z0-9]/g, '').toLowerCase();
+  return extension ? `image.${extension}` : 'image';
+};
+
 export const auctionApi = {
   /**
    * 4.2 전체 경매 목록 조회
@@ -129,7 +134,7 @@ export const auctionApi = {
     presigned_url?: string;
   }>> => {
     const formData = new FormData();
-    formData.append('file', file);
+    formData.append('file', file, getSafeImageFileName(file));
     const { data } = await api.post<ApiResponse<{
       imageUrl?: string;
       image_url?: string;
