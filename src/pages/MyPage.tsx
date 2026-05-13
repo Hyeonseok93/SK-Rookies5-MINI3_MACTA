@@ -159,8 +159,8 @@ export function MyPage() {
         else res = await userApi.getMyWatchlist(params);
 
         if (!ignore && res.success) {
-          setItems(res.data);
-          setPageInfo(res.pageInfo);
+          setItems(res.data.content);
+          setPageInfo(res.data.pageInfo);
         }
       } catch {
         if (!ignore) setError('Failed to load your items.');

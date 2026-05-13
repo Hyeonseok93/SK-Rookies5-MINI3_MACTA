@@ -9,6 +9,7 @@ import type {
   UserSummaryResponse,
   UserUpdateRequest,
   UserLikeListResponse,
+  UserItemStatus,
 } from './types';
 
 /**
@@ -18,7 +19,7 @@ interface UserAuctionResponseItem {
   auctionId: number;
   title: string;
   currentPrice: number;
-  status: any;
+  status: UserItemStatus;
   viewCount?: number;
   createdAt?: string;
   mainPictureUrl?: string;

@@ -149,7 +149,7 @@ export function RegisterAuctionPage() {
         description,
         category: toAuctionCategoryCode(category) as CategoryType,
         startPrice: parseInt(startPrice.replace(/,/g, '')),
-        endTime: new Date(endTime).toISOString(),
+        endTime: endTime, // .toISOString() 제거 (백엔드 KST 기준에 맞춤)
         pictures: images.map(({ url, imageKey }, index) => ({
           url,
           imageKey,
