@@ -137,6 +137,8 @@ export interface AuctionDetail extends AuctionSummary {
   startTime: string;
   viewCount: number;
   likeCount: number;
+  winnerId?: number | string;
+  winnerNickname?: string;
   pictures: { url: string; main: boolean }[];
   biddingHistory: Bid[];
 }
