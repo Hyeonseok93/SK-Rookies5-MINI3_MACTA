@@ -107,11 +107,9 @@ export interface LikeToggleResponse {
 }
 
 export interface Bid {
-  id: string;
-  bidderId: number;
   bidderNickname: string;
   price: number;
-  updatedAt: string;
+  bidTime: string;
 }
 
 export interface Comment {
@@ -132,7 +130,7 @@ export interface AuctionDetail extends AuctionSummary {
   viewCount: number;
   likeCount: number;
   pictures: { url: string; main: boolean }[];
-  bids: Bid[];
+  biddingHistory: Bid[];
 }
 
 export interface NotificationListResponse extends ApiResponse<{
