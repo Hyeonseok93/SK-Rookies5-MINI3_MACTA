@@ -3,11 +3,12 @@ import { auctionApi } from '../api/auction';
 import type { AuctionListResponse, AuctionSummary, PageInfo } from '../api/types';
 
 const getAuctionItems = (response: AuctionListResponse): AuctionSummary[] => {
-  if (Array.isArray(response.data)) {
-    return response.data;
+  const data = response.data as unknown;
+  if (Array.isArray(data)) {
+    return data as AuctionSummary[];
   }
 
-  return response.data?.content ?? [];
+  return (data as { content?: AuctionSummary[] })?.content ?? [];
 };
 
 export function useAuctions({
@@ -50,7 +51,7 @@ export function useAuctions({
       
       if (response.success) {
         setAuctions(getAuctionItems(response));
-        setPageInfo(response.page_info ?? null);
+        setPageInfo(response.pageInfo ?? null);
       } else {
         setError(response.message || 'Failed to fetch auctions');
       }

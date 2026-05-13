@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ArrowLeft, Bell, Clock, Check, ExternalLink, Trash2 } from 'lucide-react';
 import { Layout } from '../components/layout/Layout';
@@ -19,7 +19,7 @@ export function NotificationsPage() {
   const [currentPage, setCurrentPage] = useState(0);
   const PAGE_SIZE = 20;
 
-  const fetchNotifications = async () => {
+  const fetchNotifications = useCallback(async () => {
     await Promise.resolve();
     setIsLoading(true);
     setError(null);
@@ -30,14 +30,14 @@ export function NotificationsPage() {
       });
       if (res.success) {
         setNotifications(res.data);
-        setPageInfo(res.page_info);
+        setPageInfo(res.pageInfo);
       }
     } catch {
       setError('알림을 불러오는데 실패했습니다.');
     } finally {
       setIsLoading(false);
     }
-  };
+  }, [currentPage]);
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -47,7 +47,7 @@ export function NotificationsPage() {
     return () => {
       clearTimeout(timer);
     };
-  }, [currentPage]);
+  }, [fetchNotifications]);
 
   const handleFilterChange = (newFilter: 'all' | 'unread') => {
     setFilter(newFilter);
@@ -229,7 +229,7 @@ export function NotificationsPage() {
         {!isLoading && pageInfo && (
           <Pagination 
             currentPage={currentPage} 
-            totalPages={pageInfo.total_pages} 
+            totalPages={pageInfo.totalPages} 
             onPageChange={setCurrentPage} 
           />
         )}
