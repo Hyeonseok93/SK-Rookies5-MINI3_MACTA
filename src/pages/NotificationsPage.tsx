@@ -20,7 +20,6 @@ export function NotificationsPage() {
   const PAGE_SIZE = 20;
 
   const fetchNotifications = useCallback(async () => {
-    await Promise.resolve();
     setIsLoading(true);
     setError(null);
     try {
@@ -28,8 +27,9 @@ export function NotificationsPage() {
         page: currentPage, 
         size: PAGE_SIZE 
       });
-      if (res.success) {
-        setNotifications(res.data);
+      if (res.success && res.data) {
+        // res.data is { content: Notification[] }
+        setNotifications(res.data.content || []);
         setPageInfo(res.pageInfo);
       }
     } catch {

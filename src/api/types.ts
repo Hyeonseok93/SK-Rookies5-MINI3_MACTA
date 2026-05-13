@@ -142,6 +142,12 @@ export interface AuctionDetail extends AuctionSummary {
   bids: Bid[];
 }
 
+export interface NotificationListResponse extends ApiResponse<{
+  content: Notification[];
+}> {
+  pageInfo: PageInfo;
+}
+
 export interface Notification {
   id: number;
   type: 'OUTBID' | 'AUCTION_WON' | 'AUCTION_ENDED' | 'NEW_QUESTION' | 'NEW_ANSWER' | 'CLOSING_SOON';
