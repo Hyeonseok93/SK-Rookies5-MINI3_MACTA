@@ -7,23 +7,20 @@ import { auctionApi } from '../api/auction';
 import type { AuctionDetail, Bid, Comment } from '../api/types';
 import { useToast } from '../components/common/Toast';
 import { formatPrice, sanitizeNumeric } from '../utils/format';
-import { getAccessTokenCookie } from '../api/tokenCookie';
-import { AUTH_STATE_CHANGED_EVENT } from '../api/auth';
 import { ErrorPage } from './ErrorPage';
 import { getRenderableImageUrl } from '../utils/image';
-
-const isAuthenticated = () => Boolean(getAccessTokenCookie() && localStorage.getItem('macta_user'));
+import { useAuthStore } from '../store/useAuthStore';
 
 export function ProductDetailPage() {
   const { id } = useParams();
   const navigate = useNavigate();
   const { showToast } = useToast();
+  const { user, isLoggedIn } = useAuthStore();
   
   const [item, setItem] = useState<AuctionDetail | null>(null);
   const [comments, setComments] = useState<Comment[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [isLoggedIn, setIsLoggedIn] = useState(isAuthenticated);
   
   const [bidAmount, setBidAmount] = useState('');
   const [isBidding, setIsBidding] = useState(false);
@@ -37,24 +34,7 @@ export function ProductDetailPage() {
   const [replyContent, setReplyContent] = useState('');
   const [isSubmittingReply, setIsSubmittingReply] = useState(false);
 
-  // 현재 로그인한 유저 정보 (localStorage에서 가져옴)
-  const currentUserStr = localStorage.getItem('macta_user');
-  const currentUser = currentUserStr ? JSON.parse(currentUserStr) : null;
-  const isSeller = currentUser && item && currentUser.id == item.sellerId;
-
-  useEffect(() => {
-    const handleAuthStateChanged = () => {
-      setIsLoggedIn(isAuthenticated());
-    };
-
-    window.addEventListener(AUTH_STATE_CHANGED_EVENT, handleAuthStateChanged);
-    window.addEventListener('storage', handleAuthStateChanged);
-
-    return () => {
-      window.removeEventListener(AUTH_STATE_CHANGED_EVENT, handleAuthStateChanged);
-      window.removeEventListener('storage', handleAuthStateChanged);
-    };
-  }, []);
+  const isSeller = user && item && user.id == item.sellerId;
 
   useEffect(() => {
     if (!id) return;
@@ -140,8 +120,8 @@ export function ProductDetailPage() {
       if (res.success) {
         const newComment: Comment = {
           id: res.data.id,
-          userId: currentUser?.id || 999,
-          nickname: currentUser?.nickname || 'You',
+          userId: user?.id || 999,
+          nickname: user?.nickname || 'You',
           content: newQuestion,
           createdAt: new Date().toISOString(),
           children: []
@@ -166,8 +146,8 @@ export function ProductDetailPage() {
       if (res.success) {
         const newReply: Comment = {
           id: res.data.id,
-          userId: currentUser?.id || 999,
-          nickname: currentUser?.nickname || 'Seller',
+          userId: user?.id || 999,
+          nickname: user?.nickname || 'Seller',
           content: replyContent,
           createdAt: new Date().toISOString()
         };
