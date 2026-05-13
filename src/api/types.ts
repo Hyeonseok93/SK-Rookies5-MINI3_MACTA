@@ -38,6 +38,7 @@ export interface AuctionSummary {
   endTime: string;
   bidCount: number;
   isLiked: boolean;
+  sellerId: number;
 }
 
 export interface Category {

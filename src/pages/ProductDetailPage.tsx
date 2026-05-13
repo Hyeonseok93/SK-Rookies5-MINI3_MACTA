@@ -170,6 +170,12 @@ export function ProductDetailPage() {
   };
 
   const handleToggleLike = async () => {
+    if (!isLoggedIn) {
+      showToast('로그인이 필요합니다.', 'error');
+      navigate('/login', { state: { from: `/product/${id}` } });
+      return;
+    }
+    
     if (!item) return;
     try {
       const res = await auctionApi.toggleLike(item.id);
@@ -269,7 +275,7 @@ export function ProductDetailPage() {
             <div className="bg-[#0d1b2e] border border-[#1e3a5f] rounded-lg p-6 sticky top-24">
               <div className="flex justify-between items-start mb-2 gap-4">
                 <h1 className="text-2xl font-bold text-white leading-tight">{item.title}</h1>
-                {isLoggedIn && (
+                {(!isLoggedIn || !isSeller) && (
                   <button 
                     onClick={handleToggleLike}
                     className={`p-3 rounded-xl transition-all shadow-lg flex-shrink-0 ${
@@ -425,18 +431,18 @@ export function ProductDetailPage() {
                             ></textarea>
                             <div className="flex justify-end gap-2">
                               <button
-                                onClick={() => setReplyToId(null)}
-                                className="px-3 py-1.5 text-xs text-gray-400 hover:text-white transition-colors"
-                              >
-                                Cancel
-                              </button>
-                              <button
                                 onClick={() => handleSubmitReply(comment.id)}
                                 disabled={isSubmittingReply || !replyContent.trim()}
                                 className="px-4 py-1.5 bg-blue-600 text-white rounded-md text-xs font-medium hover:bg-blue-700 transition-colors disabled:opacity-50 flex items-center gap-1"
                               >
                                 {isSubmittingReply && <Loader2 className="w-3 h-3 animate-spin" />}
-                                Post Answer
+                                Answer
+                              </button>
+                              <button
+                                onClick={() => setReplyToId(null)}
+                                className="px-3 py-1.5 text-xs text-gray-400 hover:text-white transition-colors"
+                              >
+                                Cancel
                               </button>
                             </div>
                           </div>
@@ -493,7 +499,7 @@ export function ProductDetailPage() {
               <div className="bg-[#1e3a5f]/20 p-8 rounded-lg border border-[#1e3a5f]/50 text-center">
                 <p className="text-gray-400 mb-4">질문을 남기려면 로그인이 필요합니다.</p>
                 <button
-                  onClick={() => navigate('/login', { state: { from: `/auctions/${id}` } })}
+                  onClick={() => navigate('/login', { state: { from: `/product/${id}` } })}
                   className="text-blue-400 hover:text-blue-300 font-medium transition-colors"
                 >
                   로그인하러 가기 &rarr;
