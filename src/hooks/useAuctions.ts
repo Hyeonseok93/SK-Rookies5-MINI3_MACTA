@@ -3,12 +3,7 @@ import { auctionApi } from '../api/auction';
 import type { AuctionListResponse, AuctionSummary, PageInfo } from '../api/types';
 
 const getAuctionItems = (response: AuctionListResponse): AuctionSummary[] => {
-  const data = response.data as unknown;
-  if (Array.isArray(data)) {
-    return data as AuctionSummary[];
-  }
-
-  return (data as { content?: AuctionSummary[] })?.content ?? [];
+  return response.data?.content || [];
 };
 
 export function useAuctions({
@@ -51,7 +46,10 @@ export function useAuctions({
       
       if (response.success) {
         setAuctions(getAuctionItems(response));
-        setPageInfo(response.pageInfo ?? null);
+        
+        // 백엔드 구조상 data 안에 pageInfo가 들어있음
+        const pagination = response.data?.pageInfo;
+        setPageInfo(pagination ?? null);
       } else {
         setError(response.message || 'Failed to fetch auctions');
       }
