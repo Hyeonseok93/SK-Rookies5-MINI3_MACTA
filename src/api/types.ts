@@ -38,7 +38,7 @@ export interface AuctionSummary {
   endTime: string;
   bidCount: number;
   isLiked: boolean;
-  sellerId: number;
+  sellerId: number | string;
 }
 
 export interface Category {
@@ -60,7 +60,7 @@ export interface UserSummaryResponse {
 }
 
 export interface UserInfoResponse {
-  id: number;
+  id: number | string;
   email: string;
   nickname: string;
 }
@@ -115,7 +115,7 @@ export interface Bid {
 
 export interface Comment {
   id: number;
-  userId: number;
+  userId: number | string;
   nickname: string;
   content: string;
   createdAt: string;
@@ -123,7 +123,7 @@ export interface Comment {
 }
 
 export interface AuctionDetail extends AuctionSummary {
-  sellerId: number;
+  sellerId: number | string;
   sellerNickname: string;
   sellerJoinedAt: string;
   description: string;
