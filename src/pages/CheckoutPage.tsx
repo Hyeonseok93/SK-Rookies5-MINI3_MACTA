@@ -97,8 +97,8 @@ export function CheckoutPage() {
   }
 
   const shippingFee = 3000;
-  const serviceFee = calculateServiceFee(item.current_price);
-  const totalAmount = item.current_price + shippingFee + serviceFee;
+  const serviceFee = calculateServiceFee(item.currentPrice);
+  const totalAmount = item.currentPrice + shippingFee + serviceFee;
 
   return (
     <Layout>
@@ -118,7 +118,7 @@ export function CheckoutPage() {
               <h2 className="text-white font-bold text-xl mb-4">Order Summary</h2>
               <div className="mb-6">
                 <div className="aspect-video rounded-xl overflow-hidden mb-4 border border-[#1e3a5f]">
-                  <img src={item.main_picture_url} className="w-full h-full object-cover" alt="" />
+                  <img src={item.mainPictureUrl} className="w-full h-full object-cover" alt="" />
                 </div>
                 <h3 className="text-white font-semibold leading-tight">{item.title}</h3>
                 <p className="text-xs text-gray-500 mt-1 uppercase tracking-wider">{item.category}</p>
@@ -127,7 +127,7 @@ export function CheckoutPage() {
               <div className="border-t border-[#1e3a5f] pt-4 space-y-3">
                 <div className="flex justify-between text-sm">
                   <span className="text-gray-400">Winning Bid</span>
-                  <span className="text-white font-medium">₩{formatPrice(item.current_price)}</span>
+                  <span className="text-white font-medium">₩{formatPrice(item.currentPrice)}</span>
                 </div>
                 <div className="flex justify-between text-sm">
                   <span className="text-gray-400">Shipping</span>

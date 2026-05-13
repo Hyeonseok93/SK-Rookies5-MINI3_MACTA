@@ -71,7 +71,7 @@ export function ProductDetailPage() {
 
   const handlePlaceBid = async () => {
     const amount = parseInt(bidAmount.replace(/,/g, ''));
-    if (!item || !amount || amount <= item.current_price) {
+    if (!item || !amount || amount <= item.currentPrice) {
       showToast('Bid must be higher than current bid', 'error');
       return;
     }
@@ -81,16 +81,16 @@ export function ProductDetailPage() {
       const res = await auctionApi.placeBid(item.id.toString(), amount);
       if (res.success) {
         const newBid: Bid = {
-          id: res.data.bid_id,
-          bidder_id: 999,
-          bidder_nickname: 'You',
-          price: res.data.current_price,
-          updated_at: new Date().toISOString()
+          id: res.data.bidId,
+          bidderId: 999,
+          bidderNickname: 'You',
+          price: res.data.currentPrice,
+          updatedAt: new Date().toISOString()
         };
         setItem(prev => prev ? {
           ...prev,
-          current_price: res.data.current_price,
-          bid_count: prev.bid_count + 1,
+          currentPrice: res.data.currentPrice,
+          bidCount: prev.bidCount + 1,
           bids: [newBid, ...prev.bids]
         } : null);
         setBidAmount('');
@@ -115,10 +115,10 @@ export function ProductDetailPage() {
       if (res.success) {
         const newComment: Comment = {
           id: res.data.id,
-          user_id: 999, // Current user
+          userId: 999, // Current user
           nickname: 'You',
           content: newQuestion,
-          created_at: new Date().toISOString()
+          createdAt: new Date().toISOString()
         };
         setComments(prev => [newComment, ...prev]);
         setNewQuestion('');
@@ -136,8 +136,8 @@ export function ProductDetailPage() {
     try {
       const res = await auctionApi.toggleLike(item.id);
       if (res.success) {
-        setItem(prev => prev ? { ...prev, is_liked: res.data.is_liked, like_count: res.data.like_count } : null);
-        showToast(res.data.is_liked ? 'Added to watchlist' : 'Removed from watchlist', 'success');
+        setItem(prev => prev ? { ...prev, isLiked: res.data.isLiked, likeCount: res.data.likeCount } : null);
+        showToast(res.data.isLiked ? 'Added to watchlist' : 'Removed from watchlist', 'success');
       }
     } catch {
       showToast('Failed to update watchlist', 'error');
@@ -306,9 +306,9 @@ export function ProductDetailPage() {
                     : 'bg-[#1e3a5f]/20 border-[#1e3a5f]/50'
                 }`}
               >
-                <div className="text-white font-medium mb-1">{bid.bidder_nickname}</div>
+                <div className="text-white font-medium mb-1">{bid.bidderNickname}</div>
                 <div className="text-blue-400 font-bold text-lg mb-1">₩{bid.price.toLocaleString()}</div>
-                <div className="text-xs text-gray-500">{new Date(bid.updated_at).toLocaleTimeString()}</div>
+                <div className="text-xs text-gray-500">{new Date(bid.updatedAt).toLocaleTimeString()}</div>
               </div>
             ))}
           </div>
@@ -350,7 +350,7 @@ export function ProductDetailPage() {
                       <div className="flex-1">
                         <div className="text-white font-medium mb-1">Q: {comment.content}</div>
                         <div className="text-gray-400 text-sm">
-                          Asked by {comment.nickname} • {new Date(comment.created_at).toLocaleDateString()}
+                          Asked by {comment.nickname} • {new Date(comment.createdAt).toLocaleDateString()}
                         </div>
                       </div>
                     </div>

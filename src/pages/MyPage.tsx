@@ -241,7 +241,7 @@ export function MyPage() {
     try {
       const res = await auctionApi.toggleLike(id);
       if (res.success) {
-        setItems(prev => prev.filter(item => item.auction_id !== id));
+        setItems(prev => prev.filter(item => item.auctionId !== id));
         fetchStats();
         showToast('Removed from watchlist', 'info');
       }
@@ -252,7 +252,7 @@ export function MyPage() {
 
   const handleClearWatchlist = async () => {
     try {
-      await Promise.all(items.map(item => auctionApi.toggleLike(item.auction_id)));
+      await Promise.all(items.map(item => auctionApi.toggleLike(item.auctionId)));
       setItems([]);
       fetchStats();
       showToast('Watchlist cleared', 'success');
@@ -368,22 +368,22 @@ export function MyPage() {
                   <div className="divide-y divide-[#1e3a5f]">
                     {items.map((item, idx) => (
                       <div
-                        key={`${activeTab}-${item.auction_id}-${idx}`}
-                        onClick={() => navigate(`/product/${item.auction_id}`)}
+                        key={`${activeTab}-${item.auctionId}-${idx}`}
+                        onClick={() => navigate(`/product/${item.auctionId}`)}
                         className="p-6 hover:bg-[#1e3a5f]/10 transition-colors cursor-pointer flex items-center gap-6 group"
                       >
                         <div className="w-24 h-24 rounded-xl overflow-hidden flex-shrink-0 bg-[#0a1628] border border-[#1e3a5f] group-hover:border-blue-500 transition-colors">
-                          <img src={item.preview_url} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" alt="" />
+                          <img src={item.previewUrl} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" alt="" />
                         </div>
                         <div className="flex-1 min-w-0">
                           <h3 className="text-white font-semibold text-lg mb-1 truncate">{item.title}</h3>
                           <div className="flex flex-wrap gap-4 text-sm text-gray-500 mb-3">
-                            {item.created_at && (
-                              <div className="flex items-center gap-1.5"><Clock className="w-4 h-4" /> {new Date(item.created_at).toLocaleDateString()}</div>
+                            {item.createdAt && (
+                              <div className="flex items-center gap-1.5"><Clock className="w-4 h-4" /> {new Date(item.createdAt).toLocaleDateString()}</div>
                             )}
                             <div className="flex items-center gap-1.5">
                               {activeTab === 'likes' ? <Heart className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
-                              {activeTab === 'likes' ? `${item.like_count ?? 0} likes` : `${item.view_count} views`}
+                              {activeTab === 'likes' ? `${item.likeCount ?? 0} likes` : `${item.viewCount} views`}
                             </div>
                           </div>
                           <div className="flex items-end justify-between">
@@ -392,7 +392,7 @@ export function MyPage() {
                                 {activeTab === 'bids' ? 'Your Bid' : 'Current Price'}
                               </div>
                               <div className="text-xl font-black text-blue-400">
-                                ₩{formatPrice(activeTab === 'bids' ? (item as UserBidItem).my_bid_price : item.current_price)}
+                                ₩{formatPrice(activeTab === 'bids' ? (item as UserBidItem).myBidPrice : item.currentPrice)}
                               </div>
                             </div>
                             <span className={`px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider ${
@@ -404,7 +404,7 @@ export function MyPage() {
                         </div>
                         {activeTab === 'likes' && (
                           <button
-                            onClick={(e) => handleRemoveFromWatchlist(e, item.auction_id)}
+                            onClick={(e) => handleRemoveFromWatchlist(e, item.auctionId)}
                             className="p-3 text-gray-500 hover:text-red-400 transition-colors rounded-xl hover:bg-red-500/10 flex-shrink-0"        
                             title="Remove from Watchlist"
                           >
