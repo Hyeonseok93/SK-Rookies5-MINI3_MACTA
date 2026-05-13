@@ -18,15 +18,14 @@ export interface PageInfo {
   hasPrevious: boolean;
 }
 
-export interface PaginatedResponse<T> extends ApiResponse<T> {
+export interface PaginatedData<T> {
+  content: T;
   pageInfo: PageInfo;
 }
 
-export interface AuctionListResponse extends ApiResponse<{
-  content: AuctionSummary[];
-}> {
-  pageInfo: PageInfo;
-}
+export type AuctionListResponse = ApiResponse<PaginatedData<AuctionSummary[]>>;
+
+export type NotificationListResponse = ApiResponse<PaginatedData<Notification[]>>;
 
 export interface AuctionSummary {
   id: number;
@@ -134,12 +133,6 @@ export interface AuctionDetail extends AuctionSummary {
   likeCount: number;
   pictures: { url: string; main: boolean }[];
   biddingHistory: Bid[];
-}
-
-export interface NotificationListResponse extends ApiResponse<{
-  content: Notification[];
-}> {
-  pageInfo: PageInfo;
 }
 
 export interface Notification {
