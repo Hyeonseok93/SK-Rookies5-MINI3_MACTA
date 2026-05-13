@@ -10,20 +10,17 @@ import { ErrorState } from '../components/common/ErrorState';
 import { formatPrice } from '../utils/format';
 import { toAuctionCategoryCode } from '../utils/category';
 import { useToast } from '../components/common/Toast';
-import { getAccessTokenCookie } from '../api/tokenCookie';
-import { AUTH_STATE_CHANGED_EVENT } from '../api/auth';
 import { Pagination } from '../components/common/Pagination';
 import { getRenderableImageUrl } from '../utils/image';
+import { useAuthStore } from '../store/useAuthStore';
 
 type SortOption = 'newest' | 'closing-soon' | 'price-low' | 'price-high';
-
-const isAuthenticated = () => Boolean(getAccessTokenCookie() && localStorage.getItem('macta_user'));
 
 export function HomePage() {
   const navigate = useNavigate();
   const { showToast } = useToast();
   const [searchParams, setSearchParams] = useSearchParams();
-  const [isLoggedIn, setIsLoggedIn] = useState(isAuthenticated);
+  const { user, isLoggedIn } = useAuthStore();
   
   // URL-based states
   const selectedCategory = searchParams.get('category') || 'All';
@@ -86,20 +83,6 @@ export function HomePage() {
     };
 
     fetchData();
-  }, []);
-
-  useEffect(() => {
-    const handleAuthStateChanged = () => {
-      setIsLoggedIn(isAuthenticated());
-    };
-
-    window.addEventListener(AUTH_STATE_CHANGED_EVENT, handleAuthStateChanged);
-    window.addEventListener('storage', handleAuthStateChanged);
-
-    return () => {
-      window.removeEventListener(AUTH_STATE_CHANGED_EVENT, handleAuthStateChanged);
-      window.removeEventListener('storage', handleAuthStateChanged);
-    };
   }, []);
 
   const updateFilters = (updates: Record<string, string>) => {
@@ -344,7 +327,7 @@ export function HomePage() {
                           alt={item.title}
                           className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
                         />
-                        {isLoggedIn && (
+                        {isLoggedIn && user?.id != item.sellerId && (
                           <button 
                             onClick={(e) => handleToggleLike(e, item.id)}
                             className={`absolute bottom-3 right-3 p-2 rounded-full backdrop-blur-md transition-all shadow-lg z-10 ${
