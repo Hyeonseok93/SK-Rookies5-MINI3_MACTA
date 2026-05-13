@@ -117,10 +117,24 @@ export const auctionApi = {
    * 이미지 업로드
    * POST /images
    */
-  uploadImage: async (file: File): Promise<ApiResponse<{ imageUrl: string; imageKey: string }>> => {
+  uploadImage: async (file: File): Promise<ApiResponse<{
+    imageUrl?: string;
+    image_url?: string;
+    imageKey?: string;
+    image_key?: string;
+    presignedUrl?: string;
+    presigned_url?: string;
+  }>> => {
     const formData = new FormData();
     formData.append('file', file);
-    const { data } = await api.post<ApiResponse<{ imageUrl: string; imageKey: string }>>('/images', formData, {
+    const { data } = await api.post<ApiResponse<{
+      imageUrl?: string;
+      image_url?: string;
+      imageKey?: string;
+      image_key?: string;
+      presignedUrl?: string;
+      presigned_url?: string;
+    }>>('/images', formData, {
       headers: {
         'Content-Type': 'multipart/form-data',
       },

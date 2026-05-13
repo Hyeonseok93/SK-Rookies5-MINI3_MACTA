@@ -6,6 +6,7 @@ import { auctionApi } from '../api/auction';
 import type { Category, CategoryType } from '../api/types';
 import { useToast } from '../components/common/Toast';
 import { formatPrice, sanitizeNumeric } from '../utils/format';
+import { toAuctionCategoryCode } from '../utils/category';
 
 interface FormErrors {
   title?: string;
@@ -14,6 +15,12 @@ interface FormErrors {
   startPrice?: string;
   endTime?: string;
   images?: string;
+}
+
+interface UploadedImage {
+  url: string;
+  imageKey: string;
+  previewUrl: string;
 }
 
 export function RegisterAuctionPage() {
@@ -30,7 +37,7 @@ export function RegisterAuctionPage() {
   const [category, setCategory] = useState<CategoryType | ''>('');
   const [startPrice, setStartPrice] = useState('');
   const [endTime, setEndTime] = useState('');
-  const [images, setPictures] = useState<{ url: string; main: boolean }[]>([]);
+  const [images, setPictures] = useState<UploadedImage[]>([]);
   const [errors, setErrors] = useState<FormErrors>({});
 
   useEffect(() => {
@@ -71,9 +78,19 @@ export function RegisterAuctionPage() {
     try {
       const res = await auctionApi.uploadImage(file);
       if (res.success) {
+        const imageUrl = res.data.imageUrl || res.data.image_url;
+        const imageKey = res.data.imageKey || res.data.image_key;
+        const previewUrl = res.data.presignedUrl || res.data.presigned_url || imageUrl;
+
+        if (!imageUrl || !imageKey || !previewUrl) {
+          showToast('Image upload response is missing required data', 'error');
+          return;
+        }
+
         const newImage = {
-          url: res.data.imageUrl,
-          main: images.length === 0 // First image is main by default
+          url: imageUrl,
+          imageKey,
+          previewUrl,
         };
         setPictures([...images, newImage]);
         showToast('Image uploaded successfully', 'success');
@@ -89,19 +106,7 @@ export function RegisterAuctionPage() {
   };
 
   const handleRemoveImage = (index: number) => {
-    const newImages = images.filter((_, i) => i !== index);
-    if (newImages.length > 0 && !newImages.some(img => img.main)) {
-      newImages[0].main = true;
-    }
-    setPictures(newImages);
-  };
-
-  const handleSetMainImage = (index: number) => {
-    setPictures(images.map((img, i) => ({
-      ...img,
-      main: i === index
-    })));
-    showToast('Main image updated', 'info');
+    setPictures(images.filter((_, i) => i !== index));
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -117,10 +122,15 @@ export function RegisterAuctionPage() {
       const res = await auctionApi.createAuction({
         title,
         description,
-        category: category as CategoryType,
+        category: toAuctionCategoryCode(category) as CategoryType,
         startPrice: parseInt(startPrice.replace(/,/g, '')),
         endTime: new Date(endTime).toISOString(),
-        pictures: images
+        pictures: images.map(({ url, imageKey }, index) => ({
+          url,
+          imageKey,
+          isMain: index === 0,
+          sortOrder: index + 1,
+        }))
       });
 
       if (res.success) {
@@ -167,12 +177,11 @@ export function RegisterAuctionPage() {
                 {images.map((img, idx) => (
                   <div 
                     key={idx} 
-                    onClick={() => handleSetMainImage(idx)}
-                    className={`relative w-24 h-24 rounded-lg overflow-hidden border-2 cursor-pointer transition-all ${
-                      img.main ? 'border-blue-500 ring-2 ring-blue-500/50' : 'border-[#1e3a5f] hover:border-gray-500'
+                    className={`relative w-24 h-24 rounded-lg overflow-hidden border-2 transition-all ${
+                      idx === 0 ? 'border-blue-500 ring-2 ring-blue-500/50' : 'border-[#1e3a5f]'
                     }`}
                   >
-                    <img src={img.url} className="w-full h-full object-cover" alt="Preview" />
+                    <img src={img.previewUrl} className="w-full h-full object-cover" alt="Preview" />
                     <button
                       type="button"
                       onClick={(e) => {
@@ -183,7 +192,7 @@ export function RegisterAuctionPage() {
                     >
                       <X className="w-3 h-3" />
                     </button>
-                    {img.main && (
+                    {idx === 0 && (
                       <div className="absolute bottom-0 left-0 right-0 bg-blue-600 text-[10px] text-white text-center py-0.5 font-bold">
                         MAIN
                       </div>
@@ -273,7 +282,7 @@ export function RegisterAuctionPage() {
                   >
                     <option value="" disabled>Select Category</option>
                     {categories.map(cat => (
-                      <option key={cat.id} value={cat.name}>{cat.name}</option>
+                      <option key={cat.id} value={toAuctionCategoryCode(cat.code || cat.name)}>{cat.name}</option>
                     ))}
                   </select>
                   <Plus className="absolute right-4 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-500 pointer-events-none rotate-45" />

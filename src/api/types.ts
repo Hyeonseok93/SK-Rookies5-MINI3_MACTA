@@ -1,13 +1,4 @@
-export type CategoryType = 
-  | 'Digital Devices' 
-  | 'Home Appliances' 
-  | 'Furniture/Interior' 
-  | 'Clothing' 
-  | 'Beauty/Personal Care' 
-  | 'Sports/Leisure' 
-  | 'Games/Hobbies' 
-  | 'Books/Tickets' 
-  | 'Other';
+export type CategoryType = string;
 
 export interface ApiResponse<T> {
   success: boolean;
@@ -83,11 +74,13 @@ export interface PasswordUpdateRequest {
   confirmPassword: string;
 }
 
+export type UserItemStatus = 'READY' | 'LIVE' | 'FINISHED' | 'CANCEL' | 'OUTBID' | 'WON' | 'SOLD';
+
 export interface UserAuctionItem {
   auctionId: number;
   title: string;
   currentPrice: number;
-  status: 'READY' | 'LIVE' | 'FINISHED' | 'CANCEL';
+  status: UserItemStatus;
   viewCount: number;
   createdAt: string;
   previewUrl: string;
@@ -102,7 +95,7 @@ export interface UserLikeListResponse {
   auctionId: number;
   title: string;
   currentPrice: number;
-  status: 'READY' | 'LIVE' | 'FINISHED' | 'CANCEL';
+  status: UserItemStatus;
   likeCount: number;
   mainPictureUrl: string;
 }
@@ -157,5 +150,10 @@ export interface CreateAuctionRequest {
   category: CategoryType;
   startPrice: number;
   endTime: string;
-  pictures: { url: string; main: boolean }[];
+  pictures: {
+    url: string;
+    imageKey: string;
+    isMain: boolean;
+    sortOrder: number;
+  }[];
 }
