@@ -71,9 +71,15 @@ export function ProductDetailPage() {
   }, [id, showToast]);
 
   const handlePlaceBid = async () => {
+    if (!isLoggedIn) {
+      showToast('로그인이 필요합니다.', 'error');
+      navigate('/login', { state: { from: `/auctions/${id}` } });
+      return;
+    }
+
     const amount = parseInt(bidAmount.replace(/,/g, ''));
     if (!item || !amount || amount <= item.currentPrice) {
-      showToast('Bid must be higher than current bid', 'error');
+      showToast('현재 입찰가보다 높은 금액을 입력해야 합니다.', 'error');
       return;
     }
 
@@ -81,26 +87,29 @@ export function ProductDetailPage() {
     try {
       const res = await auctionApi.placeBid(item.id.toString(), amount);
       if (res.success) {
+        const { currentPrice } = res.data;
+        
         const newBid: Bid = {
-          id: res.data.bidId,
-          bidderId: 999,
           bidderNickname: 'You',
-          price: res.data.currentPrice,
-          updatedAt: new Date().toISOString()
+          price: currentPrice,
+          bidTime: new Date().toISOString()
         };
+
         setItem(prev => prev ? {
           ...prev,
-          currentPrice: res.data.currentPrice,
+          currentPrice: currentPrice,
           bidCount: (prev.bidCount ?? 0) + 1,
-          bids: [newBid, ...(prev.bids ?? [])]
+          biddingHistory: [newBid, ...(prev.biddingHistory ?? [])]
         } : null);
+
         setBidAmount('');
         setFlash(true);
-        showToast('Bid placed successfully!', 'success');
+        showToast('입찰이 성공적으로 완료되었습니다!', 'success');
         setTimeout(() => setFlash(false), 500);
       }
-    } catch {
-      showToast('Failed to place bid', 'error');
+    } catch (err) {
+      const error = err as { message?: string };
+      showToast(error.message || '입찰에 실패했습니다.', 'error');
     } finally {
       setIsBidding(false);
     }
@@ -167,7 +176,7 @@ export function ProductDetailPage() {
   }
 
   const pictures = Array.isArray(item.pictures) ? item.pictures : [];
-  const bids = Array.isArray(item.bids) ? item.bids : [];
+  const biddingHistory = Array.isArray(item.biddingHistory) ? item.biddingHistory : [];
   const selectedPicture = pictures[selectedImage];
   const sellerJoinedDate = item.sellerJoinedAt
     ? new Date(item.sellerJoinedAt).toLocaleDateString('en-US', { month: 'short', year: 'numeric' })
@@ -268,7 +277,7 @@ export function ProductDetailPage() {
                 <div className="text-4xl font-bold text-blue-400 mb-1">
                   ₩{formatPrice(item.currentPrice)}
                 </div>
-                <div className="text-xs text-gray-500">by {bids[0]?.bidderNickname || 'Initial Bid'}</div>
+                <div className="text-xs text-gray-500">by {biddingHistory[0]?.bidderNickname || 'Initial Bid'}</div>
               </div>
 
               <div className="mb-6">
@@ -305,9 +314,10 @@ export function ProductDetailPage() {
             Live Bidding Activity
           </h3>
           <div className="grid md:grid-cols-2 lg:grid-cols-5 gap-4">
-            {bids.slice(0, 5).map((bid, index) => (
+            {biddingHistory.slice(0, 5).map((bid, index) => (
+
               <div
-                key={bid.id}
+                key={index}
                 className={`p-4 rounded-lg border ${
                   index === 0
                     ? 'bg-green-500/10 border-green-500/30'
@@ -316,7 +326,7 @@ export function ProductDetailPage() {
               >
                 <div className="text-white font-medium mb-1">{bid.bidderNickname}</div>
                 <div className="text-blue-400 font-bold text-lg mb-1">₩{bid.price.toLocaleString()}</div>
-                <div className="text-xs text-gray-500">{new Date(bid.updatedAt).toLocaleTimeString()}</div>
+                <div className="text-xs text-gray-500">{new Date(bid.bidTime).toLocaleTimeString()}</div>
               </div>
             ))}
           </div>
@@ -371,23 +381,35 @@ export function ProductDetailPage() {
             </div>
 
             {/* Ask Question Form */}
-            <form onSubmit={handleSubmitQuestion} className="bg-[#1e3a5f]/20 p-6 rounded-lg border border-[#1e3a5f]/50">
-              <label className="block text-white font-medium mb-3">Ask a Question</label>
-              <textarea
-                value={newQuestion}
-                onChange={(e) => setNewQuestion(e.target.value)}
-                placeholder="Type your question here..."
-                rows={4}
-                className="w-full px-4 py-3 bg-[#0a1628] border border-[#1e3a5f] rounded-lg text-white placeholder-gray-600 focus:outline-none focus:border-blue-500 mb-3"
-              ></textarea>
-              <button
-                type="submit"
-                disabled={isSubmittingQuestion}
-                className="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors font-medium disabled:opacity-50"
-              >
-                {isSubmittingQuestion ? 'Submitting...' : 'Submit Question'}
-              </button>
-            </form>
+            {isLoggedIn ? (
+              <form onSubmit={handleSubmitQuestion} className="bg-[#1e3a5f]/20 p-6 rounded-lg border border-[#1e3a5f]/50">
+                <label className="block text-white font-medium mb-3">Ask a Question</label>
+                <textarea
+                  value={newQuestion}
+                  onChange={(e) => setNewQuestion(e.target.value)}
+                  placeholder="Type your question here..."
+                  rows={4}
+                  className="w-full px-4 py-3 bg-[#0a1628] border border-[#1e3a5f] rounded-lg text-white placeholder-gray-600 focus:outline-none focus:border-blue-500 mb-3"
+                ></textarea>
+                <button
+                  type="submit"
+                  disabled={isSubmittingQuestion}
+                  className="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors font-medium disabled:opacity-50"
+                >
+                  {isSubmittingQuestion ? 'Submitting...' : 'Submit Question'}
+                </button>
+              </form>
+            ) : (
+              <div className="bg-[#1e3a5f]/20 p-8 rounded-lg border border-[#1e3a5f]/50 text-center">
+                <p className="text-gray-400 mb-4">질문을 남기려면 로그인이 필요합니다.</p>
+                <button
+                  onClick={() => navigate('/login', { state: { from: `/auctions/${id}` } })}
+                  className="text-blue-400 hover:text-blue-300 font-medium transition-colors"
+                >
+                  로그인하러 가기 &rarr;
+                </button>
+              </div>
+            )}
           </div>
         </div>
       </div>
