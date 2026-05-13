@@ -94,7 +94,8 @@ export interface UserAuctionItem {
 }
 
 export interface UserBidItem extends UserAuctionItem {
-  myBidPrice: number;
+  myPrice: number;
+  myBidPrice?: number;
 }
 
 export interface UserLikeListResponse {

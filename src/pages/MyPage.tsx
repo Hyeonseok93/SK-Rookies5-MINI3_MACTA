@@ -465,15 +465,36 @@ export function MyPage() {
                               {activeTab === 'likes' ? `${item.likeCount ?? 0} likes` : `${item.viewCount} views`}
                             </div>
                           </div>
-                          <div className="flex items-end justify-between">
-                            <div>
-                              <div className="text-[10px] text-gray-500 uppercase font-bold mb-1">
-                                {activeTab === 'bids' ? 'Your Bid' : 'Current Price'}
+                          <div className="flex items-end justify-between gap-4">
+                            {activeTab === 'bids' ? (
+                              <div className="flex flex-wrap gap-6">
+                                <div>
+                                  <div className="text-[10px] text-gray-500 uppercase font-bold mb-1">
+                                    My Price
+                                  </div>
+                                  <div className="text-xl font-black text-blue-400">
+                                    &#8361;{formatPrice((item as UserBidItem).myPrice)}
+                                  </div>
+                                </div>
+                                <div>
+                                  <div className="text-[10px] text-gray-500 uppercase font-bold mb-1">
+                                    Current Price
+                                  </div>
+                                  <div className="text-xl font-black text-green-400">
+                                    &#8361;{formatPrice(item.currentPrice)}
+                                  </div>
+                                </div>
                               </div>
-                              <div className="text-xl font-black text-blue-400">
-                                &#8361;{formatPrice(activeTab === 'bids' ? (item as UserBidItem).myBidPrice : item.currentPrice)}
+                            ) : (
+                              <div>
+                                <div className="text-[10px] text-gray-500 uppercase font-bold mb-1">
+                                  Current Price
+                                </div>
+                                <div className="text-xl font-black text-blue-400">
+                                  &#8361;{formatPrice(item.currentPrice)}
+                                </div>
                               </div>
-                            </div>
+                            )}
                             <span className={`px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider ${getStatusBadgeClass(item.status)}`}>
                               {item.status}
                             </span>

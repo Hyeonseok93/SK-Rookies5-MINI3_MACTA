@@ -24,6 +24,7 @@ interface UserAuctionResponseItem {
   createdAt?: string;
   mainPictureUrl?: string;
   likeCount?: number;
+  myPrice?: number;
   myBidPrice?: number;
 }
 
@@ -89,7 +90,8 @@ export const userApi = {
       data: {
         content: data.data.content.map(item => ({
           ...toUserAuctionItem(item),
-          myBidPrice: item.myBidPrice || 0
+          myPrice: item.myPrice ?? item.myBidPrice ?? 0,
+          myBidPrice: item.myBidPrice
         })),
         pageInfo: data.data.pageInfo
       }
