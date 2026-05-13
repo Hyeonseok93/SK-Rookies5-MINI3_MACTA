@@ -28,9 +28,9 @@ export function NotificationsPage() {
         size: PAGE_SIZE 
       });
       if (res.success && res.data) {
-        // res.data is { content: Notification[] }
+        // res.data is { content: Notification[], pageInfo: PageInfo }
         setNotifications(res.data.content || []);
-        setPageInfo(res.pageInfo);
+        setPageInfo(res.data.pageInfo);
       }
     } catch {
       setError('알림을 불러오는데 실패했습니다.');

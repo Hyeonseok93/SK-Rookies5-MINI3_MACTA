@@ -11,76 +11,38 @@ import type {
   UserLikeListResponse,
 } from './types';
 
-interface UserLikesResponseData {
-  data: UserLikeListResponse[];
-  pageInfo: PaginatedResponse<UserAuctionItem[]>['pageInfo'];
+/**
+ * 백엔드 DTO 인터페이스 정의 (any 제거용)
+ */
+interface UserAuctionResponseItem {
+  auctionId: number;
+  title: string;
+  currentPrice: number;
+  status: any;
+  viewCount?: number;
+  createdAt?: string;
+  mainPictureUrl?: string;
+  likeCount?: number;
+  myBidPrice?: number;
 }
 
-type UserPageResponse<T> = ApiResponse<T[] | {
-  content?: T[];
-  data?: T[];
-  pageInfo?: PaginatedResponse<T[]>['pageInfo'];
-}> & {
-  pageInfo?: PaginatedResponse<T[]>['pageInfo'];
-};
-
-const getPageData = <T>(response: UserPageResponse<T>): T[] => {
-  if (Array.isArray(response.data)) return response.data;
-  return response.data.content ?? response.data.data ?? [];
-};
-
-const getPageInfo = <T>(response: UserPageResponse<T>, items: T[]) => {
-  const pageInfo = response.pageInfo ?? (!Array.isArray(response.data) ? response.data.pageInfo : undefined);
-
-  return {
-    currentPage: pageInfo?.currentPage ?? 0,
-    pageSize: pageInfo?.pageSize ?? items.length,
-    totalPages: pageInfo?.totalPages ?? 1,
-    totalElements: pageInfo?.totalElements ?? items.length,
-    isFirst: pageInfo?.isFirst ?? true,
-    isLast: pageInfo?.isLast ?? true,
-    hasNext: pageInfo?.hasNext ?? false,
-    hasPrevious: pageInfo?.hasPrevious ?? false,
-  };
-};
-
-const normalizeUserPageResponse = <T, R = T>(
-  response: UserPageResponse<T>,
-  mapItem: (item: T) => R = item => item as unknown as R
-): PaginatedResponse<R[]> => {
-  const rawItems = getPageData(response);
-  const items = rawItems.map(mapItem);
-
-  return {
-    success: response.success,
-    data: items,
-    message: response.message,
-    timestamp: response.timestamp,
-    pageInfo: getPageInfo(response, rawItems),
-  };
-};
-
-type UserAuctionImageFields = UserAuctionItem & {
-  mainPictureUrl?: string;
-};
-
-const toUserAuctionItem = (item: UserAuctionImageFields | UserLikeListResponse): UserAuctionItem => ({
+/**
+ * 백엔드 DTO를 프론트엔드 UI용 객체로 변환하는 공통 매퍼
+ */
+const toUserAuctionItem = (item: UserAuctionResponseItem | UserLikeListResponse): UserAuctionItem => ({
   auctionId: item.auctionId,
   title: item.title,
   currentPrice: item.currentPrice,
   status: item.status,
-  viewCount: 'viewCount' in item ? item.viewCount : 0,
-  createdAt: 'createdAt' in item ? item.createdAt : '',
-  previewUrl: ('previewUrl' in item ? item.previewUrl : undefined) || item.mainPictureUrl || '',
-  mainPictureUrl: item.mainPictureUrl,
+  viewCount: 'viewCount' in item ? item.viewCount || 0 : 0,
+  createdAt: 'createdAt' in item ? item.createdAt || '' : '',
+  previewUrl: item.mainPictureUrl || '', 
   likeCount: item.likeCount,
 });
 
-const toUserBidItem = (item: UserBidItem & { mainPictureUrl?: string }): UserBidItem => ({
-  ...toUserAuctionItem(item),
-  myBidPrice: item.myBidPrice,
-});
-
+/**
+ * 사용자 관련 API (마이페이지 등)
+ */
 export const userApi = {
   // GET /api/v1/users/me/summary
   getUserSummary: async (): Promise<ApiResponse<UserSummaryResponse>> => {
@@ -108,25 +70,40 @@ export const userApi = {
 
   // GET /api/v1/users/me/auctions
   getMyAuctions: async (params: { page?: number; size?: number; status?: string } = {}): Promise<PaginatedResponse<UserAuctionItem[]>> => {
-    const { data } = await api.get<UserPageResponse<UserAuctionImageFields>>('/users/me/auctions', { params });
-    return normalizeUserPageResponse(data, toUserAuctionItem);
+    const { data } = await api.get<PaginatedResponse<UserAuctionResponseItem[]>>('/users/me/auctions', { params });
+    return {
+      ...data,
+      data: {
+        content: data.data.content.map(toUserAuctionItem),
+        pageInfo: data.data.pageInfo
+      }
+    };
   },
 
   // GET /api/v1/users/me/bids
   getMyBids: async (params: { page?: number; size?: number; status?: string } = {}): Promise<PaginatedResponse<UserBidItem[]>> => {
-    const { data } = await api.get<UserPageResponse<UserBidItem & { mainPictureUrl?: string }>>('/users/me/bids', { params });
-    return normalizeUserPageResponse(data, toUserBidItem);
+    const { data } = await api.get<PaginatedResponse<UserAuctionResponseItem[]>>('/users/me/bids', { params });
+    return {
+      ...data,
+      data: {
+        content: data.data.content.map(item => ({
+          ...toUserAuctionItem(item),
+          myBidPrice: item.myBidPrice || 0
+        })),
+        pageInfo: data.data.pageInfo
+      }
+    };
   },
 
   // GET /api/v1/users/me/likes
   getMyWatchlist: async (params: { page?: number; size?: number; status?: string } = {}): Promise<PaginatedResponse<UserAuctionItem[]>> => {
-    const { data } = await api.get<ApiResponse<UserLikesResponseData>>('/users/me/likes', { params });
+    const { data } = await api.get<PaginatedResponse<UserLikeListResponse[]>>('/users/me/likes', { params });
     return {
-      success: data.success,
-      data: data.data.data.map(toUserAuctionItem),
-      message: data.message,
-      timestamp: data.timestamp,
-      pageInfo: data.data.pageInfo,
+      ...data,
+      data: {
+        content: data.data.content.map(toUserAuctionItem),
+        pageInfo: data.data.pageInfo
+      }
     };
   },
 };
