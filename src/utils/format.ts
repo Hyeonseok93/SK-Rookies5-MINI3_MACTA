@@ -26,12 +26,26 @@ export const calculateServiceFee = (price: number): number => {
 
 /**
  * Parses a date string from the backend.
+ * If no timezone info is present, assumes KST (+09:00) to match backend settings.
  */
 export const parseDate = (dateStr: string | Date | null | undefined): Date => {
   if (!dateStr) return new Date();
   if (dateStr instanceof Date) return dateStr;
   
-  return new Date(dateStr);
+  let str = dateStr;
+  if (typeof str === 'string' && !str.includes('Z') && !str.includes('+')) {
+    // If it's a simple ISO-like string without offset, append KST offset
+    // This ensures that the browser correctly interprets the time as KST
+    // regardless of the user's local timezone.
+    const separator = str.includes(' ') ? ' ' : 'T';
+    if (!str.includes(separator)) {
+      // Just a date? Append a default time
+      str = `${str}${separator}00:00:00`;
+    }
+    str = `${str}+09:00`;
+  }
+  
+  return new Date(str);
 };
 
 /**
