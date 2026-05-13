@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ArrowLeft, Camera, X, Plus, Calendar, Coins, Package, Loader2, AlertCircle } from 'lucide-react';
 import { Layout } from '../components/layout/Layout';
@@ -18,8 +18,10 @@ interface FormErrors {
 
 export function RegisterAuctionPage() {
   const navigate = useNavigate();
+  const fileInputRef = useRef<HTMLInputElement>(null);
   const { showToast } = useToast();
   const [isLoading, setIsLoading] = useState(false);
+  const [isUploading, setIsUploading] = useState(false);
   const [categories, setCategories] = useState<Category[]>([]);
   
   // Form State
@@ -52,8 +54,38 @@ export function RegisterAuctionPage() {
   };
 
   const handleImageAdd = () => {
-    // In production, this would open a file picker and upload to S3/Cloud Storage
-    showToast('Image upload feature will be connected to the backend soon.', 'info');
+    fileInputRef.current?.click();
+  };
+
+  const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    // Validate file size (e.g., 10MB)
+    if (file.size > 10 * 1024 * 1024) {
+      showToast('File size should be less than 10MB', 'error');
+      return;
+    }
+
+    setIsUploading(true);
+    try {
+      const res = await auctionApi.uploadImage(file);
+      if (res.success) {
+        const newImage = {
+          url: res.data.imageUrl,
+          main: images.length === 0 // First image is main by default
+        };
+        setPictures([...images, newImage]);
+        showToast('Image uploaded successfully', 'success');
+      }
+    } catch (err) {
+      console.error('Image upload failed:', err);
+      showToast('Failed to upload image', 'error');
+    } finally {
+      setIsUploading(false);
+      // Reset input value to allow selecting the same file again
+      if (fileInputRef.current) fileInputRef.current.value = '';
+    }
   };
 
   const handleRemoveImage = (index: number) => {
@@ -86,8 +118,8 @@ export function RegisterAuctionPage() {
         title,
         description,
         category: category as CategoryType,
-        start_price: parseInt(startPrice.replace(/,/g, '')),
-        end_time: new Date(endTime).toISOString(),
+        startPrice: parseInt(startPrice.replace(/,/g, '')),
+        endTime: new Date(endTime).toISOString(),
         pictures: images
       });
 
@@ -158,16 +190,33 @@ export function RegisterAuctionPage() {
                     )}
                   </div>
                 ))}
+
+                {/* Hidden File Input */}
+                <input
+                  type="file"
+                  ref={fileInputRef}
+                  onChange={handleFileChange}
+                  accept="image/*"
+                  className="hidden"
+                />
+
                 {images.length < 5 && (
                   <button
                     type="button"
                     onClick={handleImageAdd}
+                    disabled={isUploading}
                     className={`w-24 h-24 rounded-lg border-2 border-dashed flex flex-col items-center justify-center transition-all bg-[#0a1628] ${
                       errors.images ? 'border-red-500/50 text-red-400' : 'border-[#1e3a5f] text-gray-500 hover:border-blue-500 hover:text-blue-400'
                     }`}
                   >
-                    <Camera className="w-8 h-8 mb-1" />
-                    <span className="text-[10px] font-medium text-center px-1 leading-tight">Add Photo<br/>(Simulated)</span>
+                    {isUploading ? (
+                      <Loader2 className="w-8 h-8 animate-spin text-blue-500" />
+                    ) : (
+                      <>
+                        <Camera className="w-8 h-8 mb-1" />
+                        <span className="text-[10px] font-medium text-center px-1 leading-tight">Add Photo</span>
+                      </>
+                    )}
                   </button>
                 )}
               </div>

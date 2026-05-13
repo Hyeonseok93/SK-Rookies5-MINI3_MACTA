@@ -40,13 +40,13 @@ export interface AuctionListResponse extends ApiResponse<{
 export interface AuctionSummary {
   id: number;
   title: string;
-  current_price: number;
+  currentPrice: number;
   status: 'READY' | 'LIVE' | 'FINISHED' | 'CANCEL';
-  main_picture_url: string;
+  mainPictureUrl: string;
   category: CategoryType;
-  end_time: string;
-  bid_count: number;
-  is_liked: boolean; // Add this
+  endTime: string;
+  bidCount: number;
+  isLiked: boolean;
 }
 
 export interface Category {
@@ -56,8 +56,8 @@ export interface Category {
 }
 
 export interface AuctionStats {
-  total_active: number;
-  ending_soon: number;
+  totalActive: number;
+  endingSoon: number;
 }
 
 export interface UserSummaryResponse {
@@ -108,36 +108,36 @@ export interface UserLikeListResponse {
 }
 
 export interface LikeToggleResponse {
-  auction_id: number;
-  like_count: number;
-  is_liked: boolean;
+  auctionId: number;
+  likeCount: number;
+  isLiked: boolean;
 }
 
 export interface Bid {
   id: string;
-  bidder_id: number;
-  bidder_nickname: string;
+  bidderId: number;
+  bidderNickname: string;
   price: number;
-  updated_at: string;
+  updatedAt: string;
 }
 
 export interface Comment {
   id: number;
-  user_id: number;
+  userId: number;
   nickname: string;
   content: string;
-  created_at: string;
+  createdAt: string;
 }
 
 export interface AuctionDetail extends AuctionSummary {
-  seller_id: number;
-  seller_nickname: string;
-  seller_joined_at: string;
+  sellerId: number;
+  sellerNickname: string;
+  sellerJoinedAt: string;
   description: string;
-  start_price: number;
-  start_time: string;
-  view_count: number;
-  like_count: number;
+  startPrice: number;
+  startTime: string;
+  viewCount: number;
+  likeCount: number;
   pictures: { url: string; main: boolean }[];
   bids: Bid[];
 }
@@ -146,16 +146,16 @@ export interface Notification {
   id: number;
   type: 'OUTBID' | 'AUCTION_WON' | 'AUCTION_ENDED' | 'NEW_QUESTION' | 'NEW_ANSWER' | 'CLOSING_SOON';
   content: string;
-  target_url: string;
-  is_read: boolean;
-  created_at: string;
+  targetUrl: string;
+  isRead: boolean;
+  createdAt: string;
 }
 
 export interface CreateAuctionRequest {
   title: string;
   description: string;
   category: CategoryType;
-  start_price: number;
-  end_time: string;
+  startPrice: number;
+  endTime: string;
   pictures: { url: string; main: boolean }[];
 }
