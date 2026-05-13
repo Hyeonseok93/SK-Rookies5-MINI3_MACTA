@@ -130,6 +130,8 @@ export const auctionApi = {
    */
   getNotifications: async (params: { page?: number; size?: number } = {}): Promise<PaginatedResponse<Notification[]>> => {
     const { data } = await api.get<PaginatedResponse<Notification[]>>('/notifications', { params });
+    // If the backend returns data as an object with content, but we expected Notification[], 
+    // the current typing might be confusing. Let's ensure data.data is handled correctly in the component.
     return data;
   },
 
