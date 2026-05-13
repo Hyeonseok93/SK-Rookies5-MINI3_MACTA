@@ -33,10 +33,11 @@ export function HomePage() {
   const [sortBy, setSortBy] = useState<SortOption>('newest');
   const [currentPage, setCurrentPage] = useState(0);
   const PAGE_SIZE = 30;
+  const categoryParam = selectedCategory === 'All' ? undefined : selectedCategory;
   
   // API Data
   const { auctions, setAuctions, pageInfo, isLoading, error, refetch } = useAuctions({
-    category: selectedCategory,
+    category: categoryParam,
     q: searchQuery,
     minPrice,
     maxPrice,
