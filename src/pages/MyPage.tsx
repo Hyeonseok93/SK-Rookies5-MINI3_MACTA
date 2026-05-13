@@ -16,7 +16,7 @@ import { Pagination } from '../components/common/Pagination';
 import { getRenderableImageUrl } from '../utils/image';
 
 type MyPageTab = 'auctions' | 'bids' | 'likes';
-type MyPageStatusFilter = 'ALL' | 'OUTBID' | 'WON' | 'SOLD';
+type MyPageStatusFilter = 'ALL' | 'READY' | 'LIVE' | 'FINISHED' | 'CANCEL' | 'PAID' | 'SHIPPING' | 'COMPLETED';
 
 interface StoredUser {
   id?: number | string;
@@ -33,10 +33,14 @@ interface ApiErrorBody {
 }
 
 const STATUS_FILTERS: { value: MyPageStatusFilter; label: string }[] = [
-  { value: 'ALL', label: '전체' },
-  { value: 'OUTBID', label: '상위 입찰 발생' },
-  { value: 'WON', label: '낙찰 성공' },
-  { value: 'SOLD', label: '판매성공' },
+  { value: 'ALL', label: 'All' },
+  { value: 'READY', label: 'Ready' },
+  { value: 'LIVE', label: 'Live' },
+  { value: 'FINISHED', label: 'Finished' },
+  { value: 'CANCEL', label: 'Cancel' },
+  { value: 'PAID', label: 'Paid' },
+  { value: 'SHIPPING', label: 'Shipping' },
+  { value: 'COMPLETED', label: 'Completed' },
 ];
 
 const TAB_TITLES: Record<MyPageTab, string> = {
@@ -55,6 +59,18 @@ const getStatusBadgeClass = (status: string) => {
       return 'bg-blue-600/20 text-blue-300';
     case 'SOLD':
       return 'bg-purple-600/20 text-purple-300';
+    case 'READY':
+      return 'bg-slate-600/20 text-slate-300';
+    case 'FINISHED':
+      return 'bg-blue-600/20 text-blue-300';
+    case 'CANCEL':
+      return 'bg-red-600/20 text-red-300';
+    case 'PAID':
+      return 'bg-cyan-600/20 text-cyan-300';
+    case 'SHIPPING':
+      return 'bg-indigo-600/20 text-indigo-300';
+    case 'COMPLETED':
+      return 'bg-emerald-600/20 text-emerald-300';
     default:
       return 'bg-gray-700 text-gray-400';
   }
@@ -136,7 +152,7 @@ export function MyPage() {
         const params = {
           page: currentPage,
           size: PAGE_SIZE,
-          ...(activeTab !== 'likes' ? { status: statusFilter } : {}),
+          ...(activeTab === 'auctions' && statusFilter !== 'ALL' ? { status: statusFilter } : {}),
         };
         if (activeTab === 'auctions') res = await userApi.getMyAuctions(params);
         else if (activeTab === 'bids') res = await userApi.getMyBids(params);
@@ -301,6 +317,9 @@ export function MyPage() {
     }
   };
 
+  const itemCount = pageInfo?.totalElements ?? items.length;
+  const totalPages = pageInfo?.totalPages ?? 1;
+
   return (
     <Layout>
       <div className="max-w-7xl mx-auto px-4 py-8">
@@ -380,7 +399,7 @@ export function MyPage() {
               <div className="p-6 border-b border-[#1e3a5f] flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
                 <div>
                   <h2 className="text-xl font-bold text-white">{TAB_TITLES[activeTab]}</h2>
-                  {activeTab !== 'likes' && (
+                  {activeTab === 'auctions' && (
                     <div className="mt-4 flex flex-wrap gap-2">
                       {STATUS_FILTERS.map((filter) => (
                         <button
@@ -401,7 +420,7 @@ export function MyPage() {
                 </div>
                 <div className="flex items-center gap-4">
                   <div className="text-sm text-gray-500">
-                    {pageInfo ? `${pageInfo.totalElements} items found` : `${items.length} items found`}
+                    {itemCount} items found
                   </div>
                   {activeTab === 'likes' && items.length > 0 && (
                     <button
@@ -484,7 +503,7 @@ export function MyPage() {
             {!isLoading && pageInfo && (
               <Pagination 
                 currentPage={currentPage} 
-                totalPages={pageInfo.totalPages} 
+                totalPages={totalPages} 
                 onPageChange={setCurrentPage} 
               />
             )}

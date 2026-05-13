@@ -84,6 +84,7 @@ export interface UserAuctionItem {
   viewCount: number;
   createdAt: string;
   previewUrl: string;
+  mainPictureUrl?: string;
   likeCount?: number;
 }
 
