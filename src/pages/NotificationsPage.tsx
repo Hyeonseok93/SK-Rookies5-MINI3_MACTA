@@ -57,7 +57,7 @@ export function NotificationsPage() {
   const handleMarkAsRead = async (id: number) => {
     const res = await auctionApi.markNotificationAsRead(id);
     if (res.success) {
-      setNotifications(prev => prev.map(n => n.id === id ? { ...n, is_read: true } : n));
+      setNotifications(prev => prev.map(n => n.id === id ? { ...n, isRead: true } : n));
     }
   };
 
@@ -77,16 +77,16 @@ export function NotificationsPage() {
   };
 
   const handleMarkAllRead = async () => {
-    const unreadIds = notifications.filter(n => !n.is_read).map(n => n.id);
+    const unreadIds = notifications.filter(n => !n.isRead).map(n => n.id);
     if (unreadIds.length === 0) return;
     
     await Promise.all(unreadIds.map(id => auctionApi.markNotificationAsRead(id)));
-    setNotifications(prev => prev.map(n => ({ ...n, is_read: true })));
+    setNotifications(prev => prev.map(n => ({ ...n, isRead: true })));
     showToast('모든 알림을 읽음 처리했습니다.', 'success');
   };
 
   const handleDeleteRead = async () => {
-    const readIds = notifications.filter(n => n.is_read).map(n => n.id);
+    const readIds = notifications.filter(n => n.isRead).map(n => n.id);
     if (readIds.length === 0) {
       showToast('삭제할 읽은 알림이 없습니다.', 'info');
       return;
@@ -94,13 +94,13 @@ export function NotificationsPage() {
 
     const res = await auctionApi.deleteReadNotifications();
     if (res.success) {
-      setNotifications(prev => prev.filter(n => !n.is_read));
+      setNotifications(prev => prev.filter(n => !n.isRead));
       showToast('읽은 알림을 모두 삭제했습니다.', 'success');
     }
   };
 
   const filteredNotifications = filter === 'unread' 
-    ? notifications.filter(n => !n.is_read)
+    ? notifications.filter(n => !n.isRead)
     : notifications;
 
   return (
@@ -118,7 +118,7 @@ export function NotificationsPage() {
           </div>
           
           <div className="flex gap-3">
-            {notifications.some(n => !n.is_read) && (
+            {notifications.some(n => !n.isRead) && (
               <button 
                 onClick={handleMarkAllRead}
                 className="text-xs bg-blue-600/10 text-blue-400 border border-blue-600/30 px-3 py-1.5 rounded-lg hover:bg-blue-600/20 transition-colors flex items-center gap-2"
@@ -127,7 +127,7 @@ export function NotificationsPage() {
                 모두 읽음 처리
               </button>
             )}
-            {notifications.some(n => n.is_read) && (
+            {notifications.some(n => n.isRead) && (
               <button 
                 onClick={handleDeleteRead}
                 className="text-xs bg-red-600/10 text-red-400 border border-red-600/30 px-3 py-1.5 rounded-lg hover:bg-red-500/20 transition-colors flex items-center gap-2"
@@ -155,7 +155,7 @@ export function NotificationsPage() {
               filter === 'unread' ? 'bg-blue-600 text-white' : 'text-gray-400 hover:bg-[#1e3a5f]/30'
             }`}
           >
-            읽지 않음 ({notifications.filter(n => !n.is_read).length})
+            읽지 않음 ({notifications.filter(n => !n.isRead).length})
           </button>
         </div>
 
@@ -174,22 +174,22 @@ export function NotificationsPage() {
               {filteredNotifications.map((n) => (
                 <div 
                   key={n.id} 
-                  className={`p-6 flex items-center gap-4 transition-all cursor-pointer hover:bg-[#1e3a5f]/10 ${!n.is_read ? 'bg-blue-600/5' : 'opacity-70'}`}
+                  className={`p-6 flex items-center gap-4 transition-all cursor-pointer hover:bg-[#1e3a5f]/10 ${!n.isRead ? 'bg-blue-600/5' : 'opacity-70'}`}
                   onClick={() => handleMarkAsRead(n.id)}
                 >
-                  <div className={`p-3 rounded-xl flex-shrink-0 ${!n.is_read ? 'bg-blue-600/20 text-blue-400' : 'bg-gray-800 text-gray-500'}`}>
+                  <div className={`p-3 rounded-xl flex-shrink-0 ${!n.isRead ? 'bg-blue-600/20 text-blue-400' : 'bg-gray-800 text-gray-500'}`}>
                     <Bell className="w-6 h-6" />
                   </div>
                   <div className="flex-1 min-w-0">
                     <div className="flex justify-between items-start mb-1">
-                      <p className={`text-lg leading-snug ${!n.is_read ? 'text-white font-semibold' : 'text-gray-300'}`}>
+                      <p className={`text-lg leading-snug ${!n.isRead ? 'text-white font-semibold' : 'text-gray-300'}`}>
                         {n.content}
                       </p>
                     </div>
                     <div className="flex items-center gap-4 text-sm text-gray-500">
                       <div className="flex items-center gap-1.5">
                         <Clock className="w-4 h-4" />
-                        {new Date(n.created_at).toLocaleString()}
+                        {new Date(n.createdAt).toLocaleString()}
                       </div>
                       <span className="px-2 py-0.5 rounded-md bg-[#1e3a5f]/50 text-[10px] uppercase font-bold tracking-wider">
                         {n.type === 'OUTBID' ? '입찰 상회' : n.type === 'AUCTION_ENDED' ? '경매 종료' : n.type.replace('_', ' ')}
@@ -198,7 +198,7 @@ export function NotificationsPage() {
                   </div>
                   <div className="flex items-center gap-2">
                     <button 
-                      onClick={(e) => handleNavigate(e, n.target_url, n.id)}
+                      onClick={(e) => handleNavigate(e, n.targetUrl, n.id)}
                       className="flex items-center gap-2 px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg text-sm font-semibold transition-all shadow-lg shadow-blue-500/10"
                     >
                       <span>보기</span>

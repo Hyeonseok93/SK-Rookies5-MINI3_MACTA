@@ -126,14 +126,14 @@ export function HomePage() {
     
     // 1. Optimistic UI Update: 즉시 화면의 하트 색상을 바꿈 (로딩 없이 즉시)
     setAuctions(prev => prev.map(item => 
-      item.id === id ? { ...item, is_liked: !item.is_liked } : item
+      item.id === id ? { ...item, isLiked: !item.isLiked } : item
     ));
 
     try {
       // 2. 서버 통신 (로딩 스피너 없이 백그라운드에서 실행)
       const res = await auctionApi.toggleLike(id);
       if (res.success) {
-        showToast(res.data.is_liked ? 'Added to watchlist' : 'Removed from watchlist', 'success');
+        showToast(res.data.isLiked ? 'Added to watchlist' : 'Removed from watchlist', 'success');
         // 사이드바 통계만 조용히 업데이트
         auctionApi.getAuctionStats().then(statsRes => {
           if (statsRes.success) setStats(statsRes.data);
@@ -142,7 +142,7 @@ export function HomePage() {
     } catch {
       // 3. 실패 시 UI 롤백
       setAuctions(prev => prev.map(item => 
-        item.id === id ? { ...item, is_liked: !item.is_liked } : item
+        item.id === id ? { ...item, isLiked: !item.isLiked } : item
       ));
       showToast('Failed to update watchlist', 'error');
     }
@@ -293,13 +293,13 @@ export function HomePage() {
                 <div className="flex justify-between items-center">
                   <span className="text-gray-400 text-sm">Total</span>
                   <span className="text-white font-bold">
-                    {stats ? stats.total_active : '...'}
+                    {stats ? stats.totalActive : '...'}
                   </span>
                 </div>
                 <div className="flex justify-between items-center">
                   <span className="text-gray-400 text-sm">Ending Soon</span>
                   <span className="text-red-400 font-bold">
-                    {stats ? stats.ending_soon : '...'}
+                    {stats ? stats.endingSoon : '...'}
                   </span>
                 </div>
               </div>
@@ -337,7 +337,7 @@ export function HomePage() {
                     >
                       <div className="relative aspect-square overflow-hidden bg-[#1e3a5f]/20">
                         <img
-                          src={item.main_picture_url}
+                          src={item.mainPictureUrl}
                           alt={item.title}
                           className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
                         />
@@ -345,15 +345,15 @@ export function HomePage() {
                           <button 
                             onClick={(e) => handleToggleLike(e, item.id)}
                             className={`absolute bottom-3 right-3 p-2 rounded-full backdrop-blur-md transition-all shadow-lg z-10 ${
-                              item.is_liked ? 'bg-red-500 text-white' : 'bg-black/40 text-white hover:bg-white hover:text-red-500'
+                              item.isLiked ? 'bg-red-500 text-white' : 'bg-black/40 text-white hover:bg-white hover:text-red-500'
                             }`}
                           >
-                            <Heart className={`w-4 h-4 ${item.is_liked ? 'fill-current' : ''}`} />
+                            <Heart className={`w-4 h-4 ${item.isLiked ? 'fill-current' : ''}`} />
                           </button>
                         )}
                         <div className="absolute top-3 right-3 bg-red-600 text-white px-3 py-1.5 rounded-full text-sm font-semibold flex items-center gap-1.5 shadow-lg">
                           <Clock className="w-4 h-4" />
-                          <CountdownTimer endTime={new Date(item.end_time)} />
+                          <CountdownTimer endTime={new Date(item.endTime)} />
                         </div>
                         <div className="absolute top-3 left-3 bg-blue-600/90 text-white px-3 py-1 rounded-full text-xs font-medium">
                           {item.category}
@@ -366,10 +366,10 @@ export function HomePage() {
                         </div>
                         <div className="flex items-end justify-between">
                           <div className="text-2xl font-bold text-blue-400">
-                            ₩{formatPrice(item.current_price)}
+                            ₩{formatPrice(item.currentPrice)}
                           </div>
                           <div className="text-xs text-gray-500">
-                            {item.bid_count} bids
+                            {item.bidCount} bids
                           </div>
                         </div>
                       </div>

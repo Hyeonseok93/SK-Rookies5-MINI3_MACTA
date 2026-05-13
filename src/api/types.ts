@@ -84,18 +84,18 @@ export interface PasswordUpdateRequest {
 }
 
 export interface UserAuctionItem {
-  auction_id: number;
+  auctionId: number;
   title: string;
-  current_price: number;
+  currentPrice: number;
   status: 'READY' | 'LIVE' | 'FINISHED' | 'CANCEL';
-  view_count: number;
-  created_at: string;
-  preview_url: string;
-  like_count?: number;
+  viewCount: number;
+  createdAt: string;
+  previewUrl: string;
+  likeCount?: number;
 }
 
 export interface UserBidItem extends UserAuctionItem {
-  my_bid_price: number;
+  myBidPrice: number;
 }
 
 export interface UserLikeListResponse {

@@ -22,7 +22,7 @@ export function Header() {
   const [showNotifications, setShowNotifications] = useState(false);
   const notificationRef = useRef<HTMLDivElement>(null);
 
-  const unreadCount = notifications.filter(n => !n.is_read).length;
+  const unreadCount = notifications.filter(n => !n.isRead).length;
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -82,7 +82,7 @@ export function Header() {
   const markAsRead = async (id: number) => {
     const res = await auctionApi.markNotificationAsRead(id);
     if (res.success) {
-      setNotifications(prev => prev.map(n => n.id === id ? { ...n, is_read: true } : n));
+      setNotifications(prev => prev.map(n => n.id === id ? { ...n, isRead: true } : n));
     }
   };
 
@@ -160,23 +160,23 @@ export function Header() {
                           {notifications.slice(0, 5).map((n) => (
                             <div 
                               key={n.id} 
-                              className={`p-4 hover:bg-[#1e3a5f]/20 transition-colors cursor-pointer group flex items-start gap-3 ${!n.is_read ? 'bg-blue-600/5' : ''}`}
+                              className={`p-4 hover:bg-[#1e3a5f]/20 transition-colors cursor-pointer group flex items-start gap-3 ${!n.isRead ? 'bg-blue-600/5' : ''}`}
                               onClick={() => markAsRead(n.id)}
                             >
-                              <div className={`mt-1 p-2 rounded-lg flex-shrink-0 ${!n.is_read ? 'bg-blue-600/20 text-blue-400' : 'bg-gray-800 text-gray-500'}`}>
+                              <div className={`mt-1 p-2 rounded-lg flex-shrink-0 ${!n.isRead ? 'bg-blue-600/20 text-blue-400' : 'bg-gray-800 text-gray-500'}`}>
                                 <Bell className="w-4 h-4" />
                               </div>
                               <div className="flex-1 min-w-0">
-                                <p className={`text-sm leading-snug mb-1 ${!n.is_read ? 'text-white font-medium' : 'text-gray-400'}`}>
+                                <p className={`text-sm leading-snug mb-1 ${!n.isRead ? 'text-white font-medium' : 'text-gray-400'}`}>
                                   {n.content}
                                 </p>
                                 <div className="flex items-center gap-2 text-[10px] text-gray-500">
                                   <Clock className="w-3 h-3" />
-                                  {new Date(n.created_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                                  {new Date(n.createdAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                                 </div>
                               </div>
                               <button
-                                onClick={(e) => handleNavigate(e, n.target_url, n.id)}
+                                onClick={(e) => handleNavigate(e, n.targetUrl, n.id)}
                                 className="mt-1 p-1.5 rounded-md hover:bg-blue-600 hover:text-white text-gray-500 transition-all"
                                 title="Go to Auction"
                               >

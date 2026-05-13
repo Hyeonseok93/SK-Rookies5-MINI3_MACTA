@@ -45,8 +45,8 @@ export const auctionApi = {
    * 4.2 경매 등록
    * POST /auctions
    */
-  createAuction: async (payload: CreateAuctionRequest): Promise<ApiResponse<{ auction_id: number }>> => {
-    const { data } = await api.post<ApiResponse<{ auction_id: number }>>('/auctions', payload);
+  createAuction: async (payload: CreateAuctionRequest): Promise<ApiResponse<{ auctionId: number }>> => {
+    const { data } = await api.post<ApiResponse<{ auctionId: number }>>('/auctions', payload);
     return data;
   },
 
@@ -54,8 +54,8 @@ export const auctionApi = {
    * 4.3 입찰하기
    * POST /auctions/{id}/bids
    */
-  placeBid: async (id: string, amount: number): Promise<ApiResponse<{ bid_id: string; current_price: number }>> => {
-    const { data } = await api.post<ApiResponse<{ bid_id: string; current_price: number }>>(`/auctions/${id}/bids`, { price: amount });
+  placeBid: async (id: string, amount: number): Promise<ApiResponse<{ bidId: string; currentPrice: number }>> => {
+    const { data } = await api.post<ApiResponse<{ bidId: string; currentPrice: number }>>(`/auctions/${id}/bids`, { price: amount });
     return data;
   },
 
@@ -64,7 +64,7 @@ export const auctionApi = {
    * POST /payments
    */
   processPayment: async (auctionId: number): Promise<ApiResponse<void>> => {
-    const { data } = await api.post<ApiResponse<void>>('/payments', { auction_id: auctionId });
+    const { data } = await api.post<ApiResponse<void>>('/payments', { auctionId });
     return data;
   },
 

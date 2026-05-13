@@ -17,14 +17,14 @@ interface UserLikesResponseData {
 }
 
 const toUserAuctionItem = (item: UserLikeListResponse): UserAuctionItem => ({
-  auction_id: item.auctionId,
+  auctionId: item.auctionId,
   title: item.title,
-  current_price: item.currentPrice,
+  currentPrice: item.currentPrice,
   status: item.status,
-  view_count: 0,
-  created_at: '',
-  preview_url: item.mainPictureUrl,
-  like_count: item.likeCount,
+  viewCount: 0,
+  createdAt: '',
+  previewUrl: item.mainPictureUrl,
+  likeCount: item.likeCount,
 });
 
 export const userApi = {
