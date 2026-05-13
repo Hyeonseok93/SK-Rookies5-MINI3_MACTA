@@ -19,7 +19,10 @@ export const auctionApi = {
     maxPrice?: string;
     sort?: string;
   }): Promise<AuctionListResponse> => {
-    const { data } = await api.get<AuctionListResponse>('/auctions', { params });
+    const filteredParams = Object.fromEntries(
+      Object.entries(params).filter(([, value]) => value !== undefined && value !== '')
+    );
+    const { data } = await api.get<AuctionListResponse>('/auctions', { params: filteredParams });
     return data;
   },
 

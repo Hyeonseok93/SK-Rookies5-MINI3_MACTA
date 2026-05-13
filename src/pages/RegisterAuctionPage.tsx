@@ -25,6 +25,18 @@ interface UploadedImage {
   objectPreviewUrl?: string;
 }
 
+const getSafeImageFileName = (file: File) => {
+  const extension = file.name.split('.').pop()?.replace(/[^a-zA-Z0-9]/g, '').toLowerCase();
+  return extension ? `image.${extension}` : 'image';
+};
+
+const createUploadImageFile = (file: File) => {
+  return new File([file], getSafeImageFileName(file), {
+    type: file.type,
+    lastModified: file.lastModified,
+  });
+};
+
 export function RegisterAuctionPage() {
   const navigate = useNavigate();
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -86,7 +98,8 @@ export function RegisterAuctionPage() {
 
     setIsUploading(true);
     try {
-      const res = await auctionApi.uploadImage(file);
+      const uploadFile = createUploadImageFile(file);
+      const res = await auctionApi.uploadImage(uploadFile);
       if (res.success) {
         const imageUrl = res.data.imageUrl || res.data.image_url;
         const imageKey = res.data.imageKey || res.data.image_key;
