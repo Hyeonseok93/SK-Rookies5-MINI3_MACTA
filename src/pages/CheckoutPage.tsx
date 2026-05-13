@@ -6,6 +6,7 @@ import { auctionApi } from '../api/auction';
 import type { AuctionDetail } from '../api/types';
 import { formatPrice, calculateServiceFee } from '../utils/format';
 import { useToast } from '../components/common/Toast';
+import { getRenderableImageUrl } from '../utils/image';
 
 export function CheckoutPage() {
   const { id } = useParams();
@@ -118,7 +119,7 @@ export function CheckoutPage() {
               <h2 className="text-white font-bold text-xl mb-4">Order Summary</h2>
               <div className="mb-6">
                 <div className="aspect-video rounded-xl overflow-hidden mb-4 border border-[#1e3a5f]">
-                  <img src={item.mainPictureUrl} className="w-full h-full object-cover" alt="" />
+                  <img src={getRenderableImageUrl(item.mainPictureUrl)} className="w-full h-full object-cover" alt="" />
                 </div>
                 <h3 className="text-white font-semibold leading-tight">{item.title}</h3>
                 <p className="text-xs text-gray-500 mt-1 uppercase tracking-wider">{item.category}</p>

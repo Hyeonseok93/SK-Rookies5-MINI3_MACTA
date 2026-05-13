@@ -13,6 +13,7 @@ import { formatPrice } from '../utils/format';
 import { useToast } from '../components/common/Toast';
 import { AUTH_STATE_CHANGED_EVENT } from '../api/auth';
 import { Pagination } from '../components/common/Pagination';
+import { getRenderableImageUrl } from '../utils/image';
 
 type MyPageTab = 'auctions' | 'bids' | 'likes';
 type MyPageStatusFilter = 'ALL' | 'OUTBID' | 'WON' | 'SOLD';
@@ -432,7 +433,7 @@ export function MyPage() {
                         className="p-6 hover:bg-[#1e3a5f]/10 transition-colors cursor-pointer flex items-center gap-6 group"
                       >
                         <div className="w-24 h-24 rounded-xl overflow-hidden flex-shrink-0 bg-[#0a1628] border border-[#1e3a5f] group-hover:border-blue-500 transition-colors">
-                          <img src={item.previewUrl} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" alt="" />
+                          <img src={getRenderableImageUrl(item.previewUrl)} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" alt="" />
                         </div>
                         <div className="flex-1 min-w-0">
                           <h3 className="text-white font-semibold text-lg mb-1 truncate">{item.title}</h3>

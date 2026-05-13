@@ -22,7 +22,7 @@ export function Header() {
   const [showNotifications, setShowNotifications] = useState(false);
   const notificationRef = useRef<HTMLDivElement>(null);
 
-  const unreadCount = notifications.filter(n => !n.isRead).length;
+  const unreadCount = Array.isArray(notifications) ? notifications.filter(n => !n.isRead).length : 0;
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -35,21 +35,24 @@ export function Header() {
   }, []);
 
   useEffect(() => {
-    if (!isLoggedIn) {
-      setNotifications([]);
-      setShowNotifications(false);
-      return;
-    }
+    const initializeNotifications = async () => {
+      if (!isLoggedIn) {
+        setNotifications([]);
+        setShowNotifications(false);
+        return;
+      }
 
-    let ignore = false;
-
-    auctionApi.getNotifications().then(res => {
-      if (!ignore && res.success) setNotifications(res.data);
-    });
-
-    return () => {
-      ignore = true;
+      const res = await auctionApi.getNotifications();
+      if (res.success) {
+        const data = res.data as unknown;
+        const notificationList = Array.isArray(data) 
+          ? data 
+          : (data as { content?: Notification[] })?.content || [];
+        setNotifications(notificationList as Notification[]);
+      }
     };
+
+    initializeNotifications();
   }, [isLoggedIn]);
 
   useEffect(() => {

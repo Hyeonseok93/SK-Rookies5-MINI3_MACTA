@@ -7,6 +7,7 @@ import type { Category, CategoryType } from '../api/types';
 import { useToast } from '../components/common/Toast';
 import { formatPrice, sanitizeNumeric } from '../utils/format';
 import { toAuctionCategoryCode } from '../utils/category';
+import { getRenderableImageUrl } from '../utils/image';
 
 interface FormErrors {
   title?: string;
@@ -21,11 +22,13 @@ interface UploadedImage {
   url: string;
   imageKey: string;
   previewUrl: string;
+  objectPreviewUrl?: string;
 }
 
 export function RegisterAuctionPage() {
   const navigate = useNavigate();
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const objectPreviewUrlsRef = useRef<Set<string>>(new Set());
   const { showToast } = useToast();
   const [isLoading, setIsLoading] = useState(false);
   const [isUploading, setIsUploading] = useState(false);
@@ -44,6 +47,13 @@ export function RegisterAuctionPage() {
     auctionApi.getCategories().then(res => {
       if (res.success) setCategories(res.data);
     });
+  }, []);
+
+  useEffect(() => {
+    return () => {
+      objectPreviewUrlsRef.current.forEach(url => URL.revokeObjectURL(url));
+      objectPreviewUrlsRef.current.clear();
+    };
   }, []);
 
   const validateForm = (): boolean => {
@@ -80,10 +90,17 @@ export function RegisterAuctionPage() {
       if (res.success) {
         const imageUrl = res.data.imageUrl || res.data.image_url;
         const imageKey = res.data.imageKey || res.data.image_key;
-        const previewUrl = res.data.presignedUrl || res.data.presigned_url || imageUrl;
+        const localPreviewUrl = URL.createObjectURL(file);
+        const uploadedPreviewUrl = getRenderableImageUrl(
+          res.data.presignedUrl,
+          res.data.presigned_url,
+          imageUrl
+        );
+        const previewUrl = uploadedPreviewUrl || localPreviewUrl;
 
         if (!imageUrl || !imageKey || !previewUrl) {
           showToast('Image upload response is missing required data', 'error');
+          URL.revokeObjectURL(localPreviewUrl);
           return;
         }
 
@@ -91,7 +108,10 @@ export function RegisterAuctionPage() {
           url: imageUrl,
           imageKey,
           previewUrl,
+          objectPreviewUrl: uploadedPreviewUrl ? undefined : localPreviewUrl,
         };
+        if (uploadedPreviewUrl) URL.revokeObjectURL(localPreviewUrl);
+        else objectPreviewUrlsRef.current.add(localPreviewUrl);
         setPictures([...images, newImage]);
         showToast('Image uploaded successfully', 'success');
       }
@@ -106,6 +126,11 @@ export function RegisterAuctionPage() {
   };
 
   const handleRemoveImage = (index: number) => {
+    const imageToRemove = images[index];
+    if (imageToRemove?.objectPreviewUrl) {
+      URL.revokeObjectURL(imageToRemove.objectPreviewUrl);
+      objectPreviewUrlsRef.current.delete(imageToRemove.objectPreviewUrl);
+    }
     setPictures(images.filter((_, i) => i !== index));
   };
 

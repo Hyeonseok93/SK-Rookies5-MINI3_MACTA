@@ -13,6 +13,7 @@ import { useToast } from '../components/common/Toast';
 import { getAccessTokenCookie } from '../api/tokenCookie';
 import { AUTH_STATE_CHANGED_EVENT } from '../api/auth';
 import { Pagination } from '../components/common/Pagination';
+import { getRenderableImageUrl } from '../utils/image';
 
 type SortOption = 'newest' | 'closing-soon' | 'price-low' | 'price-high';
 
@@ -338,7 +339,7 @@ export function HomePage() {
                     >
                       <div className="relative aspect-square overflow-hidden bg-[#1e3a5f]/20">
                         <img
-                          src={item.mainPictureUrl}
+                          src={getRenderableImageUrl(item.mainPictureUrl)}
                           alt={item.title}
                           className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
                         />

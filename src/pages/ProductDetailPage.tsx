@@ -10,6 +10,7 @@ import { formatPrice, sanitizeNumeric } from '../utils/format';
 import { getAccessTokenCookie } from '../api/tokenCookie';
 import { AUTH_STATE_CHANGED_EVENT } from '../api/auth';
 import { ErrorPage } from './ErrorPage';
+import { getRenderableImageUrl } from '../utils/image';
 
 const isAuthenticated = () => Boolean(getAccessTokenCookie() && localStorage.getItem('macta_user'));
 
@@ -90,8 +91,8 @@ export function ProductDetailPage() {
         setItem(prev => prev ? {
           ...prev,
           currentPrice: res.data.currentPrice,
-          bidCount: prev.bidCount + 1,
-          bids: [newBid, ...prev.bids]
+          bidCount: (prev.bidCount ?? 0) + 1,
+          bids: [newBid, ...(prev.bids ?? [])]
         } : null);
         setBidAmount('');
         setFlash(true);
@@ -165,6 +166,13 @@ export function ProductDetailPage() {
     );
   }
 
+  const pictures = Array.isArray(item.pictures) ? item.pictures : [];
+  const bids = Array.isArray(item.bids) ? item.bids : [];
+  const selectedPicture = pictures[selectedImage];
+  const sellerJoinedDate = item.sellerJoinedAt
+    ? new Date(item.sellerJoinedAt).toLocaleDateString('en-US', { month: 'short', year: 'numeric' })
+    : '-';
+
   return (
     <Layout>
       <div className="max-w-7xl mx-auto px-4 py-8">
@@ -181,13 +189,13 @@ export function ProductDetailPage() {
           <div>
             <div className="aspect-square rounded-lg overflow-hidden bg-[#0d1b2e] border border-[#1e3a5f] mb-4">
               <img
-                src={item.pictures[selectedImage]?.url}
+                src={getRenderableImageUrl(selectedPicture?.url, item.mainPictureUrl)}
                 alt={item.title}
                 className="w-full h-full object-cover"
               />
             </div>
             <div className="grid grid-cols-3 gap-3 mb-6">
-              {item.pictures.map((pic, idx) => (
+              {pictures.map((pic, idx) => (
                 <button
                   key={idx}
                   onClick={() => setSelectedImage(idx)}
@@ -195,7 +203,7 @@ export function ProductDetailPage() {
                     selectedImage === idx ? 'border-blue-500' : 'border-[#1e3a5f]'
                   }`}
                 >
-                  <img src={pic.url} alt={`${item.title} ${idx + 1}`} className="w-full h-full object-cover" />
+                  <img src={getRenderableImageUrl(pic.url, item.mainPictureUrl)} alt={`${item.title} ${idx + 1}`} className="w-full h-full object-cover" />
                 </button>
               ))}
             </div>
@@ -212,7 +220,7 @@ export function ProductDetailPage() {
                     <CheckCircle className="w-4 h-4 text-green-400" />
                   </div>
                   <div className="text-xs text-gray-400">
-                    Member since {new Date(item.sellerJoinedAt).toLocaleDateString('en-US', { month: 'short', year: 'numeric' })}
+                    Member since {sellerJoinedDate}
                   </div>
                 </div>
               </div>
@@ -260,7 +268,7 @@ export function ProductDetailPage() {
                 <div className="text-4xl font-bold text-blue-400 mb-1">
                   ₩{formatPrice(item.currentPrice)}
                 </div>
-                <div className="text-xs text-gray-500">by {item.bids[0]?.bidderNickname || 'Initial Bid'}</div>
+                <div className="text-xs text-gray-500">by {bids[0]?.bidderNickname || 'Initial Bid'}</div>
               </div>
 
               <div className="mb-6">
@@ -297,7 +305,7 @@ export function ProductDetailPage() {
             Live Bidding Activity
           </h3>
           <div className="grid md:grid-cols-2 lg:grid-cols-5 gap-4">
-            {item.bids.slice(0, 5).map((bid, index) => (
+            {bids.slice(0, 5).map((bid, index) => (
               <div
                 key={bid.id}
                 className={`p-4 rounded-lg border ${
