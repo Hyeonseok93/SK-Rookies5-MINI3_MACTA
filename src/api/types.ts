@@ -3,7 +3,7 @@ export type CategoryType = string;
 export interface ApiResponse<T> {
   success: boolean;
   data: T;
-  message?: string;
+  message: string;
   timestamp: string;
 }
 
@@ -23,9 +23,14 @@ export interface PaginatedData<T> {
   pageInfo: PageInfo;
 }
 
-export type AuctionListResponse = ApiResponse<PaginatedData<AuctionSummary[]>>;
+/**
+ * 백엔드 표준 페이지네이션 응답 규격
+ */
+export type PaginatedResponse<T> = ApiResponse<PaginatedData<T>>;
 
-export type NotificationListResponse = ApiResponse<PaginatedData<Notification[]>>;
+export type AuctionListResponse = PaginatedResponse<AuctionSummary[]>;
+
+export type NotificationListResponse = PaginatedResponse<Notification[]>;
 
 export interface AuctionSummary {
   id: number;
