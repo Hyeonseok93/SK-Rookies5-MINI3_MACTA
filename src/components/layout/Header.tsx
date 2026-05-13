@@ -5,6 +5,7 @@ import { auctionApi } from '../../api/auction';
 import type { Notification } from '../../api/types';
 import { useAuthStore } from '../../store/useAuthStore';
 import { useToast } from '../common/Toast';
+import { formatTime } from '../../utils/format';
 
 export function Header() {
   const navigate = useNavigate();
@@ -159,7 +160,7 @@ export function Header() {
                                 </p>
                                 <div className="flex items-center gap-2 text-[10px] text-gray-500">
                                   <Clock className="w-3 h-3" />
-                                  {new Date(n.createdAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                                  {formatTime(n.createdAt)}
                                 </div>
                               </div>
                               <button
