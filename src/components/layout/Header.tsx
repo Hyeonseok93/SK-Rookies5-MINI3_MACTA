@@ -37,18 +37,21 @@ export function Header() {
   useEffect(() => {
     const initializeNotifications = async () => {
       if (!isLoggedIn) {
-        setNotifications([]);
-        setShowNotifications(false);
+        // Use functional updates and check to avoid unnecessary cascading renders
+        setNotifications(prev => prev.length > 0 ? [] : prev);
+        setShowNotifications(prev => prev ? false : prev);
         return;
       }
 
-      const res = await auctionApi.getNotifications();
-      if (res.success) {
-        const data = res.data as unknown;
-        const notificationList = Array.isArray(data) 
-          ? data 
-          : (data as { content?: Notification[] })?.content || [];
-        setNotifications(notificationList as Notification[]);
+      try {
+        const res = await auctionApi.getNotifications();
+        if (res.success && res.data) {
+          // res.data is { content: Notification[] } per NotificationListResponse
+          const notificationList = res.data.content || [];
+          setNotifications(notificationList);
+        }
+      } catch (error) {
+        console.error('Failed to fetch notifications:', error);
       }
     };
 

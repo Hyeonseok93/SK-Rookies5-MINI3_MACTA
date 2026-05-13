@@ -1,8 +1,8 @@
 import { api } from './client';
 import type { 
-  AuctionListResponse, PaginatedResponse, ApiResponse, Category, 
+  AuctionListResponse, ApiResponse, Category, 
   AuctionDetail, Comment, AuctionStats, CreateAuctionRequest, 
-  Notification, LikeToggleResponse 
+  NotificationListResponse, LikeToggleResponse 
 } from './types';
 
 const getSafeImageFileName = (file: File) => {
@@ -154,10 +154,8 @@ export const auctionApi = {
    * 4.5 알림 목록 조회
    * GET /notifications
    */
-  getNotifications: async (params: { page?: number; size?: number } = {}): Promise<PaginatedResponse<Notification[]>> => {
-    const { data } = await api.get<PaginatedResponse<Notification[]>>('/notifications', { params });
-    // If the backend returns data as an object with content, but we expected Notification[], 
-    // the current typing might be confusing. Let's ensure data.data is handled correctly in the component.
+  getNotifications: async (params: { page?: number; size?: number } = {}): Promise<NotificationListResponse> => {
+    const { data } = await api.get<NotificationListResponse>('/notifications', { params });
     return data;
   },
 
