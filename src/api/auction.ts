@@ -122,6 +122,15 @@ export const auctionApi = {
   },
 
   /**
+   * 4.8 문의 답변 등록
+   * POST /auctions/{id}/comments/{commentId}/answers
+   */
+  postAnswer: async (auctionId: string, commentId: number, content: string): Promise<ApiResponse<{ id: number }>> => {
+    const { data } = await api.post<ApiResponse<{ id: number }>>(`/auctions/${auctionId}/comments/${commentId}/answers`, { content });
+    return data;
+  },
+
+  /**
    * 이미지 업로드
    * POST /images
    */

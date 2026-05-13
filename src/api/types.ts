@@ -118,6 +118,7 @@ export interface Comment {
   nickname: string;
   content: string;
   createdAt: string;
+  children?: Comment[]; // 답변(대댓글) 목록
 }
 
 export interface AuctionDetail extends AuctionSummary {
