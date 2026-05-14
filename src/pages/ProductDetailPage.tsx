@@ -310,7 +310,15 @@ export function ProductDetailPage() {
                   {item.winnerNickname ? (
                     <>
                       <div className="text-3xl font-black text-white mb-1">Winner: {item.winnerNickname}</div>
-                      <div className="text-blue-200 text-sm">Final Price: ₩{formatPrice(item.currentPrice)}</div>
+                      <div className="text-blue-200 text-sm mb-4">Final Price: ₩{formatPrice(item.currentPrice)}</div>
+                      {user && item.winnerId === user.id && (
+                        <button
+                          onClick={() => navigate(`/checkout/${item.id}`)}
+                          className="w-full bg-white text-blue-600 py-3 rounded-xl font-bold hover:bg-blue-50 transition-colors shadow-lg"
+                        >
+                          축하합니다! 지금 바로 결제하세요
+                        </button>
+                      )}
                     </>
                   ) : (
                     <div className="text-2xl font-bold text-white">No winning bids</div>
