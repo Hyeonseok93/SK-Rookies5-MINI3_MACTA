@@ -465,39 +465,53 @@ export function MyPage() {
                               {activeTab === 'likes' ? `${item.likeCount ?? 0} likes` : `${item.viewCount} views`}
                             </div>
                           </div>
-                          <div className="flex items-end justify-between gap-4">
-                            {activeTab === 'bids' ? (
-                              <div className="flex flex-wrap gap-6">
-                                <div>
-                                  <div className="text-[10px] text-gray-500 uppercase font-bold mb-1">
-                                    My Price
+                          <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4">
+                            <div className="flex items-end gap-6">
+                              {activeTab === 'bids' ? (
+                                <div className="flex flex-wrap gap-6">
+                                  <div>
+                                    <div className="text-[10px] text-gray-500 uppercase font-bold mb-1">
+                                      My Price
+                                    </div>
+                                    <div className="text-xl font-black text-blue-400">
+                                      &#8361;{formatPrice((item as UserBidItem).myPrice)}
+                                    </div>
                                   </div>
-                                  <div className="text-xl font-black text-blue-400">
-                                    &#8361;{formatPrice((item as UserBidItem).myPrice)}
+                                  <div>
+                                    <div className="text-[10px] text-gray-500 uppercase font-bold mb-1">
+                                      Current Price
+                                    </div>
+                                    <div className="text-xl font-black text-green-400">
+                                      &#8361;{formatPrice(item.currentPrice)}
+                                    </div>
                                   </div>
                                 </div>
+                              ) : (
                                 <div>
                                   <div className="text-[10px] text-gray-500 uppercase font-bold mb-1">
                                     Current Price
                                   </div>
-                                  <div className="text-xl font-black text-green-400">
+                                  <div className="text-xl font-black text-blue-400">
                                     &#8361;{formatPrice(item.currentPrice)}
                                   </div>
                                 </div>
-                              </div>
-                            ) : (
-                              <div>
-                                <div className="text-[10px] text-gray-500 uppercase font-bold mb-1">
-                                  Current Price
-                                </div>
-                                <div className="text-xl font-black text-blue-400">
-                                  &#8361;{formatPrice(item.currentPrice)}
-                                </div>
-                              </div>
+                              )}
+                              <span className={`px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider ${getStatusBadgeClass(item.status)}`}>
+                                {item.status}
+                              </span>
+                            </div>
+                            
+                            {activeTab === 'bids' && item.status === 'FINISHED' && (
+                              <button
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  navigate(`/checkout/${item.auctionId}`);
+                                }}
+                                className="px-4 py-2 bg-blue-600 hover:bg-blue-500 text-white text-sm font-bold rounded-lg transition-colors shadow-lg"
+                              >
+                                결제하기
+                              </button>
                             )}
-                            <span className={`px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider ${getStatusBadgeClass(item.status)}`}>
-                              {item.status}
-                            </span>
                           </div>
                         </div>
                         {activeTab === 'likes' && (
