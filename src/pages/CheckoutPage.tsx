@@ -19,6 +19,7 @@ export function CheckoutPage() {
   const [isLoading, setIsLoading] = useState(true);
   const [isProcessing, setIsProcessing] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [paymentMethod, setPaymentMethod] = useState<'card' | 'bank'>('card');
 
   useEffect(() => {
     if (!id) return;
@@ -132,20 +133,41 @@ export function CheckoutPage() {
               </div>
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
-                <div className="border-2 border-blue-500 bg-blue-500/5 rounded-xl p-5 flex items-start gap-4">
-                  <div className="w-5 h-5 rounded-full border-4 border-blue-500 mt-1 flex-shrink-0" />
-                  <div>
+                <button
+                  type="button"
+                  onClick={() => setPaymentMethod('card')}
+                  className={`flex items-start gap-4 p-5 rounded-xl border-2 transition-all ${
+                    paymentMethod === 'card'
+                      ? 'border-blue-500 bg-blue-500/5'
+                      : 'border-[#1e3a5f] bg-transparent hover:border-blue-500/50'
+                  }`}
+                >
+                  <div className={`w-5 h-5 rounded-full border-4 mt-1 flex-shrink-0 transition-colors ${
+                    paymentMethod === 'card' ? 'border-blue-500' : 'border-gray-600'
+                  }`} />
+                  <div className="text-left">
                     <span className="block text-white font-bold">Credit/Debit Card</span>
                     <span className="text-xs text-gray-400">Visa, Mastercard, etc.</span>
                   </div>
-                </div>
-                <div className="border border-[#1e3a5f] rounded-xl p-5 flex items-start gap-4 opacity-50 grayscale">
-                  <div className="w-5 h-5 rounded-full border-2 border-gray-600 mt-1 flex-shrink-0" />
-                  <div>
+                </button>
+
+                <button
+                  type="button"
+                  onClick={() => setPaymentMethod('bank')}
+                  className={`flex items-start gap-4 p-5 rounded-xl border-2 transition-all ${
+                    paymentMethod === 'bank'
+                      ? 'border-blue-500 bg-blue-500/5'
+                      : 'border-[#1e3a5f] bg-transparent hover:border-blue-500/50'
+                  }`}
+                >
+                  <div className={`w-5 h-5 rounded-full border-4 mt-1 flex-shrink-0 transition-colors ${
+                    paymentMethod === 'bank' ? 'border-blue-500' : 'border-gray-600'
+                  }`} />
+                  <div className="text-left">
                     <span className="block text-white font-bold">Bank Transfer</span>
-                    <span className="text-xs text-gray-400">Available for verified users</span>
+                    <span className="text-xs text-gray-400">Direct wire transfer</span>
                   </div>
-                </div>
+                </button>
               </div>
 
               <div className="space-y-4 mb-8 p-6 bg-[#0a1628] rounded-xl border border-[#1e3a5f]">
