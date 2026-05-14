@@ -16,7 +16,7 @@ import { Pagination } from '../components/common/Pagination';
 import { getRenderableImageUrl } from '../utils/image';
 
 type MyPageTab = 'auctions' | 'bids' | 'likes';
-type MyPageStatusFilter = 'ALL' | 'LIVE' | 'FINISHED' | 'PAID' | 'SHIPPING' | 'COMPLETED' | 'WON' | 'OUTBID' | 'SOLD';
+type MyPageStatusFilter = 'ALL' | 'LIVE' | 'FINISHED' | 'PAID' | 'SHIPPING' | 'COMPLETED' | 'WON' | 'OUTBID' | 'SOLD' | 'LOST';
 
 interface StoredUser {
   id?: number | string;
@@ -47,6 +47,10 @@ const BID_STATUS_FILTERS: { value: MyPageStatusFilter; label: string }[] = [
   { value: 'LIVE', label: 'Live' },
   { value: 'FINISHED', label: 'Finished' },
   { value: 'WON', label: 'Won' },
+  { value: 'LOST', label: 'Lost' },
+  { value: 'PAID', label: 'Paid' },
+  { value: 'SHIPPING', label: 'Shipping' },
+  { value: 'COMPLETED', label: 'Completed' },
   { value: 'OUTBID', label: 'Outbid' },
 ];
 
@@ -62,6 +66,8 @@ const getStatusBadgeClass = (status: string) => {
       return 'bg-green-600/20 text-green-400';
     case 'OUTBID':
       return 'bg-amber-500/20 text-amber-300';
+    case 'LOST':
+      return 'bg-red-500/20 text-red-300';
     case 'WON':
       return 'bg-blue-600/20 text-blue-300';
     case 'SOLD':
