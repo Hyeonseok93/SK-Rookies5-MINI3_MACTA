@@ -16,7 +16,7 @@ import { Pagination } from '../components/common/Pagination';
 import { getRenderableImageUrl } from '../utils/image';
 
 type MyPageTab = 'auctions' | 'bids' | 'likes';
-type MyPageStatusFilter = 'ALL' | 'READY' | 'LIVE' | 'FINISHED' | 'CANCEL' | 'PAID' | 'SHIPPING' | 'COMPLETED';
+type MyPageStatusFilter = 'ALL' | 'LIVE' | 'FINISHED' | 'PAID' | 'SHIPPING' | 'COMPLETED' | 'WON' | 'OUTBID';
 
 interface StoredUser {
   id?: number | string;
@@ -34,13 +34,19 @@ interface ApiErrorBody {
 
 const STATUS_FILTERS: { value: MyPageStatusFilter; label: string }[] = [
   { value: 'ALL', label: 'All' },
-  { value: 'READY', label: 'Ready' },
   { value: 'LIVE', label: 'Live' },
   { value: 'FINISHED', label: 'Finished' },
-  { value: 'CANCEL', label: 'Cancel' },
   { value: 'PAID', label: 'Paid' },
   { value: 'SHIPPING', label: 'Shipping' },
   { value: 'COMPLETED', label: 'Completed' },
+];
+
+const BID_STATUS_FILTERS: { value: MyPageStatusFilter; label: string }[] = [
+  { value: 'ALL', label: 'All' },
+  { value: 'LIVE', label: 'Live' },
+  { value: 'FINISHED', label: 'Finished' },
+  { value: 'WON', label: 'Won' },
+  { value: 'OUTBID', label: 'Outbid' },
 ];
 
 const TAB_TITLES: Record<MyPageTab, string> = {
@@ -59,12 +65,8 @@ const getStatusBadgeClass = (status: string) => {
       return 'bg-blue-600/20 text-blue-300';
     case 'SOLD':
       return 'bg-purple-600/20 text-purple-300';
-    case 'READY':
-      return 'bg-slate-600/20 text-slate-300';
     case 'FINISHED':
       return 'bg-blue-600/20 text-blue-300';
-    case 'CANCEL':
-      return 'bg-red-600/20 text-red-300';
     case 'PAID':
       return 'bg-cyan-600/20 text-cyan-300';
     case 'SHIPPING':
@@ -155,7 +157,7 @@ export function MyPage() {
         const params = {
           page: currentPage,
           size: PAGE_SIZE,
-          ...(activeTab === 'auctions' && statusFilter !== 'ALL' ? { status: statusFilter } : {}),
+          ...((activeTab === 'auctions' || activeTab === 'bids') && statusFilter !== 'ALL' ? { status: statusFilter } : {}),
         };
         if (activeTab === 'auctions') res = await userApi.getMyAuctions(params);
         else if (activeTab === 'bids') res = await userApi.getMyBids(params);
@@ -434,9 +436,9 @@ export function MyPage() {
               <div className="p-6 border-b border-[#1e3a5f] flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
                 <div>
                   <h2 className="text-xl font-bold text-white">{TAB_TITLES[activeTab]}</h2>
-                  {activeTab === 'auctions' && (
+                  {(activeTab === 'auctions' || activeTab === 'bids') && (
                     <div className="mt-4 flex flex-wrap gap-2">
-                      {STATUS_FILTERS.map((filter) => (
+                      {(activeTab === 'auctions' ? STATUS_FILTERS : BID_STATUS_FILTERS).map((filter) => (
                         <button
                           key={filter.value}
                           type="button"
