@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { getServerNow } from '../../utils/format';
 
 interface CountdownTimerProps {
   endTime: Date;
@@ -11,7 +12,7 @@ export function CountdownTimer({ endTime, className = '', showSeconds = false }:
 
   useEffect(() => {
     const updateCountdown = () => {
-      const now = new Date().getTime();
+      const now = getServerNow().getTime();
       const distance = endTime.getTime() - now;
 
       if (distance < 0) {

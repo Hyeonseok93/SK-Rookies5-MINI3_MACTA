@@ -1,5 +1,15 @@
 import axios from 'axios';
 import { getAccessTokenCookie } from './tokenCookie';
+import { useTimeStore } from '../store/useTimeStore';
+
+// Extend AxiosRequestConfig to include metadata
+declare module 'axios' {
+  export interface AxiosRequestConfig {
+    metadata?: {
+      startTime: number;
+    };
+  }
+}
 
 export const api = axios.create({
   baseURL: import.meta.env.VITE_API_BASE_URL,
@@ -16,12 +26,31 @@ api.interceptors.request.use((config) => {
     config.headers.Authorization = `Bearer ${accessToken}`;
   }
 
+  // Record start time for RTT compensation
+  config.metadata = { startTime: Date.now() };
+
   return config;
 });
 
-// Response Interceptor for Global Error Handling
+// Response Interceptor for Time Sync and Global Error Handling
 api.interceptors.response.use(
-  (response) => response,
+  (response) => {
+    // 1. Time Synchronization Logic
+    const startTime = response.config.metadata?.startTime;
+    const endTime = Date.now();
+    const serverTimestamp = response.data?.timestamp;
+
+    if (startTime && serverTimestamp) {
+      const st = new Date(serverTimestamp).getTime();
+      const rtt = (endTime - startTime) / 2;
+      const serverOffset = (st + rtt) - endTime;
+      
+      // Update global time offset
+      useTimeStore.getState().setServerOffset(serverOffset);
+    }
+
+    return response;
+  },
   (error) => {
     if (!error.response) {
       return Promise.reject({
