@@ -6,6 +6,7 @@ import type { Notification } from '../../api/types';
 import { useAuthStore } from '../../store/useAuthStore';
 import { useToast } from '../common/Toast';
 import { formatTime } from '../../utils/format';
+import { normalizeProductDetailUrl } from '../../utils/routes';
 
 export function Header() {
   const navigate = useNavigate();
@@ -78,7 +79,7 @@ export function Header() {
     e.stopPropagation();
     markAsRead(id);
     setShowNotifications(false);
-    navigate(targetUrl);
+    navigate(normalizeProductDetailUrl(targetUrl));
   };
 
   const handleLogout = () => {

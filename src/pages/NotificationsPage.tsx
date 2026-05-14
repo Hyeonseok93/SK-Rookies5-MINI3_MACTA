@@ -8,6 +8,7 @@ import { useToast } from '../components/common/Toast';
 import { Pagination } from '../components/common/Pagination';
 import { ErrorState } from '../components/common/ErrorState';
 import { formatDateTime } from '../utils/format';
+import { normalizeProductDetailUrl } from '../utils/routes';
 
 export function NotificationsPage() {
   const navigate = useNavigate();
@@ -65,7 +66,7 @@ export function NotificationsPage() {
   const handleNavigate = (e: React.MouseEvent, targetUrl: string, id: number) => {
     e.stopPropagation();
     handleMarkAsRead(id);
-    navigate(targetUrl);
+    navigate(normalizeProductDetailUrl(targetUrl));
   };
 
   const handleDelete = async (e: React.MouseEvent, id: number) => {
