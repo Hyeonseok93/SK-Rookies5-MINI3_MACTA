@@ -29,7 +29,7 @@ spec:
       serviceAccountName: backend-sa
       containers:
         - name: backend
-          image: 105588835975.dkr.ecr.ap-northeast-2.amazonaws.com/rookies5-macta/backend:9077a2d55d05af3d36312f57b5cd8f9df247fb13
+          image: 105588835975.dkr.ecr.ap-northeast-2.amazonaws.com/rookies5-macta/backend:10070f417c37f939716be48cb7725ea7cc265239
           ports:
             - containerPort: 8080
           env:
