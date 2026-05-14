@@ -1,6 +1,7 @@
 import axios from 'axios';
 import { getAccessTokenCookie } from './tokenCookie';
 import { useTimeStore } from '../store/useTimeStore';
+import { useAuthStore } from '../store/useAuthStore';
 
 // Extend AxiosRequestConfig to include metadata
 declare module 'axios' {
@@ -75,15 +76,12 @@ api.interceptors.response.use(
       case 401:
         // Unauthorized: Clear tokens and redirect
         customMessage = '세션이 만료되었습니다. 다시 로그인해주세요.';
-        document.cookie = 'macta_access_token=; Max-Age=0; Path=/; SameSite=Lax';
-        localStorage.removeItem('macta_user');
-        if (!window.location.pathname.includes('/login')) {
-          window.location.href = '/login?expired=true';
-        }
+        useAuthStore.getState().logout();
         break;
 
       case 403:
         customMessage = '해당 작업에 대한 권한이 없습니다.';
+        useAuthStore.getState().logout();
         break;
 
       case 404:
