@@ -127,6 +127,9 @@ export function MyPage() {
     confirmPassword: '',
   });
 
+  const [refreshKey, setRefreshKey] = useState(0);
+  const triggerRefresh = () => setRefreshKey(prev => prev + 1);
+
   const fetchStats = useCallback(() => {
     userApi.getUserSummary().then(res => {
       if (res.success) setStats(res.data);
@@ -139,7 +142,7 @@ export function MyPage() {
       if (!ignore && res.success) setStats(res.data);
     });
     return () => { ignore = true; };
-  }, []);
+  }, [refreshKey]);
 
   useEffect(() => {
     let ignore = false;
@@ -176,7 +179,7 @@ export function MyPage() {
       ignore = true; 
       clearTimeout(timer);
     };
-  }, [activeTab, currentPage, statusFilter]);
+  }, [activeTab, currentPage, statusFilter, refreshKey]);
 
   const handleTabChange = (tab: MyPageTab) => {
     setActiveTab(tab);
@@ -314,6 +317,38 @@ export function MyPage() {
       showToast('Watchlist cleared', 'success');
     } catch {
       showToast('Failed to clear watchlist', 'error');
+    }
+  };
+
+  const handleStartShipping = async (e: React.MouseEvent, id: number) => {
+    e.stopPropagation();
+    if (!window.confirm('배송을 시작하시겠습니까?')) return;
+    
+    try {
+      const res = await auctionApi.startShipping(id.toString());
+      if (res.success) {
+        showToast('배송이 시작되었습니다.', 'success');
+        triggerRefresh();
+        fetchStats();
+      }
+    } catch (error) {
+      showToast(getApiErrorMessage(error, '배송 시작에 실패했습니다.'), 'error');
+    }
+  };
+
+  const handleCompleteTransaction = async (e: React.MouseEvent, id: number) => {
+    e.stopPropagation();
+    if (!window.confirm('물품을 수령하셨습니까? 거래를 확정합니다.')) return;
+
+    try {
+      const res = await auctionApi.completeTransaction(id.toString());
+      if (res.success) {
+        showToast('거래가 확정되었습니다.', 'success');
+        triggerRefresh();
+        fetchStats();
+      }
+    } catch (error) {
+      showToast(getApiErrorMessage(error, '거래 확정에 실패했습니다.'), 'error');
     }
   };
 
@@ -510,6 +545,24 @@ export function MyPage() {
                                 className="px-4 py-2 bg-blue-600 hover:bg-blue-500 text-white text-sm font-bold rounded-lg transition-colors shadow-lg"
                               >
                                 결제하기
+                              </button>
+                            )}
+
+                            {activeTab === 'auctions' && item.status === 'PAID' && (
+                              <button
+                              onClick={(e) => handleStartShipping(e, item.auctionId)}
+                                className="px-4 py-2 bg-indigo-600 hover:bg-indigo-500 text-white text-sm font-bold rounded-lg transition-colors shadow-lg"
+                              >
+                                배송 시작
+                              </button>
+                            )}
+
+                            {activeTab === 'bids' && item.status === 'SHIPPING' && (
+                              <button
+                                onClick={(e) => handleCompleteTransaction(e, item.auctionId)}
+                                className="px-4 py-2 bg-emerald-600 hover:bg-emerald-500 text-white text-sm font-bold rounded-lg transition-colors shadow-lg"
+                              >
+                                수령 확인
                               </button>
                             )}
                           </div>

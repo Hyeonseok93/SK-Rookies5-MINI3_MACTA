@@ -36,7 +36,7 @@ export interface AuctionSummary {
   id: number;
   title: string;
   currentPrice: number;
-  status: 'READY' | 'LIVE' | 'FINISHED' | 'CANCEL';
+  status: 'READY' | 'LIVE' | 'FINISHED' | 'CANCEL' | 'PAID' | 'SHIPPING' | 'COMPLETED';
   mainPictureUrl: string;
   category: CategoryType;
   endTime: string;
@@ -79,7 +79,7 @@ export interface PasswordUpdateRequest {
   confirmPassword: string;
 }
 
-export type UserItemStatus = 'READY' | 'LIVE' | 'FINISHED' | 'CANCEL' | 'OUTBID' | 'WON' | 'SOLD';
+export type UserItemStatus = 'READY' | 'LIVE' | 'FINISHED' | 'CANCEL' | 'OUTBID' | 'WON' | 'SOLD' | 'PAID' | 'SHIPPING' | 'COMPLETED';
 
 export interface UserAuctionItem {
   auctionId: number;
