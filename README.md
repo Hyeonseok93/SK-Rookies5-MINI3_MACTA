@@ -631,6 +631,73 @@ SSM FRONTEND_IMAGE/BACKEND_IMAGE
 
 두 방식은 혼용할 수 있지만, 운영에서는 한 가지 배포 방식을 선택하는 것이 좋습니다.
 
+## Rolling Update
+
+프론트엔드와 백엔드는 Kubernetes Deployment의 Rolling Update 방식을 사용합니다. 이미지 태그가 변경되거나 Pod template이 변경되면 Kubernetes가 새 ReplicaSet을 만들고, 기존 Pod를 한 번에 모두 내리지 않고 순차적으로 새 Pod로 교체합니다.
+
+현재 설정:
+
+```yaml
+replicas: 2
+strategy:
+  type: RollingUpdate
+  rollingUpdate:
+    maxSurge: 1
+    maxUnavailable: 0
+```
+
+적용 위치:
+
+```text
+k8s/frontend/frontend.yaml
+k8s/backend/backend.yaml
+```
+
+동작 방식:
+
+```text
+1. 현재 frontend/backend Pod는 각각 2개 replica로 실행
+2. 새 이미지 태그가 manifest에 반영됨
+3. Argo CD sync 또는 kubectl apply가 Deployment 변경을 적용
+4. Kubernetes가 새 ReplicaSet 생성
+5. maxSurge: 1 설정에 따라 기존 2개 Pod 위에 새 Pod 1개를 추가로 생성
+6. readinessProbe가 성공해 새 Pod가 Ready 상태가 되면 Service 트래픽 대상에 포함
+7. maxUnavailable: 0 설정에 따라 Ready Pod 수를 유지하면서 기존 Pod 1개 종료
+8. 같은 과정을 반복해 모든 Pod를 새 버전으로 교체
+```
+
+`maxSurge: 1`은 업데이트 중 원하는 replica 수보다 Pod를 최대 1개 더 만들 수 있다는 의미입니다. `replicas: 2` 기준으로 업데이트 중 일시적으로 최대 3개 Pod가 실행될 수 있습니다.
+
+`maxUnavailable: 0`은 업데이트 중 사용 가능한 Pod 수를 줄이지 않겠다는 의미입니다. 새 Pod가 Ready 되기 전에는 기존 Pod를 먼저 종료하지 않으므로, 배포 중 서비스 중단 가능성을 줄입니다.
+
+readinessProbe는 새 Pod를 Service 트래픽에 넣어도 되는지 판단하는 기준입니다.
+
+```text
+frontend: HTTP GET /, port 80, initialDelaySeconds 10, periodSeconds 5
+backend:  TCP socket 8080, initialDelaySeconds 30, periodSeconds 10
+```
+
+배포 상태 확인:
+
+```powershell
+kubectl rollout status deployment/rookies5-macta-frontend -n rookies5-macta
+kubectl rollout status deployment/rookies5-macta-backend -n rookies5-macta
+```
+
+ReplicaSet과 Pod 교체 과정 확인:
+
+```powershell
+kubectl get rs -n rookies5-macta
+kubectl get pods -n rookies5-macta -w
+```
+
+문제가 생겼을 때 이전 버전으로 롤백:
+
+```powershell
+kubectl rollout undo deployment/rookies5-macta-frontend -n rookies5-macta
+kubectl rollout undo deployment/rookies5-macta-backend -n rookies5-macta
+```
+
 ## ResourceQuota
 
 현재 레포에는 `ResourceQuota`와 `LimitRange` manifest가 적용되어 있지 않습니다.
