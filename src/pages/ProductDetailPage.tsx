@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { ArrowLeft, Clock, Package, User, MessageCircle, CheckCircle, Shield, Loader2, Heart, CornerDownRight } from 'lucide-react';
+import { ArrowLeft, Clock, User, MessageCircle, CheckCircle, Shield, Loader2, Heart, CornerDownRight } from 'lucide-react';
 import { Layout } from '../components/layout/Layout';
 import { CountdownTimer } from '../components/common/CountdownTimer';
 import { auctionApi } from '../api/auction';
