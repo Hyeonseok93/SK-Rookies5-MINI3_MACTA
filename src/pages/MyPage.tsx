@@ -14,6 +14,7 @@ import { useToast } from '../components/common/Toast';
 import { AUTH_STATE_CHANGED_EVENT } from '../api/auth';
 import { Pagination } from '../components/common/Pagination';
 import { getRenderableImageUrl } from '../utils/image';
+import { ConfirmModal } from '../components/common/ConfirmModal';
 
 type MyPageTab = 'auctions' | 'bids' | 'likes';
 type MyPageStatusFilter = 'ALL' | 'LIVE' | 'FINISHED' | 'PAID' | 'SHIPPING' | 'COMPLETED' | 'WON' | 'OUTBID' | 'SOLD' | 'LOST';
@@ -133,6 +134,18 @@ export function MyPage() {
     currentPassword: '',
     newPassword: '',
     confirmPassword: '',
+  });
+
+  const [confirmModal, setConfirmModal] = useState<{
+    isOpen: boolean;
+    title: string;
+    message: string;
+    onConfirm: () => void;
+  }>({
+    isOpen: false,
+    title: '',
+    message: '',
+    onConfirm: () => {},
   });
 
   const [refreshKey, setRefreshKey] = useState(0);
@@ -328,36 +341,48 @@ export function MyPage() {
     }
   };
 
-  const handleStartShipping = async (e: React.MouseEvent, id: number) => {
+  const handleStartShipping = (e: React.MouseEvent, id: number) => {
     e.stopPropagation();
-    if (!window.confirm('배송을 시작하시겠습니까?')) return;
-    
-    try {
-      const res = await auctionApi.startShipping(id.toString());
-      if (res.success) {
-        showToast('배송이 시작되었습니다.', 'success');
-        triggerRefresh();
-        fetchStats();
+    setConfirmModal({
+      isOpen: true,
+      title: '배송 시작',
+      message: '배송을 시작하시겠습니까?',
+      onConfirm: async () => {
+        setConfirmModal(prev => ({ ...prev, isOpen: false }));
+        try {
+          const res = await auctionApi.startShipping(id.toString());
+          if (res.success) {
+            showToast('배송이 시작되었습니다.', 'success');
+            triggerRefresh();
+            fetchStats();
+          }
+        } catch (error) {
+          showToast(getApiErrorMessage(error, '배송 시작에 실패했습니다.'), 'error');
+        }
       }
-    } catch (error) {
-      showToast(getApiErrorMessage(error, '배송 시작에 실패했습니다.'), 'error');
-    }
+    });
   };
 
-  const handleCompleteTransaction = async (e: React.MouseEvent, id: number) => {
+  const handleCompleteTransaction = (e: React.MouseEvent, id: number) => {
     e.stopPropagation();
-    if (!window.confirm('물품을 수령하셨습니까? 거래를 확정합니다.')) return;
-
-    try {
-      const res = await auctionApi.completeTransaction(id.toString());
-      if (res.success) {
-        showToast('거래가 확정되었습니다.', 'success');
-        triggerRefresh();
-        fetchStats();
+    setConfirmModal({
+      isOpen: true,
+      title: '거래 확정',
+      message: '물품을 수령하셨습니까? 거래를 확정합니다.',
+      onConfirm: async () => {
+        setConfirmModal(prev => ({ ...prev, isOpen: false }));
+        try {
+          const res = await auctionApi.completeTransaction(id.toString());
+          if (res.success) {
+            showToast('거래가 확정되었습니다.', 'success');
+            triggerRefresh();
+            fetchStats();
+          }
+        } catch (error) {
+          showToast(getApiErrorMessage(error, '거래 확정에 실패했습니다.'), 'error');
+        }
       }
-    } catch (error) {
-      showToast(getApiErrorMessage(error, '거래 확정에 실패했습니다.'), 'error');
-    }
+    });
   };
 
   const itemCount = pageInfo?.totalElements ?? items.length;
@@ -750,6 +775,14 @@ export function MyPage() {
           </div>
         </div>
       )}
+
+      <ConfirmModal
+        isOpen={confirmModal.isOpen}
+        title={confirmModal.title}
+        message={confirmModal.message}
+        onConfirm={confirmModal.onConfirm}
+        onCancel={() => setConfirmModal(prev => ({ ...prev, isOpen: false }))}
+      />
     </Layout>
   );
 }
