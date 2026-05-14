@@ -52,18 +52,18 @@ export const ConfirmModal: React.FC<ConfirmModalProps> = ({
           
           <div className="flex justify-end gap-3 mt-2">
             <Button
-              variant="outline"
-              onClick={onCancel}
-              className="px-4 py-2 text-sm font-medium border-border hover:bg-accent dark:border-[#1e3a5f] dark:hover:bg-[#1e3a5f] dark:text-gray-300"
-            >
-              {cancelText}
-            </Button>
-            <Button
               variant={variant === 'destructive' ? 'destructive' : 'default'}
               onClick={onConfirm}
               className="px-4 py-2 text-sm font-medium"
             >
               {confirmText}
+            </Button>
+            <Button
+              variant="outline"
+              onClick={onCancel}
+              className="px-4 py-2 text-sm font-medium border-border hover:bg-accent dark:border-[#1e3a5f] dark:hover:bg-[#1e3a5f] dark:text-gray-300"
+            >
+              {cancelText}
             </Button>
           </div>
         </div>
