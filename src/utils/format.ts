@@ -1,3 +1,5 @@
+import { useTimeStore } from '../store/useTimeStore';
+
 /**
  * Formats a number with thousand separators.
  * Example: 1250000 -> "1,250,000"
@@ -25,24 +27,32 @@ export const calculateServiceFee = (price: number): number => {
 };
 
 /**
+ * Returns the current time synchronized with the server.
+ * Use this instead of new Date() for any time-sensitive logic.
+ */
+export const getServerNow = (): Date => {
+  const { serverOffset } = useTimeStore.getState();
+  return new Date(Date.now() + serverOffset);
+};
+
+/**
  * Parses a date string from the backend.
- * If no timezone info is present, assumes KST (+09:00) to match backend settings.
+ * ISO 8601 strings with 'Z' are correctly handled by the native Date constructor.
  */
 export const parseDate = (dateStr: string | Date | null | undefined): Date => {
-  if (!dateStr) return new Date();
+  if (!dateStr) return getServerNow();
   if (dateStr instanceof Date) return dateStr;
   
+  // If the string is already ISO 8601 (contains T and Z/offset), the Date constructor handles it correctly.
+  // Otherwise, we treat it as UTC for consistency if no info is provided.
   let str = dateStr;
   if (typeof str === 'string' && !str.includes('Z') && !str.includes('+')) {
-    // If it's a simple ISO-like string without offset, append KST offset
-    // This ensures that the browser correctly interprets the time as KST
-    // regardless of the user's local timezone.
     const separator = str.includes(' ') ? ' ' : 'T';
     if (!str.includes(separator)) {
-      // Just a date? Append a default time
       str = `${str}${separator}00:00:00`;
     }
-    str = `${str}+09:00`;
+    // Backend is now configured to send 'Z' (UTC), but as a fallback:
+    str = `${str}Z`;
   }
   
   return new Date(str);

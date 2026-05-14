@@ -6,7 +6,7 @@ import { CountdownTimer } from '../components/common/CountdownTimer';
 import { auctionApi } from '../api/auction';
 import type { AuctionDetail, Bid, Comment } from '../api/types';
 import { useToast } from '../components/common/Toast';
-import { formatPrice, sanitizeNumeric, formatDate, parseDate, formatTime } from '../utils/format';
+import { formatPrice, sanitizeNumeric, formatDate, parseDate, formatTime, getServerNow } from '../utils/format';
 import { formatCategoryDisplay } from '../utils/category';
 import { ErrorPage } from './ErrorPage';
 import { getRenderableImageUrl } from '../utils/image';
@@ -36,7 +36,7 @@ export function ProductDetailPage() {
   const [isSubmittingReply, setIsSubmittingReply] = useState(false);
 
   const isSeller = user && item && user.id === item.sellerId;
-  const isEnded = item ? new Date(parseDate(item.endTime)).getTime() <= new Date().getTime() : false;
+  const isEnded = item ? parseDate(item.endTime).getTime() <= getServerNow().getTime() : false;
   const isFinished = item?.status === 'FINISHED';
 
   useEffect(() => {
@@ -66,7 +66,7 @@ export function ProductDetailPage() {
   const handlePlaceBid = async () => {
     if (!isLoggedIn) {
       showToast('로그인이 필요합니다.', 'error');
-      navigate('/login', { state: { from: `/auctions/${id}` } });
+      navigate('/login', { state: { from: `/product/${id}` } });
       return;
     }
 
@@ -90,7 +90,7 @@ export function ProductDetailPage() {
         const newBid: Bid = {
           bidderNickname: 'You',
           price: currentPrice,
-          bidTime: new Date().toISOString()
+          bidTime: getServerNow().toISOString()
         };
 
         setItem(prev => prev ? {
@@ -131,7 +131,7 @@ export function ProductDetailPage() {
           userId: user?.id || 999,
           nickname: user?.nickname || 'You',
           content: newQuestion,
-          createdAt: new Date().toISOString(),
+          createdAt: getServerNow().toISOString(),
           children: []
         };
         setComments(prev => [newComment, ...prev]);
@@ -157,7 +157,7 @@ export function ProductDetailPage() {
           userId: user?.id || 999,
           nickname: user?.nickname || 'Seller',
           content: replyContent,
-          createdAt: new Date().toISOString()
+          createdAt: getServerNow().toISOString()
         };
 
         setComments(prev => prev.map(c => 
