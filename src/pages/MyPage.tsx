@@ -45,7 +45,6 @@ const STATUS_FILTERS: { value: MyPageStatusFilter; label: string }[] = [
 const BID_STATUS_FILTERS: { value: MyPageStatusFilter; label: string }[] = [
   { value: 'ALL', label: 'All' },
   { value: 'LIVE', label: 'Live' },
-  { value: 'FINISHED', label: 'Finished' },
   { value: 'WON', label: 'Won' },
   { value: 'LOST', label: 'Lost' },
   { value: 'PAID', label: 'Paid' },
