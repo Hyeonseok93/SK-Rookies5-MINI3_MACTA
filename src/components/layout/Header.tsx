@@ -7,6 +7,7 @@ import { useAuthStore } from '../../store/useAuthStore';
 import { useToast } from '../common/Toast';
 import { formatTime } from '../../utils/format';
 import { normalizeProductDetailUrl } from '../../utils/routes';
+import { AUTH_STATE_CHANGED_EVENT } from '../../api/auth';
 
 export function Header() {
   const navigate = useNavigate();
@@ -14,7 +15,7 @@ export function Header() {
   const [searchParams] = useSearchParams();
   const [searchQuery, setSearchQuery] = useState(searchParams.get('q') || '');
   const [showMobileMenu, setShowMobileMenu] = useState(false);
-  const { isLoggedIn, logout: storeLogout } = useAuthStore();
+  const { isLoggedIn, logout: storeLogout, syncAuthState } = useAuthStore();
 
   // Notification State
   const [notifications, setNotifications] = useState<Notification[]>([]);
@@ -22,6 +23,22 @@ export function Header() {
   const notificationRef = useRef<HTMLDivElement>(null);
 
   const unreadCount = Array.isArray(notifications) ? notifications.filter(n => !n.isRead).length : 0;
+
+  useEffect(() => {
+    syncAuthState();
+
+    const handleAuthStateChange = () => syncAuthState();
+
+    window.addEventListener('focus', handleAuthStateChange);
+    window.addEventListener(AUTH_STATE_CHANGED_EVENT, handleAuthStateChange);
+    const timer = window.setInterval(handleAuthStateChange, 30000);
+
+    return () => {
+      window.removeEventListener('focus', handleAuthStateChange);
+      window.removeEventListener(AUTH_STATE_CHANGED_EVENT, handleAuthStateChange);
+      window.clearInterval(timer);
+    };
+  }, [syncAuthState]);
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {

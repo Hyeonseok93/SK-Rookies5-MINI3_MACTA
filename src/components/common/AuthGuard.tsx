@@ -1,7 +1,7 @@
-import { useMemo } from 'react';
+import { useEffect } from 'react';
 import type { ReactNode } from 'react';
 import { Navigate, useLocation } from 'react-router-dom';
-import { getAccessTokenCookie } from '../../api/tokenCookie';
+import { useAuthStore } from '../../store/useAuthStore';
 
 interface AuthGuardProps {
   children: ReactNode;
@@ -13,11 +13,11 @@ interface AuthGuardProps {
  */
 export function AuthGuard({ children }: AuthGuardProps) {
   const location = useLocation();
-  
-  const isLoggedIn = useMemo(() => {
-    const user = localStorage.getItem('macta_user');
-    return Boolean(getAccessTokenCookie() && user);
-  }, []);
+  const { isLoggedIn, syncAuthState } = useAuthStore();
+
+  useEffect(() => {
+    syncAuthState();
+  }, [syncAuthState]);
 
   if (!isLoggedIn) {
     // Redirect to login, but save the current location to redirect back after login
