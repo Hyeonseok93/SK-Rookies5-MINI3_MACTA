@@ -45,7 +45,7 @@ export function CheckoutPage() {
     
     setIsProcessing(true);
     try {
-      const res = await auctionApi.processPayment(item.id);
+      const res = await auctionApi.processPayment(item.id, item.currentPrice);
       if (res.success) {
         showToast('Payment successful! Your item will be shipped soon.', 'success');
         navigate('/my-page?tab=auctions');
@@ -79,9 +79,7 @@ export function CheckoutPage() {
     );
   }
 
-  const serviceFee = Math.floor(item.currentPrice * 0.05);
-  const shippingFee = 0; // Free shipping
-  const totalAmount = item.currentPrice + serviceFee + shippingFee;
+  const totalAmount = item.currentPrice;
 
   return (
     <Layout>
@@ -111,14 +109,6 @@ export function CheckoutPage() {
                 <div className="flex justify-between text-sm">
                   <span className="text-gray-400">Winning Bid</span>
                   <span className="text-white font-medium">₩{formatPrice(item.currentPrice)}</span>
-                </div>
-                <div className="flex justify-between text-sm">
-                  <span className="text-gray-400">Shipping</span>
-                  <span className="text-white font-medium">₩{formatPrice(shippingFee)}</span>
-                </div>
-                <div className="flex justify-between text-sm">
-                  <span className="text-gray-400">Service Fee (5%)</span>
-                  <span className="text-white font-medium">₩{formatPrice(serviceFee)}</span>
                 </div>
                 <div className="border-t border-[#1e3a5f] pt-3 flex justify-between items-center">
                   <span className="text-white font-bold text-lg">Total</span>

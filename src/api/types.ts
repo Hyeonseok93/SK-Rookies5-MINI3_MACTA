@@ -87,6 +87,7 @@ export interface UserAuctionItem {
   currentPrice: number;
   status: UserItemStatus;
   viewCount: number;
+  finalPrice?: number;
   createdAt: string;
   previewUrl: string;
   mainPictureUrl?: string;
@@ -137,6 +138,7 @@ export interface AuctionDetail extends AuctionSummary {
   startTime: string;
   viewCount: number;
   likeCount: number;
+  mainPictureUrl: string;
   winnerId?: number | string;
   winnerNickname?: string;
   pictures: { url: string; main: boolean }[];
