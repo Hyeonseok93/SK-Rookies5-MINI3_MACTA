@@ -566,12 +566,16 @@ export function MyPage() {
                               )}
                               <span className={`px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider ${
                                 getStatusBadgeClass(
-                                  activeTab === 'bids' && item.status !== 'LIVE' && (item as UserBidItem).myPrice < item.currentPrice
+                                  activeTab === 'bids' && 
+                                  ['WON', 'PAID', 'SHIPPING', 'COMPLETED', 'FINISHED', 'SOLD'].includes(item.status) && 
+                                  (item as UserBidItem).myPrice < item.currentPrice
                                     ? 'LOST'
                                     : item.status
                                 )
                               }`}>
-                                {activeTab === 'bids' && item.status !== 'LIVE' && (item as UserBidItem).myPrice < item.currentPrice
+                                {activeTab === 'bids' && 
+                                ['WON', 'PAID', 'SHIPPING', 'COMPLETED', 'FINISHED', 'SOLD'].includes(item.status) && 
+                                (item as UserBidItem).myPrice < item.currentPrice
                                   ? 'LOST'
                                   : item.status}
                               </span>
