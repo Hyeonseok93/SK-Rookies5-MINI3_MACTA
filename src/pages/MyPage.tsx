@@ -16,7 +16,7 @@ import { Pagination } from '../components/common/Pagination';
 import { getRenderableImageUrl } from '../utils/image';
 
 type MyPageTab = 'auctions' | 'bids' | 'likes';
-type MyPageStatusFilter = 'ALL' | 'LIVE' | 'FINISHED' | 'PAID' | 'SHIPPING' | 'COMPLETED' | 'WON' | 'OUTBID';
+type MyPageStatusFilter = 'ALL' | 'LIVE' | 'FINISHED' | 'PAID' | 'SHIPPING' | 'COMPLETED' | 'WON' | 'OUTBID' | 'SOLD';
 
 interface StoredUser {
   id?: number | string;
@@ -36,6 +36,7 @@ const STATUS_FILTERS: { value: MyPageStatusFilter; label: string }[] = [
   { value: 'ALL', label: 'All' },
   { value: 'LIVE', label: 'Live' },
   { value: 'FINISHED', label: 'Finished' },
+  { value: 'SOLD', label: 'Sold' },
   { value: 'PAID', label: 'Paid' },
   { value: 'SHIPPING', label: 'Shipping' },
   { value: 'COMPLETED', label: 'Completed' },
