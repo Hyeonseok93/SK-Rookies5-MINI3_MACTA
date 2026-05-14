@@ -564,12 +564,20 @@ export function MyPage() {
                                   </div>
                                 </div>
                               )}
-                              <span className={`px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider ${getStatusBadgeClass(item.status)}`}>
-                                {item.status}
+                              <span className={`px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider ${
+                                getStatusBadgeClass(
+                                  activeTab === 'bids' && item.status !== 'LIVE' && (item as UserBidItem).myPrice < item.currentPrice
+                                    ? 'LOST'
+                                    : item.status
+                                )
+                              }`}>
+                                {activeTab === 'bids' && item.status !== 'LIVE' && (item as UserBidItem).myPrice < item.currentPrice
+                                  ? 'LOST'
+                                  : item.status}
                               </span>
                             </div>
                             
-                            {activeTab === 'bids' && item.status === 'WON' && (
+                            {activeTab === 'bids' && item.status === 'WON' && (item as UserBidItem).myPrice === item.currentPrice && (
                               <button
                                 onClick={(e) => {
                                   e.stopPropagation();
@@ -590,7 +598,7 @@ export function MyPage() {
                               </button>
                             )}
 
-                            {activeTab === 'bids' && item.status === 'SHIPPING' && (
+                            {activeTab === 'bids' && item.status === 'SHIPPING' && (item as UserBidItem).myPrice === item.currentPrice && (
                               <button
                                 onClick={(e) => handleCompleteTransaction(e, item.auctionId)}
                                 className="px-4 py-2 bg-emerald-600 hover:bg-emerald-500 text-white text-sm font-bold rounded-lg transition-colors shadow-lg"
