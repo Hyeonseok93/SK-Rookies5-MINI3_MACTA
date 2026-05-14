@@ -538,7 +538,7 @@ export function MyPage() {
                               </span>
                             </div>
                             
-                            {activeTab === 'bids' && item.status === 'FINISHED' && (
+                            {activeTab === 'bids' && item.status === 'WON' && (
                               <button
                                 onClick={(e) => {
                                   e.stopPropagation();
