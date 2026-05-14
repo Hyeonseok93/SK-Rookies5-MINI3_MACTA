@@ -416,16 +416,6 @@ export function ProductDetailPage() {
           <h3 className="text-white font-semibold text-xl mb-4">Product Description</h3>
           <div className="text-gray-300 leading-relaxed space-y-4">
             <p>{item.description}</p>
-            <div className="grid md:grid-cols-2 gap-4 mt-6">
-              <div className="bg-[#1e3a5f]/20 p-4 rounded-lg">
-                <h4 className="text-white font-semibold mb-2">Specifications</h4>
-                <ul className="space-y-2 text-sm text-gray-400">
-                  <li>• Condition: Brand New</li>
-                  <li>• Shipping: Free Standard Shipping</li>
-                  <li>• Returns: 14-day return policy</li>
-                </ul>
-              </div>
-            </div>
           </div>
         </div>
 
