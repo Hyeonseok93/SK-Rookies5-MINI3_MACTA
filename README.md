@@ -1,6 +1,6 @@
-# MACTA Infra
+# MACTA Infrastructure
 
-SK쉴더스 루키즈 개발 5기 미니프로젝트3 **MACTA** 서비스를 AWS 기반으로 배포하기 위한 인프라 레포입니다. Terraform으로 AWS 리소스를 구성하고, Kubernetes manifest와 Argo CD를 통해 EKS 위에 프론트엔드/백엔드 애플리케이션을 배포하는 구조입니다.
+SK쉴더스 루키즈 개발 5기 미니프로젝트3 실시간 경매 사이트 **MACTA** 서비스를 AWS 기반으로 배포하기 위한 인프라 레포입니다. Terraform으로 AWS 리소스를 구성하고, Kubernetes manifest와 Argo CD를 통해 EKS 위에 프론트엔드/백엔드 애플리케이션을 배포하는 구조입니다.
 
 현재 구조의 핵심은 다음과 같습니다.
 
@@ -13,6 +13,8 @@ SK쉴더스 루키즈 개발 5기 미니프로젝트3 **MACTA** 서비스를 AWS
 - 통신 구조: 정적 파일은 프론트 Nginx가 서빙하고, 동적 API 호출은 ALB가 `/api/v1` 경로로 백엔드 서비스에 직접 전달
 
 ## 전체 구조
+<img width="2157" height="1716" alt="image" src="https://github.com/user-attachments/assets/6ad7b5b4-8c38-4b4c-b70b-1ab0162d986d" />
+
 
 ```mermaid
 flowchart TB
@@ -38,12 +40,25 @@ flowchart TB
 
       subgraph eks[EKS Cluster<br/>rookies5-macta-eks]
         ing[Kubernetes Ingress<br/>macta.store]
-        feSvc[frontend Service<br/>ClusterIP :80]
-        beSvc[backend Service<br/>ClusterIP :8080]
-        fePod[React+Vite Frontend Pods<br/>Nginx static files]
-        bePod[SpringBoot Backend Pods<br/>Spring API]
-        eso[External Secrets Operator]
-        patch[SSM Annotation Patch Job]
+
+        subgraph frontend[Frontend Stack]
+          feSvc[frontend Service<br/>ClusterIP :80]
+          fePod[React + TypeScript Pods<br/>Vite Build + Nginx Static Serving]
+          feTech[Vite<br/>React<br/>TypeScript<br/>React Router Dom<br/>Tailwind CSS<br/>Shadcn/ui<br/>Lucide React<br/>Axios<br/>TanStack Query v5<br/>Zustand<br/>React Hook Form<br/>Zod<br/>date-fns]
+        end
+
+        subgraph backend[Backend Stack]
+          beSvc[backend Service<br/>ClusterIP :8080]
+          bePod[Spring Boot Pods<br/>REST API Server]
+          beTech[Java<br/>Spring Boot<br/>Spring Web<br/>Spring Security<br/>JWT<br/>JPA / Hibernate<br/>Spring Data JPA<br/>MariaDB Driver<br/>AWS SDK<br/>Gradle]
+        end
+
+        subgraph k8sops[Kubernetes Ops]
+          eso[External Secrets Operator]
+          patch[SSM Annotation Patch Job]
+          irsaPod[IRSA ServiceAccount<br/>backend-sa]
+          deploy[Deployment<br/>Rolling Update]
+        end
       end
 
       rds[RDS MariaDB 10.11<br/>mactadb]
@@ -52,39 +67,66 @@ flowchart TB
     s3ep[S3 Gateway Endpoint]
   end
 
-  ssm[SSM Parameter Store]
+  ssm[SSM Parameter Store<br/>DB / S3 / ARN / Image URI]
   cw[CloudWatch<br/>logs and metrics]
   ecr[ECR<br/>frontend/backend images]
   s3[S3 Bucket<br/>rookies5-team4-macta-bucket]
   irsa[IRSA IAM Roles]
+  gha[GitHub Actions<br/>Build / Test / Docker Push]
+  argocd[Argo CD<br/>GitOps Sync]
+  repo[GitHub Repositories<br/>backend / frontend / infra]
 
   user -->|https://macta.store| r53
   r53 --> internet
   internet <--> igw
   igw <--> publicRt
   publicRt --> alb
+
   acm -->|HTTPS listener cert| alb
   waf -->|associated by Ingress annotation| alb
+
   alb --> ing
   ing -->|/| feSvc
   ing -->|/api/v1| beSvc
+
   feSvc --> fePod
+  fePod -.-> feTech
+
   beSvc --> bePod
+  bePod -.-> beTech
+
+  bePod -->|JDBC 3306| rds
+  bePod -->|S3 API| privateRt --> s3ep --> s3
+
   natEip --> nat
   privateRt -->|default route| nat
   nat --> publicRt
-  internet --> ecr
-  internet --> ssm
+
   fePod -->|pull image| privateRt
   bePod -->|pull image| privateRt
-  bePod -->|JDBC 3306| rds
-  bePod -->|S3 API| privateRt --> s3ep --> s3
+  privateRt -->|outbound via NAT| internet
+  internet --> ecr
+  internet --> ssm
+
   eso -->|read parameters| privateRt
   eso -->|creates Kubernetes Secrets| bePod
+
   patch -->|read synced Secret| privateRt
   patch -->|patch SA, Ingress, image| ing
+
   irsa --> eso
   irsa --> bePod
+  irsaPod --> bePod
+
+  deploy --> fePod
+  deploy --> bePod
+
+  repo --> gha
+  gha -->|Docker image push| ecr
+  gha -->|update manifest image tag| repo
+  repo --> argocd
+  argocd -->|sync manifests| eks
+
   eks -->|cluster and workload metrics/logs| cw
   alb -->|access metrics| cw
   rds -->|database metrics/logs| cw
@@ -488,6 +530,15 @@ alb.ingress.kubernetes.io/wafv2-acl-arn=<WAF_WEB_ACL_ARN>
 ```
 
 ## Argo CD
+### EKS 배포 애플리케이션 상태 확인
+<img width="2540" height="1232" alt="image" src="https://github.com/user-attachments/assets/486f58b8-13d5-4fe7-8f63-fe5e5a102413" />
+
+### 백엔드 클러스터 내 배포 리소스 상태 확인
+<img width="2264" height="1150" alt="image" src="https://github.com/user-attachments/assets/4d91be76-0bbd-46d6-807d-35c0c1cb0912" />
+
+### 프론트엔드 클러스터 내 배포 리소스 상태 확인
+<img width="2044" height="1342" alt="image" src="https://github.com/user-attachments/assets/edba98d6-213c-4899-97d2-0a8ddc504fbf" />
+
 
 Argo CD는 애플리케이션 배포 상태를 확인하고 GitOps 방식으로 manifest를 sync하기 위한 도구입니다.
 
