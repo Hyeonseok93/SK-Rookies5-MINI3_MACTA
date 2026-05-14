@@ -13,7 +13,7 @@ SK쉴더스 루키즈 개발 5기 미니프로젝트3 실시간 경매 사이트
 - 통신 구조: 정적 파일은 프론트 Nginx가 서빙하고, 동적 API 호출은 ALB가 `/api/v1` 경로로 백엔드 서비스에 직접 전달
 
 ## 전체 구조
-<img width="2157" height="1716" alt="image" src="https://github.com/user-attachments/assets/6ad7b5b4-8c38-4b4c-b70b-1ab0162d986d" />
+<img width="2115" height="1671" alt="image" src="https://github.com/user-attachments/assets/f1146f1e-fc5a-476d-9ff8-39c1532fc645" />
 
 
 ```mermaid
