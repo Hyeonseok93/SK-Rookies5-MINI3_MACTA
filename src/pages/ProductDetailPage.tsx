@@ -298,10 +298,6 @@ export function ProductDetailPage() {
               </div>
               <div className="flex items-center gap-2 mb-6">
                 <span className="px-3 py-1 bg-blue-600/20 text-blue-400 rounded-lg text-sm">{formatCategoryDisplay(item.category)}</span>
-                <div className="flex items-center gap-1 text-gray-400 text-sm">
-                  <Package className="w-4 h-4" />
-                  <span>Free Shipping</span>
-                </div>
               </div>
 
               {isFinished ? (
