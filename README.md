@@ -134,6 +134,44 @@ flowchart TB
 ```
 
 &nbsp;
+## 통신 구조
+
+이 인프라는 하나의 VPC 안에서 Public Subnet과 Private Subnet을 분리해 구성합니다. 외부 사용자가 직접 접근해야 하는 진입점만 Public Subnet에 두고, 실제 애플리케이션과 데이터베이스는 Private Subnet에 배치해 외부 노출 범위를 줄이는 구조입니다.
+
+Public Subnet에는 Public ALB와 NAT Gateway가 배치됩니다. ALB는 인터넷에서 들어오는 HTTP/HTTPS 요청을 받는 유일한 외부 진입점이고, NAT Gateway는 Private Subnet의 리소스가 필요한 경우에만 외부로 나갈 수 있게 해주는 아웃바운드 통로입니다.
+
+Private Subnet에는 EKS Worker Node, 프론트엔드 Pod, 백엔드 Pod, RDS MariaDB가 배치됩니다. 프론트엔드와 백엔드 Pod는 외부에서 직접 접근할 수 없고, ALB Ingress를 통해서만 서비스 트래픽을 받습니다. RDS도 Public 접근을 막고 Private Subnet 내부에서만 백엔드가 3306 포트로 접근하도록 구성합니다.
+
+Public Subnet과 Private Subnet을 나눈 이유는 보안 경계를 명확히 하기 위해서입니다. 외부 인터넷과 직접 연결되는 리소스는 ALB로 제한하고, 애플리케이션 서버와 DB는 사설망에 두면 공격 표면을 줄일 수 있습니다. 또한 Private Subnet의 Pod가 ECR 이미지 pull, SSM Parameter 조회 등 외부 AWS API 접근이 필요할 때는 NAT Gateway 또는 VPC Endpoint를 통해 통제된 방향으로만 통신하게 됩니다.
+
+사용자 요청 흐름은 다음과 같습니다.
+
+```text
+User Browser
+  -> Route53(macta.store)
+  -> Public ALB
+  -> Kubernetes Ingress
+      /        -> frontend Service -> frontend Pod
+      /api/v1  -> backend Service  -> backend Pod
+```
+
+프론트엔드 화면 요청은 `/` 경로로 들어와 React 정적 파일을 서빙하는 Nginx Pod로 전달됩니다. API 요청은 같은 도메인의 `/api/v1` 경로로 들어오고, ALB Ingress가 이 요청을 백엔드 Service로 라우팅합니다. 따라서 프론트엔드와 백엔드는 같은 EKS 클러스터 안에 있지만, 사용자-facing API 통신은 ALB Ingress의 경로 기반 라우팅을 통해 분리됩니다.
+
+백엔드 내부 통신은 다음과 같습니다.
+
+```text
+backend Pod
+  -> RDS MariaDB:3306
+  -> S3 Bucket(S3 Gateway VPC Endpoint 경유)
+  -> Redis
+  -> SSM/Secrets 값은 External Secrets Operator가 Kubernetes Secret으로 동기화
+```
+
+S3는 인터넷을 통해 우회하지 않고 Private Route Table에 연결된 S3 Gateway VPC Endpoint를 통해 접근합니다. Secret 값은 manifest에 직접 넣지 않고 SSM Parameter Store에 저장한 뒤, External Secrets Operator가 Kubernetes Secret으로 동기화해 백엔드 Pod 환경변수로 주입합니다.
+
+배포 흐름은 GitOps 방식입니다. GitHub Actions가 프론트엔드/백엔드 이미지를 빌드해 ECR에 push하고 manifest의 image tag를 갱신하면, Argo CD가 변경 사항을 감지해 EKS에 자동으로 반영합니다. Kubernetes Deployment는 Rolling Update 전략을 사용해 새 Pod가 Ready 상태가 된 뒤 기존 Pod를 교체하므로 배포 중 서비스 중단 가능성을 줄입니다.
+
+&nbsp;
 ## 요청 라우팅
 
 ```mermaid
