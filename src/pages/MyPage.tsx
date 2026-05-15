@@ -396,7 +396,9 @@ export function MyPage() {
           <div className="flex flex-col md:flex-row items-center gap-6">
             <div className="flex-1 text-center md:text-left">
               <h1 className="text-4xl font-black text-white mb-2 tracking-tight">{user?.nickname || 'User'}</h1>
-              <p className="text-gray-400 font-medium">{user?.role || 'Active Member'}</p>
+              <p className="text-gray-400 font-medium">
+                {user?.role === 'ROLE_USER' ? 'Macta Member' : user?.role === 'ROLE_ADMIN' ? 'Macta Admin' : 'Active Member'}
+              </p>
               <div className="flex flex-wrap justify-center md:justify-start gap-3 mt-6">
                 <button
                   type="button"

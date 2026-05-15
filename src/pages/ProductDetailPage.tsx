@@ -343,7 +343,7 @@ export function ProductDetailPage() {
                 </div>
                 <div className="text-xs text-gray-500">
                   {biddingHistory.length > 0 
-                    ? `by ${biddingHistory[0].bidderNickname}` 
+                    ? `by ${isLoggedIn && user?.nickname === biddingHistory[0].bidderNickname ? 'You' : biddingHistory[0].bidderNickname}` 
                     : 'Initial Bid'}
                 </div>
               </div>
@@ -399,7 +399,9 @@ export function ProductDetailPage() {
                     : 'bg-[#1e3a5f]/20 border-[#1e3a5f]/50'
                 }`}
               >
-                <div className="text-white font-medium mb-1">{bid.bidderNickname}</div>
+                <div className="text-white font-medium mb-1">
+                  {isLoggedIn && user?.nickname === bid.bidderNickname ? 'You' : bid.bidderNickname}
+                </div>
                 <div className="text-blue-400 font-bold text-lg mb-1">₩{bid.price.toLocaleString()}</div>
                 <div className="text-xs text-gray-500">{formatTime(bid.bidTime)}</div>
               </div>
