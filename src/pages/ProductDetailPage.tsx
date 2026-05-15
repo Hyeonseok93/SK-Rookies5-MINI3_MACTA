@@ -42,8 +42,8 @@ export function ProductDetailPage() {
   useEffect(() => {
     if (!id) return;
 
-    const fetchData = async () => {
-      setIsLoading(true);
+    const fetchData = async (showLoading = true) => {
+      if (showLoading) setIsLoading(true);
       try {
         const [detailRes, commentsRes] = await Promise.all([
           auctionApi.getAuctionDetail(id),
@@ -52,16 +52,30 @@ export function ProductDetailPage() {
 
         if (detailRes.success) setItem(detailRes.data);
         if (commentsRes.success) setComments(commentsRes.data);
-      } catch {
-        setError('Failed to load auction details');
-        showToast('Failed to load auction details', 'error');
+      } catch (err) {
+        if (showLoading) {
+          setError('Failed to load auction details');
+          showToast('Failed to load auction details', 'error');
+        }
+        console.error('Background refresh failed:', err);
       } finally {
-        setIsLoading(false);
+        if (showLoading) setIsLoading(false);
       }
     };
 
-    fetchData();
-  }, [id, showToast]);
+    // 1. Initial full fetch with loading spinner
+    fetchData(true);
+
+    // 2. Set up 1-second polling (background refresh)
+    const pollInterval = setInterval(() => {
+      // Don't poll if the auction is already finished or if we're currently in the middle of a manual bid
+      if (!isFinished && !isBidding) {
+        fetchData(false);
+      }
+    }, 1000);
+
+    return () => clearInterval(pollInterval);
+  }, [id, showToast, isFinished, isBidding]);
 
   const handlePlaceBid = async () => {
     if (!isLoggedIn) {
