@@ -364,3 +364,1122 @@ public class BidService {
 | <a href="https://github.com/owhat02" target="_blank"><img width="120" height="120" src="https://github.com/owhat02.png" /></a> | <a href="https://github.com/Eojinn" target="_blank"><img width="120" height="120" src="https://github.com/Eojinn.png" /></a> | <a href="https://github.com/Hyeonseok93" target="_blank"><img width="120" height="120" src="https://github.com/Hyeonseok93.png" /></a> | <a href="https://github.com/mmije0ng" target="_blank"><img width="120" height="120" src="https://github.com/mmije0ng.png" /></a> | <a href="https://github.com/seoyeon020" target="_blank"><img width="120" height="120" src="https://github.com/seoyeon020.png" /></a> | <a href="https://github.com/JangSeonguk1011" target="_blank"><img width="120" height="120" src="https://github.com/JangSeonguk1011.png" /></a> |
 | :----------------------------------------------------------------------------------------------------------------------------: | :--------------------------------------------------------------------------------------------------------------------------: | :------------------------------------------------------------------------------------------------------------------------------------: | :------------------------------------------------------------------------------------------------------------------------------: | :----------------------------------------------------------------------------------------------------------------------------------: | :--------------------------------------------------------------------------------------------------------------------------------------------: |
 |                                           [이새연(팀장)](https://github.com/owhat02)                                           |                                             [김어진](https://github.com/Eojinn)                                              |                                                [김현석](https://github.com/Hyeonseok93)                                                |                                              [박미정](https://github.com/mmije0ng)                                               |                                               [임서연](https://github.com/seoyeon020)                                                |                                                  [장성욱](https://github.com/JangSeonguk1011)                                                  |
+
+&nbsp;
+
+## Frontend details (`MACTA-frontend`)
+
+
+<div align="center">
+  <p align="center">
+    <strong>"留덇컧 吏곸쟾 吏쒕┸???낆같 寃쎌웳, ?ㅼ떆媛??뚰넻怨??덉쟾??嫄곕옒???쒖옉"</strong>
+  </p>
+
+  <p align="center">
+    <img src="https://img.shields.io/badge/React-19.2.5-61DAFB?style=for-the-badge&logo=react&logoColor=black" alt="React" />
+    <img src="https://img.shields.io/badge/TypeScript-6.0.2-3178C6?style=for-the-badge&logo=typescript&logoColor=white" alt="TypeScript" />
+    <img src="https://img.shields.io/badge/Vite-8.0.10-646CFF?style=for-the-badge&logo=vite&logoColor=white" alt="Vite" />
+    <img src="https://img.shields.io/badge/Tailwind_CSS-v4-06B6D4?style=for-the-badge&logo=tailwindcss&logoColor=white" alt="Tailwind CSS" />
+    <img src="https://img.shields.io/badge/Zustand-5.0.13-blue?style=for-the-badge" alt="Zustand" />
+    <img src="https://img.shields.io/badge/TanStack_Query-v5-FF4154?style=for-the-badge&logo=reactquery&logoColor=white" alt="TanStack Query" />
+  </p>
+</div>
+
+---
+
+## ?? ?꾨줈?앺듃 媛쒖슂 (Overview)
+
+**MACTA Frontend**???ъ슜?먭? 媛꾪렪?섍쾶 寃쎈ℓ ?곹뭹???깅줉?섍퀬 ?ㅼ떆媛꾩쑝濡??낆같 寃쎌웳??李몄뿬?????덈룄濡?援ы쁽??諛섏쓳?????좏뵆由ъ??댁뀡?낅땲?? 
+
+寃쎈ℓ 留덇컧 吏곸쟾 ?몃옒?쎌씠 紐곕━???숈쟻 ?섍꼍?먯꽌 ?ъ슜??寃쏀뿕??洹밸??뷀븯湲??꾪빐, ?ㅼ떆媛??곹깭 ?숆린??諛?利됯컖?곸씤 UI ?쇰뱶諛깆쓣 ?쒓났?⑸땲?? ?먰븳 JWT ?몄쬆 泥닿퀎瑜?湲곕컲?쇰줈 媛쒖씤?붾맂 ??쒕낫??留덉씠?섏씠吏)? 寃곗젣/諛곗넚 ?먮쫫 ?쒖뼱, ?ㅼ떆媛??뱀냼耳??뚮┝ ?섏떊 ?명꽣?섏씠?ㅻ? 援ъ꽦?섏??듬땲??
+
+---
+
+## ???듭떖 湲곕뒫 (Key Features)
+
+### ?룧 ?ㅼ떆媛?寃쎈ℓ ?먯깋 (Home & Search)
+- **移댄뀒怨좊━ ?꾪꽣 諛?寃??*: 愿???덈뒗 ?곹뭹 移댄뀒怨좊━瑜??꾪꽣留곹븯怨?寃?됱뼱 ?낅젰???듯빐 ?곹뭹??鍮좊Ⅴ寃?寃?됲빀?덈떎.
+- **?멸린 & 留덇컧 ?꾨컯 ?곹뭹**: ?꾩옱 議고쉶?섎굹 ?낆같 李몄뿬?꾧? ?믪? ?멸린 寃쎈ℓ ?곹뭹 諛?怨?留덇컧???곹뭹?ㅼ쓣 硫붿씤 ?붾㈃???곗꽑 ?몄텧?⑸땲??
+
+### ?뵍 ?ъ슜???몄쬆 諛??멸? (Authentication)
+- **JWT 湲곕컲 濡쒓렇???뚯썝媛??*: 濡쒓렇???깃났 ???띾뱷???좏겙??湲곕컲?쇰줈 ?멸????붿껌???쒕쾭濡??꾨떖?⑸땲??
+- **API Interceptor**: Axios Interceptor瑜?援ъ꽦?섏뿬 API ?붿껌 ?ㅻ뜑???좏겙???먮룞?쇰줈 二쇱엯?섍퀬 留뚮즺????묓빀?덈떎.
+
+### ?뵇 寃쎈ℓ ?곸꽭 諛??낆같 寃쎌웳 (Product Details & Bidding)
+- **?ㅼ떆媛??낆같**: 理쒓퀬媛 寃利?濡쒖쭅??留욎텛???ъ슜?먭? 利됱떆 ?낆같???쒕룄?????덉쑝硫? ?낆같 ?깃났 ??理쒓퀬 ?낆같媛 ?곹깭媛 ?ㅼ떆媛꾩쑝濡?諛섏쁺?⑸땲??
+- **臾몄쓽 諛??뚰넻**: ?곹뭹 ?섎떒??Q&A ?뺥깭???볤? 諛??듦? ?깅줉 湲곕뒫???쒓났?섏뿬 ?먮ℓ?먯? 援щℓ??媛??먯쑀濡쒖슫 ?섏궗?뚰넻??媛?ν빀?덈떎.
+
+### ?뵪 寃쎈ℓ ?곹뭹 異쒗뭹 (Register Auction)
+- **?뺣낫 ?ㅼ젙**: ?곹뭹 ?대?吏 ?깅줉, 寃쎈ℓ ?쒖옉 媛寃? 移댄뀒怨좊━ ?ㅼ젙, 洹몃━怨?寃쎈ℓ 留덇컧 ?쒖젏???щ젰 而댄룷?뚰듃濡?吏?뺥븯???곹뭹??媛꾪렪?섍쾶 ?깅줉?⑸땲??
+
+### ?뮩 寃곗젣 諛?嫄곕옒 吏꾪뻾 (Checkout & Delivery)
+- **?숈같 嫄곕옒 愿由?*: 寃쎈ℓ 留덇컧 ???숈같?먮줈 ?뺤젙?섎㈃ 寃곗젣 ?湲??곹깭濡??꾪솚?섎ŉ, 諛곗넚 ?뺣낫(二쇱냼吏 ??瑜??낅젰?섍퀬 理쒖쥌 寃곗젣瑜??섑뻾?⑸땲??
+- **諛곗넚 ?곹깭 ?몃옒??*: ?먮ℓ?먮뒗 寃곗젣 ?꾨즺??嫄댁뿉 ???諛곗넚 泥섎━瑜?吏꾪뻾?섍퀬, 援щℓ?먮뒗 ?붾㈃?먯꽌 ?대? ?ㅼ떆媛꾩쑝濡?紐⑤땲?곕쭅?????덉뒿?덈떎.
+
+### ?뵒 ?ㅼ떆媛??대깽???뚮┝ (Notifications Hub)
+- **?ㅼ떆媛??뚮┝ 紐⑸줉**: ?ㅻⅨ ?ъ슜?먭? ???믪? 湲덉븸?쇰줈 ?낆같?섏뿬 ???낆같???곹쉶?뱁뻽嫄곕굹(Outbid), ??寃쎈ℓ媛 ?숈같?섏뿀???뚯쓽 ?ㅼ떆媛??대깽?몃? 紐⑥븘 ?뺤씤?⑸땲??
+
+---
+
+## ?썱 湲곗닠 ?ㅽ깮 (Tech Stack)
+
+### Core Libraries
+- **Framework & Runtime**: React 19 (Vite 湲곕컲 媛쒕컻?섍꼍)
+- **Language**: TypeScript
+- **Routing**: React Router Dom v7
+
+### Styling & UI Components
+- **CSS Engine**: Tailwind CSS v4 (理쒖떊 湲곕뒫 諛?鍮좊Ⅸ 鍮뚮뱶 吏??
+- **Design Utility**: Shadcn UI, Radix UI Primitive
+- **Icons**: Lucide React
+
+### State & Data Client
+- **Server State Management**: TanStack Query v5 (React Query) - 罹먯떛, ?숈쟻 由ы봽?덉떆 諛??먮룞 ?숆린??泥섎━
+- **Global Client State**: Zustand v5 - ?대씪?댁뼵???ъ씠??湲濡쒕쾶 ?곹깭 愿由?
+- **Network Client**: Axios - API 鍮꾨룞湲??듭떊 諛?怨듯넻 ?ㅼ젙 愿由?
+- **Form & Validation**: React Hook Form, Zod
+
+---
+
+## ?뱛 ?꾨줈?앺듃 援ъ“ (Directory Structure)
+
+```text
+MACTA-frontend/
+?쒋?? public/                 # ?뺤쟻 ?먯뀑 諛??뚮퉬肄?
+?쒋?? src/
+??  ?쒋?? api/                # Axios ?몄뒪?댁뒪, Interceptor 諛?API ?붾뱶?ъ씤???뺤쓽
+??  ?쒋?? assets/             # 而댄룷?뚰듃 ?대? ?ъ슜 ?대?吏/?뺤쟻 ?뚯씪
+??  ?쒋?? components/         # ?ъ궗??媛?ν븳 怨듯넻 UI 諛??덉씠?꾩썐 而댄룷?뚰듃
+??  ??  ?붴?? ui/             # Shadcn UI 湲곕컲 ?먯옄 而댄룷?뚰듃 (Button, Input, Dialog ??
+??  ?쒋?? hooks/              # 而ㅼ뒪? ??諛?怨듯넻 鍮꾩쫰?덉뒪 濡쒖쭅
+??  ?쒋?? pages/              # ?쇱슦??留ㅽ븨 ?섏씠吏 而댄룷?뚰듃
+??  ??  ?쒋?? HomePage.tsx            # 寃쎈ℓ ??寃???섏씠吏
+??  ??  ?쒋?? LoginPage.tsx           # 濡쒓렇???섏씠吏
+??  ??  ?쒋?? SignupPage.tsx          # ?뚯썝媛???섏씠吏
+??  ??  ?쒋?? ProductDetailPage.tsx   # ?곹뭹 ?곸꽭 諛??낆같/?볤? ?섏씠吏
+??  ??  ?쒋?? RegisterAuctionPage.tsx # 寃쎈ℓ ?깅줉 ?섏씠吏
+??  ??  ?쒋?? CheckoutPage.tsx        # 寃곗젣 諛?諛곗넚 愿由??섏씠吏
+??  ??  ?쒋?? MyPage.tsx              # 留덉씠?섏씠吏 ??쒕낫??
+??  ??  ?쒋?? NotificationsPage.tsx   # ?ㅼ떆媛??뚮┝ ?쇳꽣 ?섏씠吏
+??  ??  ?붴?? ErrorPage.tsx           # ?덉쇅 泥섎━ ?섏씠吏
+??  ?쒋?? store/              # Zustand Store ?뺤쓽 (Auth ?곹깭 ??
+??  ?쒋?? styles/             # ?꾩뿭 ?뚮쭏 諛??ㅽ????ㅼ젙
+??  ?쒋?? utils/              # ?щ㎎??諛?怨듯넻 ?ы띁 ?⑥닔
+??  ?쒋?? App.tsx             # ?쇱슦??諛??꾩뿭 Provider ?ㅼ젙
+??  ?쒋?? main.tsx            # React ?뚮뜑留?吏꾩엯??
+??  ?쒋?? App.css
+??  ?붴?? index.css
+?쒋?? eslint.config.js        # ESLint 由고꽣 ?ㅼ젙
+?쒋?? package.json            # ?섏〈??諛??ㅽ겕由쏀듃 援ъ꽦
+?쒋?? tsconfig.json           # TypeScript 鍮뚮뱶 ?ㅼ젙
+?붴?? vite.config.ts          # Vite 踰덈뱾???ㅼ젙
+```
+
+---
+
+## ?숋툘 ?ㅽ뻾 諛?鍮뚮뱶 媛?대뱶 (Getting Started)
+
+### 1. ?섏〈???⑦궎吏 ?ㅼ튂
+?꾨줈?앺듃 猷⑦듃 ?대뜑 ?뱀? `MACTA-frontend` ?대뜑濡??대룞?????꾨옒 紐낅졊?대? ?낅젰?섏뿬 ?꾩슂???⑦궎吏瑜??ㅼ튂?⑸땲??
+```bash
+npm install
+```
+
+### 2. 濡쒖뺄 媛쒕컻 ?쒕쾭 ?ㅽ뻾
+Vite ??紐⑤뱢 援먯껜(HMR)媛 ?곸슜??濡쒖뺄 ?쒕쾭瑜?援щ룞?⑸땲??
+```bash
+npm run dev
+```
+
+### 3. ?꾨줈?뺤뀡 鍮뚮뱶
+諛고룷???꾨줈?뺤뀡 踰덈뱾???앹꽦?⑸땲??
+```bash
+npm run build
+```
+
+---
+
+## ?숋툘 Vite Template Default Reference
+
+> [!NOTE]
+> ?꾨옒 ?댁슜? Vite React ?쒗뵆由?湲곕낯 ?앹꽦 ?덈궡臾몄엯?덈떎.
+
+This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+
+Currently, two official plugins are available:
+
+- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
+- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+
+### React Compiler
+
+The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+
+### Expanding the ESLint configuration
+
+If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+
+```js
+export default defineConfig([
+  globalIgnores(['dist']),
+  {
+    files: ['**/*.{ts,tsx}'],
+    extends: [
+      // Other configs...
+
+      // Remove tseslint.configs.recommended and replace with this
+      tseslint.configs.recommendedTypeChecked,
+      // Alternatively, use this for stricter rules
+      tseslint.configs.strictTypeChecked,
+      // Optionally, add this for stylistic rules
+      tseslint.configs.stylisticTypeChecked,
+
+      // Other configs...
+    ],
+    languageOptions: {
+      parserOptions: {
+        project: ['./tsconfig.node.json', './tsconfig.app.json'],
+        tsconfigRootDir: import.meta.dirname,
+      },
+      // other options...
+    },
+  },
+])
+```
+
+You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+
+```js
+// eslint.config.js
+import reactX from 'eslint-plugin-react-x'
+import reactDom from 'eslint-plugin-react-dom'
+
+export default defineConfig([
+  globalIgnores(['dist']),
+  {
+    files: ['**/*.{ts,tsx}'],
+    extends: [
+      // Other configs...
+      // Enable lint rules for React
+      reactX.configs['recommended-typescript'],
+      // Enable lint rules for React DOM
+      reactDom.configs.recommended,
+    ],
+    languageOptions: {
+      parserOptions: {
+        project: ['./tsconfig.node.json', './tsconfig.app.json'],
+        tsconfigRootDir: import.meta.dirname,
+      },
+      // other options...
+    },
+  },
+])
+```
+
+
+&nbsp;
+
+## Infrastructure runbook (`MACTA-infra`)
+
+
+SK?대뜑??猷⑦궎利?媛쒕컻 5湲?誘몃땲?꾨줈?앺듃3 ?ㅼ떆媛?寃쎈ℓ ?ъ씠??**MACTA** ?쒕퉬?ㅻ? AWS 湲곕컲?쇰줈 諛고룷?섍린 ?꾪븳 ?명봽???덊룷?낅땲?? Terraform?쇰줈 AWS 由ъ냼?ㅻ? 援ъ꽦?섍퀬, Kubernetes manifest? Argo CD瑜??듯빐 EKS ?꾩뿉 ?꾨줎?몄뿏??諛깆뿏???좏뵆由ъ??댁뀡??諛고룷?섎뒗 援ъ“?낅땲??
+
+?꾩옱 援ъ“???듭떖? ?ㅼ쓬怨?媛숈뒿?덈떎.
+
+- Terraform: VPC, EKS, RDS, S3, ECR, WAF, IRSA, Helm 湲곕컲 而⑦듃濡ㅻ윭 ?ㅼ튂
+- EKS: ?꾨줎?몄뿏?? 諛깆뿏?? Ingress, External Secrets 由ъ냼???ㅽ뻾
+- SSM Parameter Store: DB, S3, IAM Role ARN, WAF ARN, ACM ARN ???섍꼍蹂?媛믪쓣 ???
+- External Secrets Operator: SSM 媛믪쓣 Kubernetes Secret?쇰줈 ?숆린??
+- AWS Load Balancer Controller: Kubernetes Ingress瑜?蹂닿퀬 ALB ?앹꽦
+- Route53 + ACM: `macta.store` ?꾨찓?멸낵 HTTPS ?몄쬆???곌껐
+- ?듭떊 援ъ“: ?뺤쟻 ?뚯씪? ?꾨줎??Nginx媛 ?쒕튃?섍퀬, ?숈쟻 API ?몄텧? ALB媛 `/api/v1` 寃쎈줈濡?諛깆뿏???쒕퉬?ㅼ뿉 吏곸젒 ?꾨떖
+
+&nbsp;
+## ?꾩껜 援ъ“
+<img width="2115" height="1671" alt="image" src="https://github.com/user-attachments/assets/f1146f1e-fc5a-476d-9ff8-39c1532fc645" />
+
+
+```mermaid
+flowchart TB
+  user[User Browser]
+  r53[Route53<br/>macta.store A Alias]
+  acm[ACM Certificate<br/>macta.store]
+  waf[AWS WAFv2<br/>Regional Web ACL]
+  alb[Public ALB<br/>AWS Load Balancer Controller]
+  internet[Internet]
+
+  subgraph vpc[VPC]
+    igw[Internet Gateway]
+
+    subgraph public[Public Subnets]
+      alb
+      nat[NAT Gateway<br/>single AZ]
+      natEip[Elastic IP<br/>for NAT Gateway]
+      publicRt[Public Route Table<br/>0.0.0.0/0 -> IGW]
+    end
+
+    subgraph private[Private Subnets]
+      privateRt[Private Route Table<br/>0.0.0.0/0 -> NAT GW<br/>S3 prefix -> S3 Gateway Endpoint]
+
+      subgraph eks[EKS Cluster<br/>rookies5-macta-eks]
+        ing[Kubernetes Ingress<br/>macta.store]
+
+        subgraph frontend[Frontend Stack]
+          feSvc[frontend Service<br/>ClusterIP :80]
+          fePod[React + TypeScript Pods<br/>Vite Build + Nginx Static Serving]
+          feTech[Vite<br/>React<br/>TypeScript<br/>React Router Dom<br/>Tailwind CSS<br/>Shadcn/ui<br/>Lucide React<br/>Axios<br/>TanStack Query v5<br/>Zustand<br/>React Hook Form<br/>Zod<br/>date-fns]
+        end
+
+        subgraph backend[Backend Stack]
+          beSvc[backend Service<br/>ClusterIP :8080]
+          bePod[Spring Boot Pods<br/>REST API Server]
+          beTech[Java<br/>Spring Boot<br/>Spring Web<br/>Spring Security<br/>JWT<br/>JPA / Hibernate<br/>Spring Data JPA<br/>MariaDB Driver<br/>AWS SDK<br/>Gradle]
+        end
+
+        subgraph k8sops[Kubernetes Ops]
+          eso[External Secrets Operator]
+          patch[SSM Annotation Patch Job]
+          irsaPod[IRSA ServiceAccount<br/>backend-sa]
+          deploy[Deployment<br/>Rolling Update]
+        end
+      end
+
+      rds[RDS MariaDB 10.11<br/>mactadb]
+    end
+
+    s3ep[S3 Gateway Endpoint]
+  end
+
+  ssm[SSM Parameter Store<br/>DB / S3 / ARN / Image URI]
+  cw[CloudWatch<br/>logs and metrics]
+  ecr[ECR<br/>frontend/backend images]
+  s3[S3 Bucket<br/>rookies5-team4-macta-bucket]
+  irsa[IRSA IAM Roles]
+  gha[GitHub Actions<br/>Build / Test / Docker Push]
+  argocd[Argo CD<br/>GitOps Sync]
+  repo[GitHub Repositories<br/>backend / frontend / infra]
+
+  user -->|https://macta.store| r53
+  r53 --> internet
+  internet <--> igw
+  igw <--> publicRt
+  publicRt --> alb
+
+  acm -->|HTTPS listener cert| alb
+  waf -->|associated by Ingress annotation| alb
+
+  alb --> ing
+  ing -->|/| feSvc
+  ing -->|/api/v1| beSvc
+
+  feSvc --> fePod
+  fePod -.-> feTech
+
+  beSvc --> bePod
+  bePod -.-> beTech
+
+  bePod -->|JDBC 3306| rds
+  bePod -->|S3 API| privateRt --> s3ep --> s3
+
+  natEip --> nat
+  privateRt -->|default route| nat
+  nat --> publicRt
+
+  fePod -->|pull image| privateRt
+  bePod -->|pull image| privateRt
+  privateRt -->|outbound via NAT| internet
+  internet --> ecr
+  internet --> ssm
+
+  eso -->|read parameters| privateRt
+  eso -->|creates Kubernetes Secrets| bePod
+
+  patch -->|read synced Secret| privateRt
+  patch -->|patch SA, Ingress, image| ing
+
+  irsa --> eso
+  irsa --> bePod
+  irsaPod --> bePod
+
+  deploy --> fePod
+  deploy --> bePod
+
+  repo --> gha
+  gha -->|Docker image push| ecr
+  gha -->|update manifest image tag| repo
+  repo --> argocd
+  argocd -->|sync manifests| eks
+
+  eks -->|cluster and workload metrics/logs| cw
+  alb -->|access metrics| cw
+  rds -->|database metrics/logs| cw
+```
+
+&nbsp;
+## ?듭떊 援ъ“
+
+???명봽?쇰뒗 ?섎굹??VPC ?덉뿉??Public Subnet怨?Private Subnet??遺꾨━??援ъ꽦?⑸땲?? ?몃? ?ъ슜?먭? 吏곸젒 ?묎렐?댁빞 ?섎뒗 吏꾩엯?먮쭔 Public Subnet???먭퀬, ?ㅼ젣 ?좏뵆由ъ??댁뀡怨??곗씠?곕쿋?댁뒪??Private Subnet??諛곗튂???몃? ?몄텧 踰붿쐞瑜?以꾩씠??援ъ“?낅땲??
+
+Public Subnet?먮뒗 Public ALB? NAT Gateway媛 諛곗튂?⑸땲?? ALB???명꽣?룹뿉???ㅼ뼱?ㅻ뒗 HTTP/HTTPS ?붿껌??諛쏅뒗 ?좎씪???몃? 吏꾩엯?먯씠怨? NAT Gateway??Private Subnet??由ъ냼?ㅺ? ?꾩슂??寃쎌슦?먮쭔 ?몃?濡??섍컝 ???덇쾶 ?댁＜???꾩썐諛붿슫???듬줈?낅땲??
+
+Private Subnet?먮뒗 EKS Worker Node, ?꾨줎?몄뿏??Pod, 諛깆뿏??Pod, RDS MariaDB媛 諛곗튂?⑸땲?? ?꾨줎?몄뿏?쒖? 諛깆뿏??Pod???몃??먯꽌 吏곸젒 ?묎렐?????녾퀬, ALB Ingress瑜??듯빐?쒕쭔 ?쒕퉬???몃옒?쎌쓣 諛쏆뒿?덈떎. RDS??Public ?묎렐??留됯퀬 Private Subnet ?대??먯꽌留?諛깆뿏?쒓? 3306 ?ы듃濡??묎렐?섎룄濡?援ъ꽦?⑸땲??
+
+Public Subnet怨?Private Subnet???섎늿 ?댁쑀??蹂댁븞 寃쎄퀎瑜?紐낇솗???섍린 ?꾪빐?쒖엯?덈떎. ?몃? ?명꽣?룰낵 吏곸젒 ?곌껐?섎뒗 由ъ냼?ㅻ뒗 ALB濡??쒗븳?섍퀬, ?좏뵆由ъ??댁뀡 ?쒕쾭? DB???ъ꽕留앹뿉 ?먮㈃ 怨듦꺽 ?쒕㈃??以꾩씪 ???덉뒿?덈떎. ?먰븳 Private Subnet??Pod媛 ECR ?대?吏 pull, SSM Parameter 議고쉶 ???몃? AWS API ?묎렐???꾩슂???뚮뒗 NAT Gateway ?먮뒗 VPC Endpoint瑜??듯빐 ?듭젣??諛⑺뼢?쇰줈留??듭떊?섍쾶 ?⑸땲??
+
+?ъ슜???붿껌 ?먮쫫? ?ㅼ쓬怨?媛숈뒿?덈떎.
+
+```text
+User Browser
+  -> Route53(macta.store)
+  -> Public ALB
+  -> Kubernetes Ingress
+      /        -> frontend Service -> frontend Pod
+      /api/v1  -> backend Service  -> backend Pod
+```
+
+?꾨줎?몄뿏???붾㈃ ?붿껌? `/` 寃쎈줈濡??ㅼ뼱? React ?뺤쟻 ?뚯씪???쒕튃?섎뒗 Nginx Pod濡??꾨떖?⑸땲?? API ?붿껌? 媛숈? ?꾨찓?몄쓽 `/api/v1` 寃쎈줈濡??ㅼ뼱?ㅺ퀬, ALB Ingress媛 ???붿껌??諛깆뿏??Service濡??쇱슦?낇빀?덈떎. ?곕씪???꾨줎?몄뿏?쒖? 諛깆뿏?쒕뒗 媛숈? EKS ?대윭?ㅽ꽣 ?덉뿉 ?덉?留? ?ъ슜??facing API ?듭떊? ALB Ingress??寃쎈줈 湲곕컲 ?쇱슦?낆쓣 ?듯빐 遺꾨━?⑸땲??
+
+諛깆뿏???대? ?듭떊? ?ㅼ쓬怨?媛숈뒿?덈떎.
+
+```text
+backend Pod
+  -> RDS MariaDB:3306
+  -> S3 Bucket(S3 Gateway VPC Endpoint 寃쎌쑀)
+  -> Redis
+  -> SSM/Secrets 媛믪? External Secrets Operator媛 Kubernetes Secret?쇰줈 ?숆린??
+```
+
+S3???명꽣?룹쓣 ?듯빐 ?고쉶?섏? ?딄퀬 Private Route Table???곌껐??S3 Gateway VPC Endpoint瑜??듯빐 ?묎렐?⑸땲?? Secret 媛믪? manifest??吏곸젒 ?ｌ? ?딄퀬 SSM Parameter Store????ν븳 ?? External Secrets Operator媛 Kubernetes Secret?쇰줈 ?숆린?뷀빐 諛깆뿏??Pod ?섍꼍蹂?섎줈 二쇱엯?⑸땲??
+
+諛고룷 ?먮쫫? GitOps 諛⑹떇?낅땲?? GitHub Actions媛 ?꾨줎?몄뿏??諛깆뿏???대?吏瑜?鍮뚮뱶??ECR??push?섍퀬 manifest??image tag瑜?媛깆떊?섎㈃, Argo CD媛 蹂寃??ы빆??媛먯???EKS???먮룞?쇰줈 諛섏쁺?⑸땲?? Kubernetes Deployment??Rolling Update ?꾨왂???ъ슜????Pod媛 Ready ?곹깭媛 ????湲곗〈 Pod瑜?援먯껜?섎?濡?諛고룷 以??쒕퉬??以묐떒 媛?μ꽦??以꾩엯?덈떎.
+
+&nbsp;
+## ?붿껌 ?쇱슦??
+
+```mermaid
+sequenceDiagram
+  participant Browser
+  participant ALB as ALB Ingress
+  participant FE as Frontend Nginx Pod
+  participant BE as Backend Pod
+
+  Browser->>ALB: GET https://macta.store/
+  ALB->>FE: route /
+  FE-->>Browser: React static files
+
+  Browser->>ALB: GET https://macta.store/api/v1/...
+  ALB->>BE: route /api/v1
+  BE-->>Browser: JSON API response
+```
+
+?꾨줎?몄뿏??Nginx??React ?뺤쟻 ?뚯씪怨?SPA fallback留??대떦?⑸땲??
+
+```nginx
+server {
+    listen 80;
+
+    location / {
+        root /usr/share/nginx/html;
+        index index.html;
+        try_files $uri $uri/ /index.html;
+    }
+}
+```
+
+?꾨줎?몄뿏?쒖쓽 API base URL? 媛숈? ?꾨찓???곷?寃쎈줈瑜?沅뚯옣?⑸땲??
+
+```env
+VITE_API_BASE_URL=/api/v1
+```
+
+&nbsp;
+## AWS&CI/CD 由ъ냼??
+
+| <span style="color:white;background-color:#1F3A5F;padding:4px 8px;border-radius:4px;">援щ텇</span> | <span style="color:white;background-color:#1F3A5F;padding:4px 8px;border-radius:4px;">?곕룞 ???/span> | <span style="color:white;background-color:#1F3A5F;padding:4px 8px;border-radius:4px;">??븷</span> |
+|---|---|---|
+| ?ㅽ듃?뚰겕 | VPC | EKS / RDS / ALB ?ㅽ듃?뚰겕 遺꾨━ 諛??대? ?듭떊 援ъ꽦 |
+| ?ㅽ듃?뚰겕 | Public Subnet | Public ALB 諛?NAT Gateway 諛곗튂 |
+| ?ㅽ듃?뚰겕 | Private Subnet | EKS Worker Node / Pod / RDS ?대?留?援ъ꽦 |
+| ?명꽣???곌껐 | Internet Gateway(IGW) | VPC ?몃? ?명꽣???듭떊 ?쒓났 |
+| ?꾩썐諛붿슫??| NAT Gateway | Private Subnet???몃? ?명꽣???묎렐 ?쒓났 |
+| DNS | Route53 | macta.store ?꾨찓?몄쓣 ALB濡??곌껐 |
+| ?몄쬆??| ACM | HTTPS ?몄쬆???쒓났 |
+| 吏꾩엯??| ALB | ?몃? HTTP/HTTPS ?몃옒???섏떊 |
+| Ingress ?먮룞??| AWS Load Balancer Controller | Kubernetes Ingress 湲곕컲 ALB ?앹꽦 諛?愿由?|
+| 而⑦뀒?대꼫 ?ㅼ??ㅽ듃?덉씠??| EKS | Kubernetes 湲곕컲 ?좏뵆由ъ??댁뀡 ?댁쁺 |
+| ?몃뱶 愿由?| EKS Node Group | EKS Worker Node ?먮룞 愿由?|
+| 蹂댁븞 | WAFv2 | ALB ?욌떒 ?붿껌 ?꾪꽣留?諛?Rate Limit ?곸슜 |
+| 而⑦뀒?대꼫 ?대?吏 | ECR | Frontend / Backend Docker Image ???|
+| DB | RDS MariaDB 10.11 | 諛깆뿏???곸냽 ?곗씠?????|
+| 罹먯떆 | Redis | 罹먯떆 諛??ㅼ떆媛??곗씠??泥섎━ |
+| ?뚯씪 ??μ냼 | S3 | ?대?吏 諛??뚯씪 ???|
+| ?대? S3 ?듭떊 | S3 Gateway VPC Endpoint | Private Subnet?먯꽌 S3 ?묎렐 |
+| Secret ???| SSM Parameter Store | DB/S3/JWT ?ㅼ젙 ???|
+| Secret ?숆린??| External Secrets Operator | SSM 媛믪쓣 Kubernetes Secret?쇰줈 蹂??|
+| 沅뚰븳 愿由?| IRSA | Pod ?⑥쐞 IAM Role ?ъ슜 |
+| 諛고룷 ?먮룞??| GitHub Actions | Build / Test / Image Push / Manifest 媛깆떊 |
+| GitOps | Argo CD | Kubernetes Manifest ?먮룞 Sync |
+| 紐⑤땲?곕쭅 | CloudWatch | EKS / ALB / RDS / WAF 濡쒓렇 諛?硫뷀듃由??섏쭛 |
+
+&nbsp;
+## ?붾젆?곕━ 援ъ“
+
+```text
+infra/
+  argocd/
+    backend-application.yml
+    frontend-application.yml
+  k8s/
+    ingress.yaml
+    ssm-annotation-patch-job.yaml
+    backend/
+      namespace.yaml
+      backend.yaml
+      external-secret.yaml
+    frontend/
+      frontend.yaml
+  terraform/
+    main.tf
+    variables.tf
+    outputs.tf
+    vpc.tf
+    eks.tf
+    ecr.tf
+    rds.tf
+    s3.tf
+    waf.tf
+    external-secrets.tf
+    aws-load-balancer-controller.tf
+    policies/
+      aws-load-balancer-controller-iam-policy.json
+```
+
+&nbsp;
+## Terraform 湲곕낯媛?
+
+| ??ぉ | 媛?|
+| --- | --- |
+| AWS region | `ap-northeast-2` |
+| AWS profile | `team4` |
+| Project name | `rookies5-macta` |
+| Environment | `dev` |
+| EKS cluster | `rookies5-macta-eks` |
+| Kubernetes namespace | `rookies5-macta` |
+| Backend ServiceAccount | `backend-sa` |
+| External Secrets namespace | `external-secrets` |
+| External Secrets ServiceAccount | `external-secrets` |
+| Domain | `macta.store` |
+
+DB 怨꾩젙 ?뺣낫??`terraform/terraform.tfvars`?먯꽌 愿由ы빀?덈떎. ???뚯씪? Git???щ━吏 ?딆뒿?덈떎.
+
+```hcl
+db_instance_class = "db.t3.micro"
+db_name           = "mactadb"
+db_username       = "admin"
+db_password       = "change-me"
+```
+
+&nbsp;
+## Terraform ?곸슜
+
+```powershell
+cd C:\rookies\macta\infra\terraform
+$env:AWS_PROFILE = "team4"
+
+terraform init
+terraform fmt
+terraform validate
+terraform plan
+terraform apply
+```
+
+kubeconfig ?ㅼ젙:
+
+```powershell
+aws eks update-kubeconfig --profile team4 --region ap-northeast-2 --name rookies5-macta-eks
+```
+
+二쇱슂 output ?뺤씤:
+
+```powershell
+terraform output -raw eks_cluster_name
+terraform output -raw ecr_backend_repository_url
+terraform output -raw ecr_frontend_repository_url
+terraform output -raw backend_sa_role_arn
+terraform output -raw rds_db_url
+terraform output -raw s3_bucket_name
+terraform output -raw waf_web_acl_arn
+```
+
+&nbsp;
+## SSM Parameter Store
+
+Kubernetes YAML?먮뒗 DB 鍮꾨?踰덊샇, DB URL, ARN, ?몄쬆??ARN 媛숈? ?섍꼍蹂?媛믪쓣 吏곸젒 ?ｌ? ?딆뒿?덈떎. SSM Parameter Store????ν븯怨?External Secrets Operator媛 Kubernetes Secret?쇰줈 ?숆린?뷀빀?덈떎.
+
+?꾩옱 manifest媛 李몄“?섎뒗 SSM 寃쎈줈???ㅼ쓬怨?媛숈뒿?덈떎.
+
+| SSM parameter | ?⑸룄 |
+| --- | --- |
+| `/rookies5-macta/dev/backend/DB_URL` | 諛깆뿏??DB JDBC URL |
+| `/rookies5-macta/dev/backend/DB_USERNAME` | DB ?ъ슜?먮챸 |
+| `/rookies5-macta/dev/backend/DB_PASSWORD` | DB 鍮꾨?踰덊샇 |
+| `/rookies5-macta/dev/backend/S3_BUCKET_NAME` | S3 踰꾪궥紐?|
+| `/rookies5-macta/dev/backend/AWS_REGION` | AWS region |
+| `/rookies5-macta/dev/infra/BACKEND_ROLE_ARN` | 諛깆뿏??IRSA Role ARN |
+| `/rookies5-macta/dev/infra/WAF_WEB_ACL_ARN` | WAF Web ACL ARN |
+| `/rookies5-macta/dev/infra/ACM_CERTIFICATE_ARN` | ACM ?몄쬆??ARN |
+| `/rookies5-macta/dev/infra/BACKEND_IMAGE` | 諛깆뿏???대?吏 URI |
+| `/rookies5-macta/dev/infra/FRONTEND_IMAGE` | ?꾨줎?몄뿏???대?吏 URI |
+
+SSM 媛??앹꽦 ?덉떆:
+
+```powershell
+cd C:\rookies\macta\infra\terraform
+
+$backendRoleArn = terraform output -raw backend_sa_role_arn
+$wafWebAclArn   = terraform output -raw waf_web_acl_arn
+$backendImage   = "$(terraform output -raw ecr_backend_repository_url):latest"
+$frontendImage  = "$(terraform output -raw ecr_frontend_repository_url):latest"
+$dbUrl          = terraform output -raw rds_db_url
+$s3BucketName   = terraform output -raw s3_bucket_name
+
+aws ssm put-parameter --profile team4 --region ap-northeast-2 --name "/rookies5-macta/dev/backend/DB_URL" --type SecureString --value $dbUrl --overwrite
+aws ssm put-parameter --profile team4 --region ap-northeast-2 --name "/rookies5-macta/dev/backend/DB_USERNAME" --type SecureString --value "admin" --overwrite
+aws ssm put-parameter --profile team4 --region ap-northeast-2 --name "/rookies5-macta/dev/backend/DB_PASSWORD" --type SecureString --value "CHANGE_ME" --overwrite
+aws ssm put-parameter --profile team4 --region ap-northeast-2 --name "/rookies5-macta/dev/backend/S3_BUCKET_NAME" --type SecureString --value $s3BucketName --overwrite
+aws ssm put-parameter --profile team4 --region ap-northeast-2 --name "/rookies5-macta/dev/backend/AWS_REGION" --type String --value "ap-northeast-2" --overwrite
+
+aws ssm put-parameter --profile team4 --region ap-northeast-2 --name "/rookies5-macta/dev/infra/BACKEND_ROLE_ARN" --type SecureString --value $backendRoleArn --overwrite
+aws ssm put-parameter --profile team4 --region ap-northeast-2 --name "/rookies5-macta/dev/infra/WAF_WEB_ACL_ARN" --type SecureString --value $wafWebAclArn --overwrite
+aws ssm put-parameter --profile team4 --region ap-northeast-2 --name "/rookies5-macta/dev/infra/ACM_CERTIFICATE_ARN" --type SecureString --value "CHANGE_ME_ACM_CERTIFICATE_ARN" --overwrite
+aws ssm put-parameter --profile team4 --region ap-northeast-2 --name "/rookies5-macta/dev/infra/BACKEND_IMAGE" --type SecureString --value $backendImage --overwrite
+aws ssm put-parameter --profile team4 --region ap-northeast-2 --name "/rookies5-macta/dev/infra/FRONTEND_IMAGE" --type SecureString --value $frontendImage --overwrite
+```
+
+議고쉶:
+
+```powershell
+aws ssm get-parameters-by-path --profile team4 --region ap-northeast-2 --path "/rookies5-macta/dev" --recursive --with-decryption --query "Parameters[*].[Name,Type,Value]" --output table
+```
+
+&nbsp;
+## External Secrets
+
+Terraform? External Secrets Operator瑜?Helm?쇰줈 ?ㅼ튂?⑸땲??
+
+- Namespace: `external-secrets`
+- ServiceAccount: `external-secrets`
+- ?몄쬆 諛⑹떇: IRSA
+- SSM 沅뚰븳: `ssm:GetParameter`, `ssm:GetParameters`, `ssm:GetParametersByPath`, `ssm:DescribeParameters`
+
+Kubernetes manifest:
+
+- `k8s/backend/external-secret.yaml`
+  - `ClusterSecretStore`: AWS SSM Parameter Store ?곌껐
+  - `ExternalSecret rookies5-macta-backend-secret`: 諛깆뿏???고????섍꼍蹂??Secret ?앹꽦
+  - `ExternalSecret rookies5-macta-infra-config`: IAM Role, WAF, ACM, ?대?吏 URI Secret ?앹꽦
+
+?뺤씤:
+
+```powershell
+kubectl get deployment -n external-secrets external-secrets
+kubectl get externalsecret -n rookies5-macta
+kubectl get secret backend-secret -n rookies5-macta
+kubectl get secret rookies5-macta-infra-config -n rookies5-macta
+```
+
+&nbsp;
+## Kubernetes 諛고룷
+
+?섎룞 ?곸슜:
+
+```powershell
+cd C:\rookies\macta\infra
+
+kubectl apply -f .\k8s\backend\namespace.yaml
+kubectl apply -f .\k8s\backend\external-secret.yaml
+kubectl apply -f .\k8s\backend\backend.yaml
+kubectl apply -f .\k8s\frontend\frontend.yaml
+kubectl apply -f .\k8s\ingress.yaml
+kubectl apply -f .\k8s\ssm-annotation-patch-job.yaml
+```
+
+?뺤씤:
+
+```powershell
+kubectl get pods -n rookies5-macta
+kubectl get svc -n rookies5-macta
+kubectl get ingress -n rookies5-macta
+```
+
+&nbsp;
+## Ingress, ALB, HTTPS
+
+ALB??Terraform?먯꽌 吏곸젒 ?앹꽦?섏? ?딆뒿?덈떎. Terraform? AWS Load Balancer Controller媛 ?숈옉?????덈룄濡?IAM Role, ServiceAccount, Helm release瑜?援ъ꽦?섍퀬, ?ㅼ젣 ALB??`k8s/ingress.yaml`??Kubernetes Ingress 由ъ냼?ㅻ? AWS Load Balancer Controller媛 媛먯????앹꽦?⑸땲??
+
+利? ??援ъ“?먯꽌 Ingress???대윭?ㅽ꽣 ?몃? ?몃옒?쎌쓣 ?꾨줎?몄뿏?쒖? 諛깆뿏??Service濡??섎늻??吏꾩엯 ?쇱슦????븷???⑸땲??
+
+?꾩옱 ?쇱슦??
+
+```text
+https://macta.store/        -> rookies5-macta-frontend-service:80
+https://macta.store/api/v1  -> rookies5-macta-backend-service:8080
+```
+
+?붿껌 ?먮쫫:
+
+```text
+User Browser
+  -> Route53 macta.store A Alias
+  -> Public ALB
+  -> Kubernetes Ingress
+      /        -> frontend Service -> frontend Pod
+      /api/v1  -> backend Service  -> backend Pod
+```
+
+?꾨줎?몄뿏?쒕뒗 React ?뺤쟻 ?뚯씪??Nginx濡??쒕튃?섍퀬, API ?몄텧? 媛숈? ?꾨찓?몄쓽 `/api/v1` ?곷? 寃쎈줈瑜??ъ슜?⑸땲?? 釉뚮씪?곗?媛 `https://macta.store/api/v1/...`濡??붿껌?섎㈃ ALB Ingress媛 ?대떦 ?붿껌??諛깆뿏??Service濡??꾨떖?⑸땲?? ?곕씪???꾨줎?몄뿏??Pod媛 諛깆뿏??Pod瑜?吏곸젒 ?몄텧?섎뒗 援ъ“媛 ?꾨땲?? ?ъ슜??釉뚮씪?곗???API ?붿껌??ALB? Ingress??寃쎈줈 湲곕컲 ?쇱슦?낆쓣 ?듯빐 諛깆뿏?쒕줈 ?꾨떖?섎뒗 援ъ“?낅땲??
+
+Ingress 二쇱슂 ?ㅼ젙:
+
+```yaml
+metadata:
+  annotations:
+    kubernetes.io/ingress.class: alb
+    alb.ingress.kubernetes.io/scheme: internet-facing
+    alb.ingress.kubernetes.io/target-type: ip
+    alb.ingress.kubernetes.io/listen-ports: '[{"HTTP":80},{"HTTPS":443}]'
+    alb.ingress.kubernetes.io/ssl-redirect: "443"
+spec:
+  ingressClassName: alb
+  rules:
+    - host: macta.store
+      http:
+        paths:
+          - path: /api/v1
+            pathType: Prefix
+            backend:
+              service:
+                name: rookies5-macta-backend-service
+                port:
+                  number: 8080
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: rookies5-macta-frontend-service
+                port:
+                  number: 80
+```
+
+二쇱슂 annotation ?섎?:
+
+| annotation | ?섎? |
+| --- | --- |
+| `kubernetes.io/ingress.class: alb` | AWS Load Balancer Controller媛 泥섎━??Ingress?꾩쓣 ?쒖떆 |
+| `alb.ingress.kubernetes.io/scheme: internet-facing` | ?몃? ?명꽣?룹뿉???묎렐 媛?ν븳 public ALB ?앹꽦 |
+| `alb.ingress.kubernetes.io/target-type: ip` | ALB Target Group??Pod IP瑜?吏곸젒 ??곸쑝濡??ъ슜 |
+| `alb.ingress.kubernetes.io/listen-ports` | ALB listener ?ы듃 ?ㅼ젙. ?꾩옱 HTTP 80, HTTPS 443 ?ъ슜 |
+| `alb.ingress.kubernetes.io/ssl-redirect: "443"` | HTTP ?붿껌??HTTPS濡?由щ떎?대젆??|
+
+WAF/ACM泥섎읆 ?섍꼍留덈떎 ARN???щ씪吏??媛믪? manifest??吏곸젒 怨좎젙?섏? ?딄퀬 SSM Parameter Store????ν빀?덈떎. External Secrets Operator媛 ??媛믪쓣 `rookies5-macta-infra-config` Secret?쇰줈 ?숆린?뷀븯怨? `ssm-annotation-patch-job`??Ingress annotation?쇰줈 二쇱엯?⑸땲??
+
+- `alb.ingress.kubernetes.io/wafv2-acl-arn`
+- `alb.ingress.kubernetes.io/certificate-arn`
+- `alb.ingress.kubernetes.io/listen-ports: [{"HTTP":80},{"HTTPS":443}]`
+- `alb.ingress.kubernetes.io/ssl-redirect: "443"`
+
+??諛⑹떇?쇰줈 湲곕낯 Ingress ?쇱슦?낆? Git???좎뼵?섍퀬, 怨꾩젙/?섍꼍???곕씪 ?щ씪吏??WAF Web ACL ARN怨?ACM ?몄쬆??ARN? SSM???듯빐 ?고??꾩뿉 諛섏쁺?⑸땲??
+
+?뺤씤:
+
+```powershell
+kubectl get ingress rookies5-macta-frontend-ingress -n rookies5-macta
+kubectl describe ingress rookies5-macta-frontend-ingress -n rookies5-macta
+```
+
+?뺤씤????ぉ:
+
+- `Address`: AWS Load Balancer Controller媛 ?앹꽦??ALB DNS ?대쫫
+- `Rules`: `macta.store` host? `/`, `/api/v1` path ?쇱슦??
+- `Annotations`: certificate ARN, WAF ACL ARN, HTTPS listener, SSL redirect ?곸슜 ?щ?
+- `Events`: ALB, TargetGroup, Listener ?앹꽦 ?먮뒗 ?ㅻ쪟 硫붿떆吏
+
+&nbsp;
+## Route53 and ACM
+
+?꾨찓??
+
+```text
+macta.store
+```
+
+Route53 public hosted zone???꾩슂???덉퐫??
+
+| ?대쫫 | ???| ???|
+| --- | --- | --- |
+| `macta.store` | `A Alias` | ALB dualstack DNS |
+| `*.macta.store` | `A Alias` | ALB dualstack DNS, ?꾩슂 ??|
+| `_...macta.store` | `CNAME` | ACM DNS validation |
+
+二쇱쓽:
+
+- ACM DNS validation CNAME? ?몄쬆??寃利앹슜?낅땲?? ?쒕퉬???몃옒?쎌쓣 ALB濡?蹂대궡吏 ?딆뒿?덈떎.
+- `*.macta.store`??`www.macta.store`, `api.macta.store` 媛숈? ?쒕툕?꾨찓?몄뿉留?留ㅼ묶?⑸땲??
+- 猷⑦듃 ?꾨찓??`macta.store`瑜??곕젮硫?蹂꾨룄 `macta.store A Alias -> ALB` ?덉퐫?쒓? ?꾩슂?⑸땲??
+- ALB 湲곕낯 DNS濡?HTTPS ?묒냽?섎㈃ ?몄쬆???대쫫??留욎? ?딆븘 釉뚮씪?곗? 寃쎄퀬媛 ?⑸땲?? 理쒖쥌 ?묒냽? `https://macta.store`濡??뺤씤?⑸땲??
+
+DNS ?뺤씤:
+
+```powershell
+nslookup macta.store
+nslookup macta.store 8.8.8.8
+```
+
+&nbsp;
+## RDS
+
+?꾩옱 RDS ?붿쭊? MySQL???꾨땲??MariaDB?낅땲??
+
+| ??ぉ | 媛?|
+| --- | --- |
+| Engine | `mariadb` |
+| Engine version | `10.11` |
+| DB name | `mactadb` |
+| Port | `3306` |
+| Subnet | Private subnets |
+| Public access | disabled |
+
+JDBC URL? MariaDB??MySQL ?명솚 ?꾨줈?좎퐳???ъ슜???ㅼ쓬 ?뺥깭濡?援ъ꽦?⑸땲??
+
+```text
+jdbc:mysql://<rds-endpoint>:3306/mactadb?serverTimezone=Asia/Seoul&characterEncoding=UTF-8
+```
+
+??媛믪? SSM??`/rookies5-macta/dev/backend/DB_URL`????ν븯怨? External Secrets媛 `backend-secret`?쇰줈 ?숆린?뷀빀?덈떎.
+
+&nbsp;
+## S3
+
+S3???좏뵆由ъ??댁뀡 ?뚯씪 ??μ냼濡??ъ슜?⑸땲??
+
+- Bucket: `rookies5-team4-macta-bucket`
+- Public access block ?곸슜
+- EKS private subnet?먯꽌 S3 Gateway Endpoint濡??묎렐
+- 諛깆뿏??Pod??IRSA Role???듯빐 S3 沅뚰븳 ?ъ슜
+
+諛깆뿏??ServiceAccount:
+
+```text
+backend-sa
+```
+
+IRSA annotation? SSM 媛믪쓣 ?쎌? patch Job??二쇱엯?⑸땲??
+
+```text
+eks.amazonaws.com/role-arn=<BACKEND_ROLE_ARN>
+```
+
+?뺤씤:
+
+```powershell
+kubectl get serviceaccount backend-sa -n rookies5-macta -o yaml
+```
+
+&nbsp;
+## ECR and Images
+
+Terraform??ECR repository瑜??앹꽦?⑸땲??
+
+```powershell
+terraform output -raw ecr_backend_repository_url
+terraform output -raw ecr_frontend_repository_url
+```
+
+?대?吏 ?덉떆:
+
+```text
+105588835975.dkr.ecr.ap-northeast-2.amazonaws.com/rookies5-macta/backend:<tag>
+105588835975.dkr.ecr.ap-northeast-2.amazonaws.com/rookies5-macta/frontend:<tag>
+```
+
+?꾩옱 Kubernetes manifest??`image`??placeholder濡??????덉뒿?덈떎. ?ㅼ젣 ?대?吏??CI/CD ?먮뒗 SSM patch Job?먯꽌 諛섏쁺?⑸땲??
+
+?대?吏 pull ?ㅻ쪟 ?뺤씤:
+
+```powershell
+kubectl describe pod -n rookies5-macta -l app=rookies5-macta-frontend
+kubectl describe pod -n rookies5-macta -l app=rookies5-macta-backend
+```
+
+&nbsp;
+## WAF
+
+Terraform? Regional WAF Web ACL???앹꽦?⑸땲??
+
+?곸슜 rule:
+
+- Rate limit per IP
+- AWS Managed Rules Common Rule Set
+- AWS Managed Rules Known Bad Inputs Rule Set
+- AWS Managed Rules SQLi Rule Set
+
+WAF???앹꽦留뚯쑝濡?ALB???먮룞 ?곌껐?섏? ?딆뒿?덈떎. ?꾩옱 援ъ“?먯꽌??WAF ARN??SSM????ν븯怨? `ssm-annotation-patch-job`??Ingress annotation?쇰줈 二쇱엯?⑸땲??
+
+```text
+alb.ingress.kubernetes.io/wafv2-acl-arn=<WAF_WEB_ACL_ARN>
+```
+
+WAF??CloudWatch Metrics? full request logging??紐⑤몢 ?ъ슜?⑸땲??
+
+- CloudWatch Metrics: rule蹂?`AllowedRequests`, `BlockedRequests` 吏???뺤씤
+- Sampled requests: WAF Console?먯꽌 ?쇰? ?붿껌 ?섑뵆 ?뺤씤
+- CloudWatch Logs full logging: WAF瑜??듦낵?섍굅??李⑤떒???붿껌 ?곸꽭 濡쒓렇 ???
+
+Terraform? WAF 濡쒓렇 ??μ슜 CloudWatch Log Group???앹꽦?⑸땲??
+
+```text
+aws-waf-logs-rookies5-macta-dev-web-acl
+```
+
+WAF logging ?ㅼ젙:
+
+```text
+aws_wafv2_web_acl_logging_configuration
+  -> aws_cloudwatch_log_group.waf
+```
+
+濡쒓렇?먮뒗 ?붿껌 IP, URI, HTTP method, User-Agent, WAF action, rule match ?뺣낫 ?깆씠 ??λ맗?덈떎. `authorization`, `cookie` ?ㅻ뜑??誘쇨컧?뺣낫 ?몄텧??以꾩씠湲??꾪빐 redaction 泥섎━?⑸땲??
+
+?뺤씤:
+
+```powershell
+terraform output -raw waf_log_group_name
+```
+
+CloudWatch Logs Insights ?덉떆:
+
+```sql
+fields @timestamp, action, terminatingRuleId, httpRequest.clientIp, httpRequest.uri, httpRequest.httpMethod
+| sort @timestamp desc
+| limit 50
+```
+
+Rate Limit 李⑤떒 ?붿껌留??뺤씤:
+
+```sql
+fields @timestamp, action, terminatingRuleId, httpRequest.clientIp, httpRequest.uri
+| filter action = "BLOCK"
+| filter terminatingRuleId = "RateLimitPerIp"
+| sort @timestamp desc
+| limit 50
+```
+
+&nbsp;
+## Argo CD
+### EKS 諛고룷 ?좏뵆由ъ??댁뀡 ?곹깭 ?뺤씤
+<img width="2540" height="1232" alt="image" src="https://github.com/user-attachments/assets/486f58b8-13d5-4fe7-8f63-fe5e5a102413" />
+
+### 諛깆뿏???대윭?ㅽ꽣 ??諛고룷 由ъ냼???곹깭 ?뺤씤
+<img width="2264" height="1150" alt="image" src="https://github.com/user-attachments/assets/4d91be76-0bbd-46d6-807d-35c0c1cb0912" />
+
+### ?꾨줎?몄뿏???대윭?ㅽ꽣 ??諛고룷 由ъ냼???곹깭 ?뺤씤
+<img width="2044" height="1342" alt="image" src="https://github.com/user-attachments/assets/edba98d6-213c-4899-97d2-0a8ddc504fbf" />
+
+
+Argo CD???좏뵆由ъ??댁뀡 諛고룷 ?곹깭瑜??뺤씤?섍퀬 GitOps 諛⑹떇?쇰줈 manifest瑜?sync?섍린 ?꾪븳 ?꾧뎄?낅땲??
+
+?꾨줎?몄뿏??諛깆뿏???덊룷?먯꽌 ?대?吏 鍮뚮뱶 ??infra manifest瑜?媛깆떊?섎뜑?쇰룄 Argo CD媛 利됱떆 蹂寃쎌궗??쓣 媛먯??섏? 紐삵븷 ???덉뒿?덈떎. ?대? 以꾩씠湲??꾪빐 Argo CD webhook???④퍡 ?ъ슜?⑸땲?? GitHub push ?대깽?멸? Argo CD webhook?쇰줈 ?꾨떖?섎㈃ Application refresh媛 ?몃━嫄곕릺??湲곕낯 polling 二쇨린瑜?湲곕떎由ъ? ?딄퀬 鍮좊Ⅴ寃?sync ???蹂寃쎌쓣 媛먯??????덉뒿?덈떎.
+
+?ㅼ튂 ?덉떆:
+
+```powershell
+kubectl create namespace argocd
+kubectl apply --server-side --force-conflicts -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/install.yaml
+```
+
+UI瑜??꾩떆濡?蹂???
+
+```powershell
+kubectl port-forward svc/argocd-server -n argocd 8080:443
+```
+
+釉뚮씪?곗?:
+
+```text
+https://localhost:8080
+```
+
+珥덇린 鍮꾨?踰덊샇:
+
+```powershell
+$encoded = kubectl get secret argocd-initial-admin-secret -n argocd -o jsonpath="{.data.password}"
+[System.Text.Encoding]::UTF8.GetString([System.Convert]::FromBase64String($encoded))
+```
+
+LoadBalancer濡??몄텧???섎룄 ?덉?留? ?ㅼ뒿 ?꾩뿉??`ClusterIP`濡??섎룎由щ뒗 寃껋쓣 沅뚯옣?⑸땲??
+
+```powershell
+kubectl patch svc argocd-server -n argocd --type merge -p '{"spec":{"type":"LoadBalancer"}}'
+kubectl patch svc argocd-server -n argocd --type merge -p '{"spec":{"type":"ClusterIP"}}'
+```
+
+GitHub webhook URL:
+
+```text
+https://<argocd-server-domain-or-lb>/api/webhook
+```
+
+GitHub webhook ?ㅼ젙:
+
+```text
+Payload URL: https://<argocd-server-domain-or-lb>/api/webhook
+Content type: application/json
+Event: Just the push event
+```
+
+Argo CD瑜??몃? LoadBalancer濡??몄텧?섏? ?딅뒗 ?댁쁺 ?섍꼍?먯꽌??port-forward ???Ingress, VPN, ?щ궡留? ?먮뒗 蹂꾨룄 webhook relay 援ъ꽦???ъ슜?⑸땲??
+
+&nbsp;
+## CI/CD 諛⑺뼢
+
+沅뚯옣 ?먮쫫:
+
+```text
+Frontend or Backend repo push
+  -> GitHub Actions
+  -> Docker build
+  -> ECR push
+  -> infra manifest image tag update commit
+  -> GitHub webhook triggers Argo CD refresh
+  -> Argo CD sync
+  -> EKS rolling update
+```
+
+SSM???좎???媛?
+
+- DB URL, username, password
+- S3 bucket name
+- Backend IRSA Role ARN
+- WAF Web ACL ARN
+- ACM certificate ARN
+- AWS region
+
+?대?吏 URI???쇰컲?곸쑝濡?誘쇨컧?뺣낫媛 ?꾨땲誘濡? ?꾩쟾??GitOps瑜??먰븯硫?manifest???대?吏 ?쒓렇瑜?而ㅻ컠?섍퀬 Argo CD媛 sync?섍쾶 ?섎뒗 援ъ“媛 ???⑥닚?⑸땲??
+
+?꾩옱 SSM 湲곕컲 patch Job??吏?먰빀?덈떎.
+
+```text
+SSM FRONTEND_IMAGE/BACKEND_IMAGE
+  -> ExternalSecret
+  -> rookies5-macta-infra-config Secret
+  -> ssm-annotation-patch-job
+  -> kubectl set image
+```
+
+&nbsp;
+## Rolling Update
+
+?꾨줎?몄뿏?쒖? 諛깆뿏?쒕뒗 Kubernetes Deployment??Rolling Update 諛⑹떇???ъ슜?⑸땲?? ?대?吏 ?쒓렇媛 蹂寃쎈릺嫄곕굹 Pod template??蹂寃쎈릺硫?Kubernetes媛 ??ReplicaSet??留뚮뱾怨? 湲곗〈 Pod瑜???踰덉뿉 紐⑤몢 ?대━吏 ?딄퀬 ?쒖감?곸쑝濡???Pod濡?援먯껜?⑸땲??
+
+?꾩옱 ?ㅼ젙:
+
+```yaml
+replicas: 2
+strategy:
+  type: RollingUpdate
+  rollingUpdate:
+    maxSurge: 1
+    maxUnavailable: 0
+```
+
+?곸슜 ?꾩튂:
+
+```text
+k8s/frontend/frontend.yaml
+k8s/backend/backend.yaml
+```
+
+?숈옉 諛⑹떇:
+
+```text
+1. ?꾩옱 frontend/backend Pod??媛곴컖 2媛?replica濡??ㅽ뻾
+2. ???대?吏 ?쒓렇媛 manifest??諛섏쁺??
+3. Argo CD sync ?먮뒗 kubectl apply媛 Deployment 蹂寃쎌쓣 ?곸슜
+4. Kubernetes媛 ??ReplicaSet ?앹꽦
+5. maxSurge: 1 ?ㅼ젙???곕씪 湲곗〈 2媛?Pod ?꾩뿉 ??Pod 1媛쒕? 異붽?濡??앹꽦
+6. readinessProbe媛 ?깃났????Pod媛 Ready ?곹깭媛 ?섎㈃ Service ?몃옒????곸뿉 ?ы븿
+7. maxUnavailable: 0 ?ㅼ젙???곕씪 Ready Pod ?섎? ?좎??섎㈃??湲곗〈 Pod 1媛?醫낅즺
+8. 媛숈? 怨쇱젙??諛섎났??紐⑤뱺 Pod瑜???踰꾩쟾?쇰줈 援먯껜
+```
+
+`maxSurge: 1`? ?낅뜲?댄듃 以??먰븯??replica ?섎낫??Pod瑜?理쒕? 1媛???留뚮뱾 ???덈떎???섎??낅땲?? `replicas: 2` 湲곗??쇰줈 ?낅뜲?댄듃 以??쇱떆?곸쑝濡?理쒕? 3媛?Pod媛 ?ㅽ뻾?????덉뒿?덈떎.
+
+`maxUnavailable: 0`? ?낅뜲?댄듃 以??ъ슜 媛?ν븳 Pod ?섎? 以꾩씠吏 ?딄쿋?ㅻ뒗 ?섎??낅땲?? ??Pod媛 Ready ?섍린 ?꾩뿉??湲곗〈 Pod瑜?癒쇱? 醫낅즺?섏? ?딆쑝誘濡? 諛고룷 以??쒕퉬??以묐떒 媛?μ꽦??以꾩엯?덈떎.
+
+?곕씪????踰꾩쟾 Pod媛 ?대?吏 ?ㅻ쪟, ?ㅼ젙 ?ㅻ쪟, ?좏뵆由ъ??댁뀡 湲곕룞 ?ㅽ뙣 ?깆쑝濡?Ready ?곹깭媛 ?섏? 紐삵븯硫?湲곗〈 Pod媛 怨꾩냽 ?좎??⑸땲?? ??寃쎌슦 Rolling Update媛 以묎컙?먯꽌 硫덉텛怨?Service??湲곗〈 Ready Pod濡??몃옒?쎌쓣 怨꾩냽 ?꾨떖?섎?濡? ?ㅽ뙣??諛고룷媛 怨㏓컮濡??쒕퉬??以묐떒?쇰줈 ?댁뼱吏吏 ?딆뒿?덈떎.
+
+readinessProbe????Pod瑜?Service ?몃옒?쎌뿉 ?ｌ뼱???섎뒗吏 ?먮떒?섎뒗 湲곗??낅땲??
+
+```text
+frontend: HTTP GET /, port 80, initialDelaySeconds 10, periodSeconds 5
+backend:  TCP socket 8080, initialDelaySeconds 30, periodSeconds 10
+```
+
+諛고룷 ?곹깭 ?뺤씤:
+
+```powershell
+kubectl rollout status deployment/rookies5-macta-frontend -n rookies5-macta
+kubectl rollout status deployment/rookies5-macta-backend -n rookies5-macta
+```
+
+ReplicaSet怨?Pod 援먯껜 怨쇱젙 ?뺤씤:
+
+```powershell
+kubectl get rs -n rookies5-macta
+kubectl get pods -n rookies5-macta -w
+```
+
+臾몄젣媛 ?앷꼈?????댁쟾 踰꾩쟾?쇰줈 濡ㅻ갚:
+
+```powershell
+kubectl rollout undo deployment/rookies5-macta-frontend -n rookies5-macta
+kubectl rollout undo deployment/rookies5-macta-backend -n rookies5-macta
+```
+
+&nbsp;
+## ?댁쁺 ?뺤씤 紐낅졊
+
+```powershell
+kubectl get pods -n rookies5-macta
+kubectl get svc -n rookies5-macta
+kubectl get ingress -n rookies5-macta
+kubectl describe ingress rookies5-macta-frontend-ingress -n rookies5-macta
+kubectl get externalsecret -n rookies5-macta
+kubectl get secret backend-secret -n rookies5-macta
+kubectl get secret rookies5-macta-infra-config -n rookies5-macta
+```
+
+ALB ?묒냽:
+
+```text
+http://<alb-dns>
+https://macta.store
+```
+
+二쇱쓽:
+
+- ALB 湲곕낯 DNS濡?HTTPS ?묒냽?섎㈃ ?몄쬆??mismatch 寃쎄퀬媛 ?????덉뒿?덈떎.
+- 理쒖쥌 HTTPS 寃利앹? `https://macta.store`濡??⑸땲??
+- `macta.store`媛 DNS ?ㅻ쪟瑜??대㈃ Route53??`macta.store A Alias -> ALB` ?덉퐫?쒖? ?꾨찓???ㅼ엫?쒕쾭 ?꾩엫???뺤씤?⑸땲??
+
+&nbsp;
+## Git???щ━吏 ?딅뒗 ?뚯씪
+
+?ㅼ쓬 ?뚯씪? Git???щ━吏 ?딆뒿?덈떎.
+
+- `terraform/.terraform/`
+- `terraform/terraform.tfstate`
+- `terraform/terraform.tfstate.backup`
+- `terraform/*.tfvars`
+- Terraform plan output
+
