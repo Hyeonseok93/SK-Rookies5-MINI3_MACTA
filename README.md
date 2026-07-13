@@ -372,7 +372,7 @@ public class BidService {
 
 <div align="center">
   <p align="center">
-    <strong>"留덇컧 吏곸쟾 吏쒕┸???낆같 寃쎌웳, ?ㅼ떆媛??뚰넻怨??덉쟾??嫄곕옒???쒖옉"</strong>
+    <strong>"마감 직전 짜릿한 입찰 경쟁, 실시간 소통과 안전한 거래의 시작"</strong>
   </p>
 
   <p align="center">
@@ -387,122 +387,122 @@ public class BidService {
 
 ---
 
-## ?? ?꾨줈?앺듃 媛쒖슂 (Overview)
+## 🚀 프로젝트 개요 (Overview)
 
-**MACTA Frontend**???ъ슜?먭? 媛꾪렪?섍쾶 寃쎈ℓ ?곹뭹???깅줉?섍퀬 ?ㅼ떆媛꾩쑝濡??낆같 寃쎌웳??李몄뿬?????덈룄濡?援ы쁽??諛섏쓳?????좏뵆由ъ??댁뀡?낅땲?? 
+**MACTA Frontend**는 사용자가 간편하게 경매 상품을 등록하고 실시간으로 입찰 경쟁에 참여할 수 있도록 구현된 반응형 웹 애플리케이션입니다. 
 
-寃쎈ℓ 留덇컧 吏곸쟾 ?몃옒?쎌씠 紐곕━???숈쟻 ?섍꼍?먯꽌 ?ъ슜??寃쏀뿕??洹밸??뷀븯湲??꾪빐, ?ㅼ떆媛??곹깭 ?숆린??諛?利됯컖?곸씤 UI ?쇰뱶諛깆쓣 ?쒓났?⑸땲?? ?먰븳 JWT ?몄쬆 泥닿퀎瑜?湲곕컲?쇰줈 媛쒖씤?붾맂 ??쒕낫??留덉씠?섏씠吏)? 寃곗젣/諛곗넚 ?먮쫫 ?쒖뼱, ?ㅼ떆媛??뱀냼耳??뚮┝ ?섏떊 ?명꽣?섏씠?ㅻ? 援ъ꽦?섏??듬땲??
-
----
-
-## ???듭떖 湲곕뒫 (Key Features)
-
-### ?룧 ?ㅼ떆媛?寃쎈ℓ ?먯깋 (Home & Search)
-- **移댄뀒怨좊━ ?꾪꽣 諛?寃??*: 愿???덈뒗 ?곹뭹 移댄뀒怨좊━瑜??꾪꽣留곹븯怨?寃?됱뼱 ?낅젰???듯빐 ?곹뭹??鍮좊Ⅴ寃?寃?됲빀?덈떎.
-- **?멸린 & 留덇컧 ?꾨컯 ?곹뭹**: ?꾩옱 議고쉶?섎굹 ?낆같 李몄뿬?꾧? ?믪? ?멸린 寃쎈ℓ ?곹뭹 諛?怨?留덇컧???곹뭹?ㅼ쓣 硫붿씤 ?붾㈃???곗꽑 ?몄텧?⑸땲??
-
-### ?뵍 ?ъ슜???몄쬆 諛??멸? (Authentication)
-- **JWT 湲곕컲 濡쒓렇???뚯썝媛??*: 濡쒓렇???깃났 ???띾뱷???좏겙??湲곕컲?쇰줈 ?멸????붿껌???쒕쾭濡??꾨떖?⑸땲??
-- **API Interceptor**: Axios Interceptor瑜?援ъ꽦?섏뿬 API ?붿껌 ?ㅻ뜑???좏겙???먮룞?쇰줈 二쇱엯?섍퀬 留뚮즺????묓빀?덈떎.
-
-### ?뵇 寃쎈ℓ ?곸꽭 諛??낆같 寃쎌웳 (Product Details & Bidding)
-- **?ㅼ떆媛??낆같**: 理쒓퀬媛 寃利?濡쒖쭅??留욎텛???ъ슜?먭? 利됱떆 ?낆같???쒕룄?????덉쑝硫? ?낆같 ?깃났 ??理쒓퀬 ?낆같媛 ?곹깭媛 ?ㅼ떆媛꾩쑝濡?諛섏쁺?⑸땲??
-- **臾몄쓽 諛??뚰넻**: ?곹뭹 ?섎떒??Q&A ?뺥깭???볤? 諛??듦? ?깅줉 湲곕뒫???쒓났?섏뿬 ?먮ℓ?먯? 援щℓ??媛??먯쑀濡쒖슫 ?섏궗?뚰넻??媛?ν빀?덈떎.
-
-### ?뵪 寃쎈ℓ ?곹뭹 異쒗뭹 (Register Auction)
-- **?뺣낫 ?ㅼ젙**: ?곹뭹 ?대?吏 ?깅줉, 寃쎈ℓ ?쒖옉 媛寃? 移댄뀒怨좊━ ?ㅼ젙, 洹몃━怨?寃쎈ℓ 留덇컧 ?쒖젏???щ젰 而댄룷?뚰듃濡?吏?뺥븯???곹뭹??媛꾪렪?섍쾶 ?깅줉?⑸땲??
-
-### ?뮩 寃곗젣 諛?嫄곕옒 吏꾪뻾 (Checkout & Delivery)
-- **?숈같 嫄곕옒 愿由?*: 寃쎈ℓ 留덇컧 ???숈같?먮줈 ?뺤젙?섎㈃ 寃곗젣 ?湲??곹깭濡??꾪솚?섎ŉ, 諛곗넚 ?뺣낫(二쇱냼吏 ??瑜??낅젰?섍퀬 理쒖쥌 寃곗젣瑜??섑뻾?⑸땲??
-- **諛곗넚 ?곹깭 ?몃옒??*: ?먮ℓ?먮뒗 寃곗젣 ?꾨즺??嫄댁뿉 ???諛곗넚 泥섎━瑜?吏꾪뻾?섍퀬, 援щℓ?먮뒗 ?붾㈃?먯꽌 ?대? ?ㅼ떆媛꾩쑝濡?紐⑤땲?곕쭅?????덉뒿?덈떎.
-
-### ?뵒 ?ㅼ떆媛??대깽???뚮┝ (Notifications Hub)
-- **?ㅼ떆媛??뚮┝ 紐⑸줉**: ?ㅻⅨ ?ъ슜?먭? ???믪? 湲덉븸?쇰줈 ?낆같?섏뿬 ???낆같???곹쉶?뱁뻽嫄곕굹(Outbid), ??寃쎈ℓ媛 ?숈같?섏뿀???뚯쓽 ?ㅼ떆媛??대깽?몃? 紐⑥븘 ?뺤씤?⑸땲??
+경매 마감 직전 트래픽이 몰리는 동적 환경에서 사용자 경험을 극대화하기 위해, 실시간 상태 동기화 및 즉각적인 UI 피드백을 제공합니다. 또한 JWT 인증 체계를 기반으로 개인화된 대시보드(마이페이지)와 결제/배송 흐름 제어, 실시간 웹소켓 알림 수신 인터페이스를 구성하였습니다.
 
 ---
 
-## ?썱 湲곗닠 ?ㅽ깮 (Tech Stack)
+## ✨ 핵심 기능 (Key Features)
+
+### 🏠 실시간 경매 탐색 (Home & Search)
+- **카테고리 필터 및 검색**: 관심 있는 상품 카테고리를 필터링하고 검색어 입력을 통해 상품을 빠르게 검색합니다.
+- **인기 & 마감 임박 상품**: 현재 조회수나 입찰 참여도가 높은 인기 경매 상품 및 곧 마감될 상품들을 메인 화면에 우선 노출합니다.
+
+### 🔐 사용자 인증 및 인가 (Authentication)
+- **JWT 기반 로그인/회원가입**: 로그인 성공 시 획득한 토큰을 기반으로 인가된 요청을 서버로 전달합니다.
+- **API Interceptor**: Axios Interceptor를 구성하여 API 요청 헤더에 토큰을 자동으로 주입하고 만료에 대응합니다.
+
+### 🔍 경매 상세 및 입찰 경쟁 (Product Details & Bidding)
+- **실시간 입찰**: 최고가 검증 로직에 맞추어 사용자가 즉시 입찰을 시도할 수 있으며, 입찰 성공 시 최고 입찰가 상태가 실시간으로 반영됩니다.
+- **문의 및 소통**: 상품 하단에 Q&A 형태의 댓글 및 답글 등록 기능을 제공하여 판매자와 구매자 간 자유로운 의사소통이 가능합니다.
+
+### 🔨 경매 상품 출품 (Register Auction)
+- **정보 설정**: 상품 이미지 등록, 경매 시작 가격, 카테고리 설정, 그리고 경매 마감 시점을 달력 컴포넌트로 지정하여 상품을 간편하게 등록합니다.
+
+### 💳 결제 및 거래 진행 (Checkout & Delivery)
+- **낙찰 거래 관리**: 경매 마감 후 낙찰자로 확정되면 결제 대기 상태로 전환되며, 배송 정보(주소지 등)를 입력하고 최종 결제를 수행합니다.
+- **배송 상태 트래킹**: 판매자는 결제 완료된 건에 대해 배송 처리를 진행하고, 구매자는 화면에서 이를 실시간으로 모니터링할 수 있습니다.
+
+### 🔔 실시간 이벤트 알림 (Notifications Hub)
+- **실시간 알림 목록**: 다른 사용자가 더 높은 금액으로 입찰하여 내 입찰이 상회당했거나(Outbid), 내 경매가 낙찰되었을 때의 실시간 이벤트를 모아 확인합니다.
+
+---
+
+## 🛠 기술 스택 (Tech Stack)
 
 ### Core Libraries
-- **Framework & Runtime**: React 19 (Vite 湲곕컲 媛쒕컻?섍꼍)
+- **Framework & Runtime**: React 19 (Vite 기반 개발환경)
 - **Language**: TypeScript
 - **Routing**: React Router Dom v7
 
 ### Styling & UI Components
-- **CSS Engine**: Tailwind CSS v4 (理쒖떊 湲곕뒫 諛?鍮좊Ⅸ 鍮뚮뱶 吏??
+- **CSS Engine**: Tailwind CSS v4 (최신 기능 및 빠른 빌드 지원)
 - **Design Utility**: Shadcn UI, Radix UI Primitive
 - **Icons**: Lucide React
 
 ### State & Data Client
-- **Server State Management**: TanStack Query v5 (React Query) - 罹먯떛, ?숈쟻 由ы봽?덉떆 諛??먮룞 ?숆린??泥섎━
-- **Global Client State**: Zustand v5 - ?대씪?댁뼵???ъ씠??湲濡쒕쾶 ?곹깭 愿由?
-- **Network Client**: Axios - API 鍮꾨룞湲??듭떊 諛?怨듯넻 ?ㅼ젙 愿由?
+- **Server State Management**: TanStack Query v5 (React Query) - 캐싱, 동적 리프레시 및 자동 동기화 처리
+- **Global Client State**: Zustand v5 - 클라이언트 사이드 글로벌 상태 관리
+- **Network Client**: Axios - API 비동기 통신 및 공통 설정 관리
 - **Form & Validation**: React Hook Form, Zod
 
 ---
 
-## ?뱛 ?꾨줈?앺듃 援ъ“ (Directory Structure)
+## 📂 프로젝트 구조 (Directory Structure)
 
 ```text
 MACTA-frontend/
-?쒋?? public/                 # ?뺤쟻 ?먯뀑 諛??뚮퉬肄?
-?쒋?? src/
-??  ?쒋?? api/                # Axios ?몄뒪?댁뒪, Interceptor 諛?API ?붾뱶?ъ씤???뺤쓽
-??  ?쒋?? assets/             # 而댄룷?뚰듃 ?대? ?ъ슜 ?대?吏/?뺤쟻 ?뚯씪
-??  ?쒋?? components/         # ?ъ궗??媛?ν븳 怨듯넻 UI 諛??덉씠?꾩썐 而댄룷?뚰듃
-??  ??  ?붴?? ui/             # Shadcn UI 湲곕컲 ?먯옄 而댄룷?뚰듃 (Button, Input, Dialog ??
-??  ?쒋?? hooks/              # 而ㅼ뒪? ??諛?怨듯넻 鍮꾩쫰?덉뒪 濡쒖쭅
-??  ?쒋?? pages/              # ?쇱슦??留ㅽ븨 ?섏씠吏 而댄룷?뚰듃
-??  ??  ?쒋?? HomePage.tsx            # 寃쎈ℓ ??寃???섏씠吏
-??  ??  ?쒋?? LoginPage.tsx           # 濡쒓렇???섏씠吏
-??  ??  ?쒋?? SignupPage.tsx          # ?뚯썝媛???섏씠吏
-??  ??  ?쒋?? ProductDetailPage.tsx   # ?곹뭹 ?곸꽭 諛??낆같/?볤? ?섏씠吏
-??  ??  ?쒋?? RegisterAuctionPage.tsx # 寃쎈ℓ ?깅줉 ?섏씠吏
-??  ??  ?쒋?? CheckoutPage.tsx        # 寃곗젣 諛?諛곗넚 愿由??섏씠吏
-??  ??  ?쒋?? MyPage.tsx              # 留덉씠?섏씠吏 ??쒕낫??
-??  ??  ?쒋?? NotificationsPage.tsx   # ?ㅼ떆媛??뚮┝ ?쇳꽣 ?섏씠吏
-??  ??  ?붴?? ErrorPage.tsx           # ?덉쇅 泥섎━ ?섏씠吏
-??  ?쒋?? store/              # Zustand Store ?뺤쓽 (Auth ?곹깭 ??
-??  ?쒋?? styles/             # ?꾩뿭 ?뚮쭏 諛??ㅽ????ㅼ젙
-??  ?쒋?? utils/              # ?щ㎎??諛?怨듯넻 ?ы띁 ?⑥닔
-??  ?쒋?? App.tsx             # ?쇱슦??諛??꾩뿭 Provider ?ㅼ젙
-??  ?쒋?? main.tsx            # React ?뚮뜑留?吏꾩엯??
-??  ?쒋?? App.css
-??  ?붴?? index.css
-?쒋?? eslint.config.js        # ESLint 由고꽣 ?ㅼ젙
-?쒋?? package.json            # ?섏〈??諛??ㅽ겕由쏀듃 援ъ꽦
-?쒋?? tsconfig.json           # TypeScript 鍮뚮뱶 ?ㅼ젙
-?붴?? vite.config.ts          # Vite 踰덈뱾???ㅼ젙
+├── public/                 # 정적 에셋 및 파비콘
+├── src/
+│   ├── api/                # Axios 인스턴스, Interceptor 및 API 엔드포인트 정의
+│   ├── assets/             # 컴포넌트 내부 사용 이미지/정적 파일
+│   ├── components/         # 재사용 가능한 공통 UI 및 레이아웃 컴포넌트
+│   │   └── ui/             # Shadcn UI 기반 원자 컴포넌트 (Button, Input, Dialog 등)
+│   ├── hooks/              # 커스텀 훅 및 공통 비즈니스 로직
+│   ├── pages/              # 라우터 매핑 페이지 컴포넌트
+│   │   ├── HomePage.tsx            # 경매 홈/검색 페이지
+│   │   ├── LoginPage.tsx           # 로그인 페이지
+│   │   ├── SignupPage.tsx          # 회원가입 페이지
+│   │   ├── ProductDetailPage.tsx   # 상품 상세 및 입찰/댓글 페이지
+│   │   ├── RegisterAuctionPage.tsx # 경매 등록 페이지
+│   │   ├── CheckoutPage.tsx        # 결제 및 배송 관리 페이지
+│   │   ├── MyPage.tsx              # 마이페이지 대시보드
+│   │   ├── NotificationsPage.tsx   # 실시간 알림 센터 페이지
+│   │   └── ErrorPage.tsx           # 예외 처리 페이지
+│   ├── store/              # Zustand Store 정의 (Auth 상태 등)
+│   ├── styles/             # 전역 테마 및 스타일 설정
+│   ├── utils/              # 포맷터 및 공통 헬퍼 함수
+│   ├── App.tsx             # 라우팅 및 전역 Provider 설정
+│   ├── main.tsx            # React 렌더링 진입점
+│   ├── App.css
+│   └── index.css
+├── eslint.config.js        # ESLint 린터 설정
+├── package.json            # 의존성 및 스크립트 구성
+├── tsconfig.json           # TypeScript 빌드 설정
+└── vite.config.ts          # Vite 번들러 설정
 ```
 
 ---
 
-## ?숋툘 ?ㅽ뻾 諛?鍮뚮뱶 媛?대뱶 (Getting Started)
+## ⚙️ 실행 및 빌드 가이드 (Getting Started)
 
-### 1. ?섏〈???⑦궎吏 ?ㅼ튂
-?꾨줈?앺듃 猷⑦듃 ?대뜑 ?뱀? `MACTA-frontend` ?대뜑濡??대룞?????꾨옒 紐낅졊?대? ?낅젰?섏뿬 ?꾩슂???⑦궎吏瑜??ㅼ튂?⑸땲??
+### 1. 의존성 패키지 설치
+프로젝트 루트 폴더 혹은 `MACTA-frontend` 폴더로 이동한 뒤 아래 명령어를 입력하여 필요한 패키지를 설치합니다:
 ```bash
 npm install
 ```
 
-### 2. 濡쒖뺄 媛쒕컻 ?쒕쾭 ?ㅽ뻾
-Vite ??紐⑤뱢 援먯껜(HMR)媛 ?곸슜??濡쒖뺄 ?쒕쾭瑜?援щ룞?⑸땲??
+### 2. 로컬 개발 서버 실행
+Vite 핫 모듈 교체(HMR)가 적용된 로컬 서버를 구동합니다:
 ```bash
 npm run dev
 ```
 
-### 3. ?꾨줈?뺤뀡 鍮뚮뱶
-諛고룷???꾨줈?뺤뀡 踰덈뱾???앹꽦?⑸땲??
+### 3. 프로덕션 빌드
+배포용 프로덕션 번들을 생성합니다:
 ```bash
 npm run build
 ```
 
 ---
 
-## ?숋툘 Vite Template Default Reference
+## ⚙️ Vite Template Default Reference
 
 > [!NOTE]
-> ?꾨옒 ?댁슜? Vite React ?쒗뵆由?湲곕낯 ?앹꽦 ?덈궡臾몄엯?덈떎.
+> 아래 내용은 Vite React 템플릿 기본 생성 안내문입니다.
 
 This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
 
@@ -576,26 +576,25 @@ export default defineConfig([
 ])
 ```
 
-
 &nbsp;
 
 ## Infrastructure runbook (`MACTA-infra`)
 
 
-SK?대뜑??猷⑦궎利?媛쒕컻 5湲?誘몃땲?꾨줈?앺듃3 ?ㅼ떆媛?寃쎈ℓ ?ъ씠??**MACTA** ?쒕퉬?ㅻ? AWS 湲곕컲?쇰줈 諛고룷?섍린 ?꾪븳 ?명봽???덊룷?낅땲?? Terraform?쇰줈 AWS 由ъ냼?ㅻ? 援ъ꽦?섍퀬, Kubernetes manifest? Argo CD瑜??듯빐 EKS ?꾩뿉 ?꾨줎?몄뿏??諛깆뿏???좏뵆由ъ??댁뀡??諛고룷?섎뒗 援ъ“?낅땲??
+SK쉴더스 루키즈 개발 5기 미니프로젝트3 실시간 경매 사이트 **MACTA** 서비스를 AWS 기반으로 배포하기 위한 인프라 레포입니다. Terraform으로 AWS 리소스를 구성하고, Kubernetes manifest와 Argo CD를 통해 EKS 위에 프론트엔드/백엔드 애플리케이션을 배포하는 구조입니다.
 
-?꾩옱 援ъ“???듭떖? ?ㅼ쓬怨?媛숈뒿?덈떎.
+현재 구조의 핵심은 다음과 같습니다.
 
-- Terraform: VPC, EKS, RDS, S3, ECR, WAF, IRSA, Helm 湲곕컲 而⑦듃濡ㅻ윭 ?ㅼ튂
-- EKS: ?꾨줎?몄뿏?? 諛깆뿏?? Ingress, External Secrets 由ъ냼???ㅽ뻾
-- SSM Parameter Store: DB, S3, IAM Role ARN, WAF ARN, ACM ARN ???섍꼍蹂?媛믪쓣 ???
-- External Secrets Operator: SSM 媛믪쓣 Kubernetes Secret?쇰줈 ?숆린??
-- AWS Load Balancer Controller: Kubernetes Ingress瑜?蹂닿퀬 ALB ?앹꽦
-- Route53 + ACM: `macta.store` ?꾨찓?멸낵 HTTPS ?몄쬆???곌껐
-- ?듭떊 援ъ“: ?뺤쟻 ?뚯씪? ?꾨줎??Nginx媛 ?쒕튃?섍퀬, ?숈쟻 API ?몄텧? ALB媛 `/api/v1` 寃쎈줈濡?諛깆뿏???쒕퉬?ㅼ뿉 吏곸젒 ?꾨떖
+- Terraform: VPC, EKS, RDS, S3, ECR, WAF, IRSA, Helm 기반 컨트롤러 설치
+- EKS: 프론트엔드, 백엔드, Ingress, External Secrets 리소스 실행
+- SSM Parameter Store: DB, S3, IAM Role ARN, WAF ARN, ACM ARN 등 환경별 값을 저장
+- External Secrets Operator: SSM 값을 Kubernetes Secret으로 동기화
+- AWS Load Balancer Controller: Kubernetes Ingress를 보고 ALB 생성
+- Route53 + ACM: `macta.store` 도메인과 HTTPS 인증서 연결
+- 통신 구조: 정적 파일은 프론트 Nginx가 서빙하고, 동적 API 호출은 ALB가 `/api/v1` 경로로 백엔드 서비스에 직접 전달
 
 &nbsp;
-## ?꾩껜 援ъ“
+## 전체 구조
 <img width="2115" height="1671" alt="image" src="https://github.com/user-attachments/assets/f1146f1e-fc5a-476d-9ff8-39c1532fc645" />
 
 
@@ -716,17 +715,17 @@ flowchart TB
 ```
 
 &nbsp;
-## ?듭떊 援ъ“
+## 통신 구조
 
-???명봽?쇰뒗 ?섎굹??VPC ?덉뿉??Public Subnet怨?Private Subnet??遺꾨━??援ъ꽦?⑸땲?? ?몃? ?ъ슜?먭? 吏곸젒 ?묎렐?댁빞 ?섎뒗 吏꾩엯?먮쭔 Public Subnet???먭퀬, ?ㅼ젣 ?좏뵆由ъ??댁뀡怨??곗씠?곕쿋?댁뒪??Private Subnet??諛곗튂???몃? ?몄텧 踰붿쐞瑜?以꾩씠??援ъ“?낅땲??
+이 인프라는 하나의 VPC 안에서 Public Subnet과 Private Subnet을 분리해 구성합니다. 외부 사용자가 직접 접근해야 하는 진입점만 Public Subnet에 두고, 실제 애플리케이션과 데이터베이스는 Private Subnet에 배치해 외부 노출 범위를 줄이는 구조입니다.
 
-Public Subnet?먮뒗 Public ALB? NAT Gateway媛 諛곗튂?⑸땲?? ALB???명꽣?룹뿉???ㅼ뼱?ㅻ뒗 HTTP/HTTPS ?붿껌??諛쏅뒗 ?좎씪???몃? 吏꾩엯?먯씠怨? NAT Gateway??Private Subnet??由ъ냼?ㅺ? ?꾩슂??寃쎌슦?먮쭔 ?몃?濡??섍컝 ???덇쾶 ?댁＜???꾩썐諛붿슫???듬줈?낅땲??
+Public Subnet에는 Public ALB와 NAT Gateway가 배치됩니다. ALB는 인터넷에서 들어오는 HTTP/HTTPS 요청을 받는 유일한 외부 진입점이고, NAT Gateway는 Private Subnet의 리소스가 필요한 경우에만 외부로 나갈 수 있게 해주는 아웃바운드 통로입니다.
 
-Private Subnet?먮뒗 EKS Worker Node, ?꾨줎?몄뿏??Pod, 諛깆뿏??Pod, RDS MariaDB媛 諛곗튂?⑸땲?? ?꾨줎?몄뿏?쒖? 諛깆뿏??Pod???몃??먯꽌 吏곸젒 ?묎렐?????녾퀬, ALB Ingress瑜??듯빐?쒕쭔 ?쒕퉬???몃옒?쎌쓣 諛쏆뒿?덈떎. RDS??Public ?묎렐??留됯퀬 Private Subnet ?대??먯꽌留?諛깆뿏?쒓? 3306 ?ы듃濡??묎렐?섎룄濡?援ъ꽦?⑸땲??
+Private Subnet에는 EKS Worker Node, 프론트엔드 Pod, 백엔드 Pod, RDS MariaDB가 배치됩니다. 프론트엔드와 백엔드 Pod는 외부에서 직접 접근할 수 없고, ALB Ingress를 통해서만 서비스 트래픽을 받습니다. RDS도 Public 접근을 막고 Private Subnet 내부에서만 백엔드가 3306 포트로 접근하도록 구성합니다.
 
-Public Subnet怨?Private Subnet???섎늿 ?댁쑀??蹂댁븞 寃쎄퀎瑜?紐낇솗???섍린 ?꾪빐?쒖엯?덈떎. ?몃? ?명꽣?룰낵 吏곸젒 ?곌껐?섎뒗 由ъ냼?ㅻ뒗 ALB濡??쒗븳?섍퀬, ?좏뵆由ъ??댁뀡 ?쒕쾭? DB???ъ꽕留앹뿉 ?먮㈃ 怨듦꺽 ?쒕㈃??以꾩씪 ???덉뒿?덈떎. ?먰븳 Private Subnet??Pod媛 ECR ?대?吏 pull, SSM Parameter 議고쉶 ???몃? AWS API ?묎렐???꾩슂???뚮뒗 NAT Gateway ?먮뒗 VPC Endpoint瑜??듯빐 ?듭젣??諛⑺뼢?쇰줈留??듭떊?섍쾶 ?⑸땲??
+Public Subnet과 Private Subnet을 나눈 이유는 보안 경계를 명확히 하기 위해서입니다. 외부 인터넷과 직접 연결되는 리소스는 ALB로 제한하고, 애플리케이션 서버와 DB는 사설망에 두면 공격 표면을 줄일 수 있습니다. 또한 Private Subnet의 Pod가 ECR 이미지 pull, SSM Parameter 조회 등 외부 AWS API 접근이 필요할 때는 NAT Gateway 또는 VPC Endpoint를 통해 통제된 방향으로만 통신하게 됩니다.
 
-?ъ슜???붿껌 ?먮쫫? ?ㅼ쓬怨?媛숈뒿?덈떎.
+사용자 요청 흐름은 다음과 같습니다.
 
 ```text
 User Browser
@@ -737,24 +736,24 @@ User Browser
       /api/v1  -> backend Service  -> backend Pod
 ```
 
-?꾨줎?몄뿏???붾㈃ ?붿껌? `/` 寃쎈줈濡??ㅼ뼱? React ?뺤쟻 ?뚯씪???쒕튃?섎뒗 Nginx Pod濡??꾨떖?⑸땲?? API ?붿껌? 媛숈? ?꾨찓?몄쓽 `/api/v1` 寃쎈줈濡??ㅼ뼱?ㅺ퀬, ALB Ingress媛 ???붿껌??諛깆뿏??Service濡??쇱슦?낇빀?덈떎. ?곕씪???꾨줎?몄뿏?쒖? 諛깆뿏?쒕뒗 媛숈? EKS ?대윭?ㅽ꽣 ?덉뿉 ?덉?留? ?ъ슜??facing API ?듭떊? ALB Ingress??寃쎈줈 湲곕컲 ?쇱슦?낆쓣 ?듯빐 遺꾨━?⑸땲??
+프론트엔드 화면 요청은 `/` 경로로 들어와 React 정적 파일을 서빙하는 Nginx Pod로 전달됩니다. API 요청은 같은 도메인의 `/api/v1` 경로로 들어오고, ALB Ingress가 이 요청을 백엔드 Service로 라우팅합니다. 따라서 프론트엔드와 백엔드는 같은 EKS 클러스터 안에 있지만, 사용자-facing API 통신은 ALB Ingress의 경로 기반 라우팅을 통해 분리됩니다.
 
-諛깆뿏???대? ?듭떊? ?ㅼ쓬怨?媛숈뒿?덈떎.
+백엔드 내부 통신은 다음과 같습니다.
 
 ```text
 backend Pod
   -> RDS MariaDB:3306
-  -> S3 Bucket(S3 Gateway VPC Endpoint 寃쎌쑀)
+  -> S3 Bucket(S3 Gateway VPC Endpoint 경유)
   -> Redis
-  -> SSM/Secrets 媛믪? External Secrets Operator媛 Kubernetes Secret?쇰줈 ?숆린??
+  -> SSM/Secrets 값은 External Secrets Operator가 Kubernetes Secret으로 동기화
 ```
 
-S3???명꽣?룹쓣 ?듯빐 ?고쉶?섏? ?딄퀬 Private Route Table???곌껐??S3 Gateway VPC Endpoint瑜??듯빐 ?묎렐?⑸땲?? Secret 媛믪? manifest??吏곸젒 ?ｌ? ?딄퀬 SSM Parameter Store????ν븳 ?? External Secrets Operator媛 Kubernetes Secret?쇰줈 ?숆린?뷀빐 諛깆뿏??Pod ?섍꼍蹂?섎줈 二쇱엯?⑸땲??
+S3는 인터넷을 통해 우회하지 않고 Private Route Table에 연결된 S3 Gateway VPC Endpoint를 통해 접근합니다. Secret 값은 manifest에 직접 넣지 않고 SSM Parameter Store에 저장한 뒤, External Secrets Operator가 Kubernetes Secret으로 동기화해 백엔드 Pod 환경변수로 주입합니다.
 
-諛고룷 ?먮쫫? GitOps 諛⑹떇?낅땲?? GitHub Actions媛 ?꾨줎?몄뿏??諛깆뿏???대?吏瑜?鍮뚮뱶??ECR??push?섍퀬 manifest??image tag瑜?媛깆떊?섎㈃, Argo CD媛 蹂寃??ы빆??媛먯???EKS???먮룞?쇰줈 諛섏쁺?⑸땲?? Kubernetes Deployment??Rolling Update ?꾨왂???ъ슜????Pod媛 Ready ?곹깭媛 ????湲곗〈 Pod瑜?援먯껜?섎?濡?諛고룷 以??쒕퉬??以묐떒 媛?μ꽦??以꾩엯?덈떎.
+배포 흐름은 GitOps 방식입니다. GitHub Actions가 프론트엔드/백엔드 이미지를 빌드해 ECR에 push하고 manifest의 image tag를 갱신하면, Argo CD가 변경 사항을 감지해 EKS에 자동으로 반영합니다. Kubernetes Deployment는 Rolling Update 전략을 사용해 새 Pod가 Ready 상태가 된 뒤 기존 Pod를 교체하므로 배포 중 서비스 중단 가능성을 줄입니다.
 
 &nbsp;
-## ?붿껌 ?쇱슦??
+## 요청 라우팅
 
 ```mermaid
 sequenceDiagram
@@ -772,7 +771,7 @@ sequenceDiagram
   BE-->>Browser: JSON API response
 ```
 
-?꾨줎?몄뿏??Nginx??React ?뺤쟻 ?뚯씪怨?SPA fallback留??대떦?⑸땲??
+프론트엔드 Nginx는 React 정적 파일과 SPA fallback만 담당합니다.
 
 ```nginx
 server {
@@ -786,43 +785,43 @@ server {
 }
 ```
 
-?꾨줎?몄뿏?쒖쓽 API base URL? 媛숈? ?꾨찓???곷?寃쎈줈瑜?沅뚯옣?⑸땲??
+프론트엔드의 API base URL은 같은 도메인 상대경로를 권장합니다.
 
 ```env
 VITE_API_BASE_URL=/api/v1
 ```
 
 &nbsp;
-## AWS&CI/CD 由ъ냼??
+## AWS&CI/CD 리소스
 
-| <span style="color:white;background-color:#1F3A5F;padding:4px 8px;border-radius:4px;">援щ텇</span> | <span style="color:white;background-color:#1F3A5F;padding:4px 8px;border-radius:4px;">?곕룞 ???/span> | <span style="color:white;background-color:#1F3A5F;padding:4px 8px;border-radius:4px;">??븷</span> |
+| <span style="color:white;background-color:#1F3A5F;padding:4px 8px;border-radius:4px;">구분</span> | <span style="color:white;background-color:#1F3A5F;padding:4px 8px;border-radius:4px;">연동 대상</span> | <span style="color:white;background-color:#1F3A5F;padding:4px 8px;border-radius:4px;">역할</span> |
 |---|---|---|
-| ?ㅽ듃?뚰겕 | VPC | EKS / RDS / ALB ?ㅽ듃?뚰겕 遺꾨━ 諛??대? ?듭떊 援ъ꽦 |
-| ?ㅽ듃?뚰겕 | Public Subnet | Public ALB 諛?NAT Gateway 諛곗튂 |
-| ?ㅽ듃?뚰겕 | Private Subnet | EKS Worker Node / Pod / RDS ?대?留?援ъ꽦 |
-| ?명꽣???곌껐 | Internet Gateway(IGW) | VPC ?몃? ?명꽣???듭떊 ?쒓났 |
-| ?꾩썐諛붿슫??| NAT Gateway | Private Subnet???몃? ?명꽣???묎렐 ?쒓났 |
-| DNS | Route53 | macta.store ?꾨찓?몄쓣 ALB濡??곌껐 |
-| ?몄쬆??| ACM | HTTPS ?몄쬆???쒓났 |
-| 吏꾩엯??| ALB | ?몃? HTTP/HTTPS ?몃옒???섏떊 |
-| Ingress ?먮룞??| AWS Load Balancer Controller | Kubernetes Ingress 湲곕컲 ALB ?앹꽦 諛?愿由?|
-| 而⑦뀒?대꼫 ?ㅼ??ㅽ듃?덉씠??| EKS | Kubernetes 湲곕컲 ?좏뵆由ъ??댁뀡 ?댁쁺 |
-| ?몃뱶 愿由?| EKS Node Group | EKS Worker Node ?먮룞 愿由?|
-| 蹂댁븞 | WAFv2 | ALB ?욌떒 ?붿껌 ?꾪꽣留?諛?Rate Limit ?곸슜 |
-| 而⑦뀒?대꼫 ?대?吏 | ECR | Frontend / Backend Docker Image ???|
-| DB | RDS MariaDB 10.11 | 諛깆뿏???곸냽 ?곗씠?????|
-| 罹먯떆 | Redis | 罹먯떆 諛??ㅼ떆媛??곗씠??泥섎━ |
-| ?뚯씪 ??μ냼 | S3 | ?대?吏 諛??뚯씪 ???|
-| ?대? S3 ?듭떊 | S3 Gateway VPC Endpoint | Private Subnet?먯꽌 S3 ?묎렐 |
-| Secret ???| SSM Parameter Store | DB/S3/JWT ?ㅼ젙 ???|
-| Secret ?숆린??| External Secrets Operator | SSM 媛믪쓣 Kubernetes Secret?쇰줈 蹂??|
-| 沅뚰븳 愿由?| IRSA | Pod ?⑥쐞 IAM Role ?ъ슜 |
-| 諛고룷 ?먮룞??| GitHub Actions | Build / Test / Image Push / Manifest 媛깆떊 |
-| GitOps | Argo CD | Kubernetes Manifest ?먮룞 Sync |
-| 紐⑤땲?곕쭅 | CloudWatch | EKS / ALB / RDS / WAF 濡쒓렇 諛?硫뷀듃由??섏쭛 |
+| 네트워크 | VPC | EKS / RDS / ALB 네트워크 분리 및 내부 통신 구성 |
+| 네트워크 | Public Subnet | Public ALB 및 NAT Gateway 배치 |
+| 네트워크 | Private Subnet | EKS Worker Node / Pod / RDS 내부망 구성 |
+| 인터넷 연결 | Internet Gateway(IGW) | VPC 외부 인터넷 통신 제공 |
+| 아웃바운드 | NAT Gateway | Private Subnet의 외부 인터넷 접근 제공 |
+| DNS | Route53 | macta.store 도메인을 ALB로 연결 |
+| 인증서 | ACM | HTTPS 인증서 제공 |
+| 진입점 | ALB | 외부 HTTP/HTTPS 트래픽 수신 |
+| Ingress 자동화 | AWS Load Balancer Controller | Kubernetes Ingress 기반 ALB 생성 및 관리 |
+| 컨테이너 오케스트레이션 | EKS | Kubernetes 기반 애플리케이션 운영 |
+| 노드 관리 | EKS Node Group | EKS Worker Node 자동 관리 |
+| 보안 | WAFv2 | ALB 앞단 요청 필터링 및 Rate Limit 적용 |
+| 컨테이너 이미지 | ECR | Frontend / Backend Docker Image 저장 |
+| DB | RDS MariaDB 10.11 | 백엔드 영속 데이터 저장 |
+| 캐시 | Redis | 캐시 및 실시간 데이터 처리 |
+| 파일 저장소 | S3 | 이미지 및 파일 저장 |
+| 내부 S3 통신 | S3 Gateway VPC Endpoint | Private Subnet에서 S3 접근 |
+| Secret 저장 | SSM Parameter Store | DB/S3/JWT 설정 저장 |
+| Secret 동기화 | External Secrets Operator | SSM 값을 Kubernetes Secret으로 변환 |
+| 권한 관리 | IRSA | Pod 단위 IAM Role 사용 |
+| 배포 자동화 | GitHub Actions | Build / Test / Image Push / Manifest 갱신 |
+| GitOps | Argo CD | Kubernetes Manifest 자동 Sync |
+| 모니터링 | CloudWatch | EKS / ALB / RDS / WAF 로그 및 메트릭 수집 |
 
 &nbsp;
-## ?붾젆?곕━ 援ъ“
+## 디렉터리 구조
 
 ```text
 infra/
@@ -855,9 +854,9 @@ infra/
 ```
 
 &nbsp;
-## Terraform 湲곕낯媛?
+## Terraform 기본값
 
-| ??ぉ | 媛?|
+| 항목 | 값 |
 | --- | --- |
 | AWS region | `ap-northeast-2` |
 | AWS profile | `team4` |
@@ -870,7 +869,7 @@ infra/
 | External Secrets ServiceAccount | `external-secrets` |
 | Domain | `macta.store` |
 
-DB 怨꾩젙 ?뺣낫??`terraform/terraform.tfvars`?먯꽌 愿由ы빀?덈떎. ???뚯씪? Git???щ━吏 ?딆뒿?덈떎.
+DB 계정 정보는 `terraform/terraform.tfvars`에서 관리합니다. 이 파일은 Git에 올리지 않습니다.
 
 ```hcl
 db_instance_class = "db.t3.micro"
@@ -880,7 +879,7 @@ db_password       = "change-me"
 ```
 
 &nbsp;
-## Terraform ?곸슜
+## Terraform 적용
 
 ```powershell
 cd C:\rookies\macta\infra\terraform
@@ -893,13 +892,13 @@ terraform plan
 terraform apply
 ```
 
-kubeconfig ?ㅼ젙:
+kubeconfig 설정:
 
 ```powershell
 aws eks update-kubeconfig --profile team4 --region ap-northeast-2 --name rookies5-macta-eks
 ```
 
-二쇱슂 output ?뺤씤:
+주요 output 확인:
 
 ```powershell
 terraform output -raw eks_cluster_name
@@ -914,24 +913,24 @@ terraform output -raw waf_web_acl_arn
 &nbsp;
 ## SSM Parameter Store
 
-Kubernetes YAML?먮뒗 DB 鍮꾨?踰덊샇, DB URL, ARN, ?몄쬆??ARN 媛숈? ?섍꼍蹂?媛믪쓣 吏곸젒 ?ｌ? ?딆뒿?덈떎. SSM Parameter Store????ν븯怨?External Secrets Operator媛 Kubernetes Secret?쇰줈 ?숆린?뷀빀?덈떎.
+Kubernetes YAML에는 DB 비밀번호, DB URL, ARN, 인증서 ARN 같은 환경별 값을 직접 넣지 않습니다. SSM Parameter Store에 저장하고 External Secrets Operator가 Kubernetes Secret으로 동기화합니다.
 
-?꾩옱 manifest媛 李몄“?섎뒗 SSM 寃쎈줈???ㅼ쓬怨?媛숈뒿?덈떎.
+현재 manifest가 참조하는 SSM 경로는 다음과 같습니다.
 
-| SSM parameter | ?⑸룄 |
+| SSM parameter | 용도 |
 | --- | --- |
-| `/rookies5-macta/dev/backend/DB_URL` | 諛깆뿏??DB JDBC URL |
-| `/rookies5-macta/dev/backend/DB_USERNAME` | DB ?ъ슜?먮챸 |
-| `/rookies5-macta/dev/backend/DB_PASSWORD` | DB 鍮꾨?踰덊샇 |
-| `/rookies5-macta/dev/backend/S3_BUCKET_NAME` | S3 踰꾪궥紐?|
+| `/rookies5-macta/dev/backend/DB_URL` | 백엔드 DB JDBC URL |
+| `/rookies5-macta/dev/backend/DB_USERNAME` | DB 사용자명 |
+| `/rookies5-macta/dev/backend/DB_PASSWORD` | DB 비밀번호 |
+| `/rookies5-macta/dev/backend/S3_BUCKET_NAME` | S3 버킷명 |
 | `/rookies5-macta/dev/backend/AWS_REGION` | AWS region |
-| `/rookies5-macta/dev/infra/BACKEND_ROLE_ARN` | 諛깆뿏??IRSA Role ARN |
+| `/rookies5-macta/dev/infra/BACKEND_ROLE_ARN` | 백엔드 IRSA Role ARN |
 | `/rookies5-macta/dev/infra/WAF_WEB_ACL_ARN` | WAF Web ACL ARN |
-| `/rookies5-macta/dev/infra/ACM_CERTIFICATE_ARN` | ACM ?몄쬆??ARN |
-| `/rookies5-macta/dev/infra/BACKEND_IMAGE` | 諛깆뿏???대?吏 URI |
-| `/rookies5-macta/dev/infra/FRONTEND_IMAGE` | ?꾨줎?몄뿏???대?吏 URI |
+| `/rookies5-macta/dev/infra/ACM_CERTIFICATE_ARN` | ACM 인증서 ARN |
+| `/rookies5-macta/dev/infra/BACKEND_IMAGE` | 백엔드 이미지 URI |
+| `/rookies5-macta/dev/infra/FRONTEND_IMAGE` | 프론트엔드 이미지 URI |
 
-SSM 媛??앹꽦 ?덉떆:
+SSM 값 생성 예시:
 
 ```powershell
 cd C:\rookies\macta\infra\terraform
@@ -956,7 +955,7 @@ aws ssm put-parameter --profile team4 --region ap-northeast-2 --name "/rookies5-
 aws ssm put-parameter --profile team4 --region ap-northeast-2 --name "/rookies5-macta/dev/infra/FRONTEND_IMAGE" --type SecureString --value $frontendImage --overwrite
 ```
 
-議고쉶:
+조회:
 
 ```powershell
 aws ssm get-parameters-by-path --profile team4 --region ap-northeast-2 --path "/rookies5-macta/dev" --recursive --with-decryption --query "Parameters[*].[Name,Type,Value]" --output table
@@ -965,21 +964,21 @@ aws ssm get-parameters-by-path --profile team4 --region ap-northeast-2 --path "/
 &nbsp;
 ## External Secrets
 
-Terraform? External Secrets Operator瑜?Helm?쇰줈 ?ㅼ튂?⑸땲??
+Terraform은 External Secrets Operator를 Helm으로 설치합니다.
 
 - Namespace: `external-secrets`
 - ServiceAccount: `external-secrets`
-- ?몄쬆 諛⑹떇: IRSA
-- SSM 沅뚰븳: `ssm:GetParameter`, `ssm:GetParameters`, `ssm:GetParametersByPath`, `ssm:DescribeParameters`
+- 인증 방식: IRSA
+- SSM 권한: `ssm:GetParameter`, `ssm:GetParameters`, `ssm:GetParametersByPath`, `ssm:DescribeParameters`
 
 Kubernetes manifest:
 
 - `k8s/backend/external-secret.yaml`
-  - `ClusterSecretStore`: AWS SSM Parameter Store ?곌껐
-  - `ExternalSecret rookies5-macta-backend-secret`: 諛깆뿏???고????섍꼍蹂??Secret ?앹꽦
-  - `ExternalSecret rookies5-macta-infra-config`: IAM Role, WAF, ACM, ?대?吏 URI Secret ?앹꽦
+  - `ClusterSecretStore`: AWS SSM Parameter Store 연결
+  - `ExternalSecret rookies5-macta-backend-secret`: 백엔드 런타임 환경변수 Secret 생성
+  - `ExternalSecret rookies5-macta-infra-config`: IAM Role, WAF, ACM, 이미지 URI Secret 생성
 
-?뺤씤:
+확인:
 
 ```powershell
 kubectl get deployment -n external-secrets external-secrets
@@ -989,9 +988,9 @@ kubectl get secret rookies5-macta-infra-config -n rookies5-macta
 ```
 
 &nbsp;
-## Kubernetes 諛고룷
+## Kubernetes 배포
 
-?섎룞 ?곸슜:
+수동 적용:
 
 ```powershell
 cd C:\rookies\macta\infra
@@ -1004,7 +1003,7 @@ kubectl apply -f .\k8s\ingress.yaml
 kubectl apply -f .\k8s\ssm-annotation-patch-job.yaml
 ```
 
-?뺤씤:
+확인:
 
 ```powershell
 kubectl get pods -n rookies5-macta
@@ -1015,18 +1014,18 @@ kubectl get ingress -n rookies5-macta
 &nbsp;
 ## Ingress, ALB, HTTPS
 
-ALB??Terraform?먯꽌 吏곸젒 ?앹꽦?섏? ?딆뒿?덈떎. Terraform? AWS Load Balancer Controller媛 ?숈옉?????덈룄濡?IAM Role, ServiceAccount, Helm release瑜?援ъ꽦?섍퀬, ?ㅼ젣 ALB??`k8s/ingress.yaml`??Kubernetes Ingress 由ъ냼?ㅻ? AWS Load Balancer Controller媛 媛먯????앹꽦?⑸땲??
+ALB는 Terraform에서 직접 생성하지 않습니다. Terraform은 AWS Load Balancer Controller가 동작할 수 있도록 IAM Role, ServiceAccount, Helm release를 구성하고, 실제 ALB는 `k8s/ingress.yaml`의 Kubernetes Ingress 리소스를 AWS Load Balancer Controller가 감지해 생성합니다.
 
-利? ??援ъ“?먯꽌 Ingress???대윭?ㅽ꽣 ?몃? ?몃옒?쎌쓣 ?꾨줎?몄뿏?쒖? 諛깆뿏??Service濡??섎늻??吏꾩엯 ?쇱슦????븷???⑸땲??
+즉, 이 구조에서 Ingress는 클러스터 외부 트래픽을 프론트엔드와 백엔드 Service로 나누는 진입 라우터 역할을 합니다.
 
-?꾩옱 ?쇱슦??
+현재 라우팅:
 
 ```text
 https://macta.store/        -> rookies5-macta-frontend-service:80
 https://macta.store/api/v1  -> rookies5-macta-backend-service:8080
 ```
 
-?붿껌 ?먮쫫:
+요청 흐름:
 
 ```text
 User Browser
@@ -1037,9 +1036,9 @@ User Browser
       /api/v1  -> backend Service  -> backend Pod
 ```
 
-?꾨줎?몄뿏?쒕뒗 React ?뺤쟻 ?뚯씪??Nginx濡??쒕튃?섍퀬, API ?몄텧? 媛숈? ?꾨찓?몄쓽 `/api/v1` ?곷? 寃쎈줈瑜??ъ슜?⑸땲?? 釉뚮씪?곗?媛 `https://macta.store/api/v1/...`濡??붿껌?섎㈃ ALB Ingress媛 ?대떦 ?붿껌??諛깆뿏??Service濡??꾨떖?⑸땲?? ?곕씪???꾨줎?몄뿏??Pod媛 諛깆뿏??Pod瑜?吏곸젒 ?몄텧?섎뒗 援ъ“媛 ?꾨땲?? ?ъ슜??釉뚮씪?곗???API ?붿껌??ALB? Ingress??寃쎈줈 湲곕컲 ?쇱슦?낆쓣 ?듯빐 諛깆뿏?쒕줈 ?꾨떖?섎뒗 援ъ“?낅땲??
+프론트엔드는 React 정적 파일을 Nginx로 서빙하고, API 호출은 같은 도메인의 `/api/v1` 상대 경로를 사용합니다. 브라우저가 `https://macta.store/api/v1/...`로 요청하면 ALB Ingress가 해당 요청을 백엔드 Service로 전달합니다. 따라서 프론트엔드 Pod가 백엔드 Pod를 직접 호출하는 구조가 아니라, 사용자 브라우저의 API 요청이 ALB와 Ingress의 경로 기반 라우팅을 통해 백엔드로 전달되는 구조입니다.
 
-Ingress 二쇱슂 ?ㅼ젙:
+Ingress 주요 설정:
 
 ```yaml
 metadata:
@@ -1071,64 +1070,64 @@ spec:
                   number: 80
 ```
 
-二쇱슂 annotation ?섎?:
+주요 annotation 의미:
 
-| annotation | ?섎? |
+| annotation | 의미 |
 | --- | --- |
-| `kubernetes.io/ingress.class: alb` | AWS Load Balancer Controller媛 泥섎━??Ingress?꾩쓣 ?쒖떆 |
-| `alb.ingress.kubernetes.io/scheme: internet-facing` | ?몃? ?명꽣?룹뿉???묎렐 媛?ν븳 public ALB ?앹꽦 |
-| `alb.ingress.kubernetes.io/target-type: ip` | ALB Target Group??Pod IP瑜?吏곸젒 ??곸쑝濡??ъ슜 |
-| `alb.ingress.kubernetes.io/listen-ports` | ALB listener ?ы듃 ?ㅼ젙. ?꾩옱 HTTP 80, HTTPS 443 ?ъ슜 |
-| `alb.ingress.kubernetes.io/ssl-redirect: "443"` | HTTP ?붿껌??HTTPS濡?由щ떎?대젆??|
+| `kubernetes.io/ingress.class: alb` | AWS Load Balancer Controller가 처리할 Ingress임을 표시 |
+| `alb.ingress.kubernetes.io/scheme: internet-facing` | 외부 인터넷에서 접근 가능한 public ALB 생성 |
+| `alb.ingress.kubernetes.io/target-type: ip` | ALB Target Group이 Pod IP를 직접 대상으로 사용 |
+| `alb.ingress.kubernetes.io/listen-ports` | ALB listener 포트 설정. 현재 HTTP 80, HTTPS 443 사용 |
+| `alb.ingress.kubernetes.io/ssl-redirect: "443"` | HTTP 요청을 HTTPS로 리다이렉트 |
 
-WAF/ACM泥섎읆 ?섍꼍留덈떎 ARN???щ씪吏??媛믪? manifest??吏곸젒 怨좎젙?섏? ?딄퀬 SSM Parameter Store????ν빀?덈떎. External Secrets Operator媛 ??媛믪쓣 `rookies5-macta-infra-config` Secret?쇰줈 ?숆린?뷀븯怨? `ssm-annotation-patch-job`??Ingress annotation?쇰줈 二쇱엯?⑸땲??
+WAF/ACM처럼 환경마다 ARN이 달라지는 값은 manifest에 직접 고정하지 않고 SSM Parameter Store에 저장합니다. External Secrets Operator가 이 값을 `rookies5-macta-infra-config` Secret으로 동기화하고, `ssm-annotation-patch-job`이 Ingress annotation으로 주입합니다.
 
 - `alb.ingress.kubernetes.io/wafv2-acl-arn`
 - `alb.ingress.kubernetes.io/certificate-arn`
 - `alb.ingress.kubernetes.io/listen-ports: [{"HTTP":80},{"HTTPS":443}]`
 - `alb.ingress.kubernetes.io/ssl-redirect: "443"`
 
-??諛⑹떇?쇰줈 湲곕낯 Ingress ?쇱슦?낆? Git???좎뼵?섍퀬, 怨꾩젙/?섍꼍???곕씪 ?щ씪吏??WAF Web ACL ARN怨?ACM ?몄쬆??ARN? SSM???듯빐 ?고??꾩뿉 諛섏쁺?⑸땲??
+이 방식으로 기본 Ingress 라우팅은 Git에 선언하고, 계정/환경에 따라 달라지는 WAF Web ACL ARN과 ACM 인증서 ARN은 SSM을 통해 런타임에 반영합니다.
 
-?뺤씤:
+확인:
 
 ```powershell
 kubectl get ingress rookies5-macta-frontend-ingress -n rookies5-macta
 kubectl describe ingress rookies5-macta-frontend-ingress -n rookies5-macta
 ```
 
-?뺤씤????ぉ:
+확인할 항목:
 
-- `Address`: AWS Load Balancer Controller媛 ?앹꽦??ALB DNS ?대쫫
-- `Rules`: `macta.store` host? `/`, `/api/v1` path ?쇱슦??
-- `Annotations`: certificate ARN, WAF ACL ARN, HTTPS listener, SSL redirect ?곸슜 ?щ?
-- `Events`: ALB, TargetGroup, Listener ?앹꽦 ?먮뒗 ?ㅻ쪟 硫붿떆吏
+- `Address`: AWS Load Balancer Controller가 생성한 ALB DNS 이름
+- `Rules`: `macta.store` host와 `/`, `/api/v1` path 라우팅
+- `Annotations`: certificate ARN, WAF ACL ARN, HTTPS listener, SSL redirect 적용 여부
+- `Events`: ALB, TargetGroup, Listener 생성 또는 오류 메시지
 
 &nbsp;
 ## Route53 and ACM
 
-?꾨찓??
+도메인:
 
 ```text
 macta.store
 ```
 
-Route53 public hosted zone???꾩슂???덉퐫??
+Route53 public hosted zone에 필요한 레코드:
 
-| ?대쫫 | ???| ???|
+| 이름 | 타입 | 대상 |
 | --- | --- | --- |
 | `macta.store` | `A Alias` | ALB dualstack DNS |
-| `*.macta.store` | `A Alias` | ALB dualstack DNS, ?꾩슂 ??|
+| `*.macta.store` | `A Alias` | ALB dualstack DNS, 필요 시 |
 | `_...macta.store` | `CNAME` | ACM DNS validation |
 
-二쇱쓽:
+주의:
 
-- ACM DNS validation CNAME? ?몄쬆??寃利앹슜?낅땲?? ?쒕퉬???몃옒?쎌쓣 ALB濡?蹂대궡吏 ?딆뒿?덈떎.
-- `*.macta.store`??`www.macta.store`, `api.macta.store` 媛숈? ?쒕툕?꾨찓?몄뿉留?留ㅼ묶?⑸땲??
-- 猷⑦듃 ?꾨찓??`macta.store`瑜??곕젮硫?蹂꾨룄 `macta.store A Alias -> ALB` ?덉퐫?쒓? ?꾩슂?⑸땲??
-- ALB 湲곕낯 DNS濡?HTTPS ?묒냽?섎㈃ ?몄쬆???대쫫??留욎? ?딆븘 釉뚮씪?곗? 寃쎄퀬媛 ?⑸땲?? 理쒖쥌 ?묒냽? `https://macta.store`濡??뺤씤?⑸땲??
+- ACM DNS validation CNAME은 인증서 검증용입니다. 서비스 트래픽을 ALB로 보내지 않습니다.
+- `*.macta.store`는 `www.macta.store`, `api.macta.store` 같은 서브도메인에만 매칭됩니다.
+- 루트 도메인 `macta.store`를 쓰려면 별도 `macta.store A Alias -> ALB` 레코드가 필요합니다.
+- ALB 기본 DNS로 HTTPS 접속하면 인증서 이름이 맞지 않아 브라우저 경고가 납니다. 최종 접속은 `https://macta.store`로 확인합니다.
 
-DNS ?뺤씤:
+DNS 확인:
 
 ```powershell
 nslookup macta.store
@@ -1138,9 +1137,9 @@ nslookup macta.store 8.8.8.8
 &nbsp;
 ## RDS
 
-?꾩옱 RDS ?붿쭊? MySQL???꾨땲??MariaDB?낅땲??
+현재 RDS 엔진은 MySQL이 아니라 MariaDB입니다.
 
-| ??ぉ | 媛?|
+| 항목 | 값 |
 | --- | --- |
 | Engine | `mariadb` |
 | Engine version | `10.11` |
@@ -1149,37 +1148,37 @@ nslookup macta.store 8.8.8.8
 | Subnet | Private subnets |
 | Public access | disabled |
 
-JDBC URL? MariaDB??MySQL ?명솚 ?꾨줈?좎퐳???ъ슜???ㅼ쓬 ?뺥깭濡?援ъ꽦?⑸땲??
+JDBC URL은 MariaDB의 MySQL 호환 프로토콜을 사용해 다음 형태로 구성합니다.
 
 ```text
 jdbc:mysql://<rds-endpoint>:3306/mactadb?serverTimezone=Asia/Seoul&characterEncoding=UTF-8
 ```
 
-??媛믪? SSM??`/rookies5-macta/dev/backend/DB_URL`????ν븯怨? External Secrets媛 `backend-secret`?쇰줈 ?숆린?뷀빀?덈떎.
+이 값은 SSM의 `/rookies5-macta/dev/backend/DB_URL`에 저장하고, External Secrets가 `backend-secret`으로 동기화합니다.
 
 &nbsp;
 ## S3
 
-S3???좏뵆由ъ??댁뀡 ?뚯씪 ??μ냼濡??ъ슜?⑸땲??
+S3는 애플리케이션 파일 저장소로 사용합니다.
 
 - Bucket: `rookies5-team4-macta-bucket`
-- Public access block ?곸슜
-- EKS private subnet?먯꽌 S3 Gateway Endpoint濡??묎렐
-- 諛깆뿏??Pod??IRSA Role???듯빐 S3 沅뚰븳 ?ъ슜
+- Public access block 적용
+- EKS private subnet에서 S3 Gateway Endpoint로 접근
+- 백엔드 Pod는 IRSA Role을 통해 S3 권한 사용
 
-諛깆뿏??ServiceAccount:
+백엔드 ServiceAccount:
 
 ```text
 backend-sa
 ```
 
-IRSA annotation? SSM 媛믪쓣 ?쎌? patch Job??二쇱엯?⑸땲??
+IRSA annotation은 SSM 값을 읽은 patch Job이 주입합니다.
 
 ```text
 eks.amazonaws.com/role-arn=<BACKEND_ROLE_ARN>
 ```
 
-?뺤씤:
+확인:
 
 ```powershell
 kubectl get serviceaccount backend-sa -n rookies5-macta -o yaml
@@ -1188,23 +1187,23 @@ kubectl get serviceaccount backend-sa -n rookies5-macta -o yaml
 &nbsp;
 ## ECR and Images
 
-Terraform??ECR repository瑜??앹꽦?⑸땲??
+Terraform이 ECR repository를 생성합니다.
 
 ```powershell
 terraform output -raw ecr_backend_repository_url
 terraform output -raw ecr_frontend_repository_url
 ```
 
-?대?吏 ?덉떆:
+이미지 예시:
 
 ```text
 105588835975.dkr.ecr.ap-northeast-2.amazonaws.com/rookies5-macta/backend:<tag>
 105588835975.dkr.ecr.ap-northeast-2.amazonaws.com/rookies5-macta/frontend:<tag>
 ```
 
-?꾩옱 Kubernetes manifest??`image`??placeholder濡??????덉뒿?덈떎. ?ㅼ젣 ?대?吏??CI/CD ?먮뒗 SSM patch Job?먯꽌 諛섏쁺?⑸땲??
+현재 Kubernetes manifest의 `image`는 placeholder로 둘 수 있습니다. 실제 이미지는 CI/CD 또는 SSM patch Job에서 반영합니다.
 
-?대?吏 pull ?ㅻ쪟 ?뺤씤:
+이미지 pull 오류 확인:
 
 ```powershell
 kubectl describe pod -n rookies5-macta -l app=rookies5-macta-frontend
@@ -1214,49 +1213,49 @@ kubectl describe pod -n rookies5-macta -l app=rookies5-macta-backend
 &nbsp;
 ## WAF
 
-Terraform? Regional WAF Web ACL???앹꽦?⑸땲??
+Terraform은 Regional WAF Web ACL을 생성합니다.
 
-?곸슜 rule:
+적용 rule:
 
 - Rate limit per IP
 - AWS Managed Rules Common Rule Set
 - AWS Managed Rules Known Bad Inputs Rule Set
 - AWS Managed Rules SQLi Rule Set
 
-WAF???앹꽦留뚯쑝濡?ALB???먮룞 ?곌껐?섏? ?딆뒿?덈떎. ?꾩옱 援ъ“?먯꽌??WAF ARN??SSM????ν븯怨? `ssm-annotation-patch-job`??Ingress annotation?쇰줈 二쇱엯?⑸땲??
+WAF는 생성만으로 ALB에 자동 연결되지 않습니다. 현재 구조에서는 WAF ARN을 SSM에 저장하고, `ssm-annotation-patch-job`이 Ingress annotation으로 주입합니다.
 
 ```text
 alb.ingress.kubernetes.io/wafv2-acl-arn=<WAF_WEB_ACL_ARN>
 ```
 
-WAF??CloudWatch Metrics? full request logging??紐⑤몢 ?ъ슜?⑸땲??
+WAF는 CloudWatch Metrics와 full request logging을 모두 사용합니다.
 
-- CloudWatch Metrics: rule蹂?`AllowedRequests`, `BlockedRequests` 吏???뺤씤
-- Sampled requests: WAF Console?먯꽌 ?쇰? ?붿껌 ?섑뵆 ?뺤씤
-- CloudWatch Logs full logging: WAF瑜??듦낵?섍굅??李⑤떒???붿껌 ?곸꽭 濡쒓렇 ???
+- CloudWatch Metrics: rule별 `AllowedRequests`, `BlockedRequests` 지표 확인
+- Sampled requests: WAF Console에서 일부 요청 샘플 확인
+- CloudWatch Logs full logging: WAF를 통과하거나 차단된 요청 상세 로그 저장
 
-Terraform? WAF 濡쒓렇 ??μ슜 CloudWatch Log Group???앹꽦?⑸땲??
+Terraform은 WAF 로그 저장용 CloudWatch Log Group을 생성합니다.
 
 ```text
 aws-waf-logs-rookies5-macta-dev-web-acl
 ```
 
-WAF logging ?ㅼ젙:
+WAF logging 설정:
 
 ```text
 aws_wafv2_web_acl_logging_configuration
   -> aws_cloudwatch_log_group.waf
 ```
 
-濡쒓렇?먮뒗 ?붿껌 IP, URI, HTTP method, User-Agent, WAF action, rule match ?뺣낫 ?깆씠 ??λ맗?덈떎. `authorization`, `cookie` ?ㅻ뜑??誘쇨컧?뺣낫 ?몄텧??以꾩씠湲??꾪빐 redaction 泥섎━?⑸땲??
+로그에는 요청 IP, URI, HTTP method, User-Agent, WAF action, rule match 정보 등이 저장됩니다. `authorization`, `cookie` 헤더는 민감정보 노출을 줄이기 위해 redaction 처리합니다.
 
-?뺤씤:
+확인:
 
 ```powershell
 terraform output -raw waf_log_group_name
 ```
 
-CloudWatch Logs Insights ?덉떆:
+CloudWatch Logs Insights 예시:
 
 ```sql
 fields @timestamp, action, terminatingRuleId, httpRequest.clientIp, httpRequest.uri, httpRequest.httpMethod
@@ -1264,7 +1263,7 @@ fields @timestamp, action, terminatingRuleId, httpRequest.clientIp, httpRequest.
 | limit 50
 ```
 
-Rate Limit 李⑤떒 ?붿껌留??뺤씤:
+Rate Limit 차단 요청만 확인:
 
 ```sql
 fields @timestamp, action, terminatingRuleId, httpRequest.clientIp, httpRequest.uri
@@ -1276,47 +1275,47 @@ fields @timestamp, action, terminatingRuleId, httpRequest.clientIp, httpRequest.
 
 &nbsp;
 ## Argo CD
-### EKS 諛고룷 ?좏뵆由ъ??댁뀡 ?곹깭 ?뺤씤
+### EKS 배포 애플리케이션 상태 확인
 <img width="2540" height="1232" alt="image" src="https://github.com/user-attachments/assets/486f58b8-13d5-4fe7-8f63-fe5e5a102413" />
 
-### 諛깆뿏???대윭?ㅽ꽣 ??諛고룷 由ъ냼???곹깭 ?뺤씤
+### 백엔드 클러스터 내 배포 리소스 상태 확인
 <img width="2264" height="1150" alt="image" src="https://github.com/user-attachments/assets/4d91be76-0bbd-46d6-807d-35c0c1cb0912" />
 
-### ?꾨줎?몄뿏???대윭?ㅽ꽣 ??諛고룷 由ъ냼???곹깭 ?뺤씤
+### 프론트엔드 클러스터 내 배포 리소스 상태 확인
 <img width="2044" height="1342" alt="image" src="https://github.com/user-attachments/assets/edba98d6-213c-4899-97d2-0a8ddc504fbf" />
 
 
-Argo CD???좏뵆由ъ??댁뀡 諛고룷 ?곹깭瑜??뺤씤?섍퀬 GitOps 諛⑹떇?쇰줈 manifest瑜?sync?섍린 ?꾪븳 ?꾧뎄?낅땲??
+Argo CD는 애플리케이션 배포 상태를 확인하고 GitOps 방식으로 manifest를 sync하기 위한 도구입니다.
 
-?꾨줎?몄뿏??諛깆뿏???덊룷?먯꽌 ?대?吏 鍮뚮뱶 ??infra manifest瑜?媛깆떊?섎뜑?쇰룄 Argo CD媛 利됱떆 蹂寃쎌궗??쓣 媛먯??섏? 紐삵븷 ???덉뒿?덈떎. ?대? 以꾩씠湲??꾪빐 Argo CD webhook???④퍡 ?ъ슜?⑸땲?? GitHub push ?대깽?멸? Argo CD webhook?쇰줈 ?꾨떖?섎㈃ Application refresh媛 ?몃━嫄곕릺??湲곕낯 polling 二쇨린瑜?湲곕떎由ъ? ?딄퀬 鍮좊Ⅴ寃?sync ???蹂寃쎌쓣 媛먯??????덉뒿?덈떎.
+프론트엔드/백엔드 레포에서 이미지 빌드 후 infra manifest를 갱신하더라도 Argo CD가 즉시 변경사항을 감지하지 못할 수 있습니다. 이를 줄이기 위해 Argo CD webhook을 함께 사용합니다. GitHub push 이벤트가 Argo CD webhook으로 전달되면 Application refresh가 트리거되어 기본 polling 주기를 기다리지 않고 빠르게 sync 대상 변경을 감지할 수 있습니다.
 
-?ㅼ튂 ?덉떆:
+설치 예시:
 
 ```powershell
 kubectl create namespace argocd
 kubectl apply --server-side --force-conflicts -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/install.yaml
 ```
 
-UI瑜??꾩떆濡?蹂???
+UI를 임시로 볼 때:
 
 ```powershell
 kubectl port-forward svc/argocd-server -n argocd 8080:443
 ```
 
-釉뚮씪?곗?:
+브라우저:
 
 ```text
 https://localhost:8080
 ```
 
-珥덇린 鍮꾨?踰덊샇:
+초기 비밀번호:
 
 ```powershell
 $encoded = kubectl get secret argocd-initial-admin-secret -n argocd -o jsonpath="{.data.password}"
 [System.Text.Encoding]::UTF8.GetString([System.Convert]::FromBase64String($encoded))
 ```
 
-LoadBalancer濡??몄텧???섎룄 ?덉?留? ?ㅼ뒿 ?꾩뿉??`ClusterIP`濡??섎룎由щ뒗 寃껋쓣 沅뚯옣?⑸땲??
+LoadBalancer로 노출할 수도 있지만, 실습 후에는 `ClusterIP`로 되돌리는 것을 권장합니다.
 
 ```powershell
 kubectl patch svc argocd-server -n argocd --type merge -p '{"spec":{"type":"LoadBalancer"}}'
@@ -1329,7 +1328,7 @@ GitHub webhook URL:
 https://<argocd-server-domain-or-lb>/api/webhook
 ```
 
-GitHub webhook ?ㅼ젙:
+GitHub webhook 설정:
 
 ```text
 Payload URL: https://<argocd-server-domain-or-lb>/api/webhook
@@ -1337,12 +1336,12 @@ Content type: application/json
 Event: Just the push event
 ```
 
-Argo CD瑜??몃? LoadBalancer濡??몄텧?섏? ?딅뒗 ?댁쁺 ?섍꼍?먯꽌??port-forward ???Ingress, VPN, ?щ궡留? ?먮뒗 蹂꾨룄 webhook relay 援ъ꽦???ъ슜?⑸땲??
+Argo CD를 외부 LoadBalancer로 노출하지 않는 운영 환경에서는 port-forward 대신 Ingress, VPN, 사내망, 또는 별도 webhook relay 구성을 사용합니다.
 
 &nbsp;
-## CI/CD 諛⑺뼢
+## CI/CD 방향
 
-沅뚯옣 ?먮쫫:
+권장 흐름:
 
 ```text
 Frontend or Backend repo push
@@ -1355,7 +1354,7 @@ Frontend or Backend repo push
   -> EKS rolling update
 ```
 
-SSM???좎???媛?
+SSM에 유지할 값:
 
 - DB URL, username, password
 - S3 bucket name
@@ -1364,9 +1363,9 @@ SSM???좎???媛?
 - ACM certificate ARN
 - AWS region
 
-?대?吏 URI???쇰컲?곸쑝濡?誘쇨컧?뺣낫媛 ?꾨땲誘濡? ?꾩쟾??GitOps瑜??먰븯硫?manifest???대?吏 ?쒓렇瑜?而ㅻ컠?섍퀬 Argo CD媛 sync?섍쾶 ?섎뒗 援ъ“媛 ???⑥닚?⑸땲??
+이미지 URI는 일반적으로 민감정보가 아니므로, 완전한 GitOps를 원하면 manifest에 이미지 태그를 커밋하고 Argo CD가 sync하게 하는 구조가 더 단순합니다.
 
-?꾩옱 SSM 湲곕컲 patch Job??吏?먰빀?덈떎.
+현재 SSM 기반 patch Job도 지원합니다.
 
 ```text
 SSM FRONTEND_IMAGE/BACKEND_IMAGE
@@ -1379,9 +1378,9 @@ SSM FRONTEND_IMAGE/BACKEND_IMAGE
 &nbsp;
 ## Rolling Update
 
-?꾨줎?몄뿏?쒖? 諛깆뿏?쒕뒗 Kubernetes Deployment??Rolling Update 諛⑹떇???ъ슜?⑸땲?? ?대?吏 ?쒓렇媛 蹂寃쎈릺嫄곕굹 Pod template??蹂寃쎈릺硫?Kubernetes媛 ??ReplicaSet??留뚮뱾怨? 湲곗〈 Pod瑜???踰덉뿉 紐⑤몢 ?대━吏 ?딄퀬 ?쒖감?곸쑝濡???Pod濡?援먯껜?⑸땲??
+프론트엔드와 백엔드는 Kubernetes Deployment의 Rolling Update 방식을 사용합니다. 이미지 태그가 변경되거나 Pod template이 변경되면 Kubernetes가 새 ReplicaSet을 만들고, 기존 Pod를 한 번에 모두 내리지 않고 순차적으로 새 Pod로 교체합니다.
 
-?꾩옱 ?ㅼ젙:
+현재 설정:
 
 ```yaml
 replicas: 2
@@ -1392,54 +1391,54 @@ strategy:
     maxUnavailable: 0
 ```
 
-?곸슜 ?꾩튂:
+적용 위치:
 
 ```text
 k8s/frontend/frontend.yaml
 k8s/backend/backend.yaml
 ```
 
-?숈옉 諛⑹떇:
+동작 방식:
 
 ```text
-1. ?꾩옱 frontend/backend Pod??媛곴컖 2媛?replica濡??ㅽ뻾
-2. ???대?吏 ?쒓렇媛 manifest??諛섏쁺??
-3. Argo CD sync ?먮뒗 kubectl apply媛 Deployment 蹂寃쎌쓣 ?곸슜
-4. Kubernetes媛 ??ReplicaSet ?앹꽦
-5. maxSurge: 1 ?ㅼ젙???곕씪 湲곗〈 2媛?Pod ?꾩뿉 ??Pod 1媛쒕? 異붽?濡??앹꽦
-6. readinessProbe媛 ?깃났????Pod媛 Ready ?곹깭媛 ?섎㈃ Service ?몃옒????곸뿉 ?ы븿
-7. maxUnavailable: 0 ?ㅼ젙???곕씪 Ready Pod ?섎? ?좎??섎㈃??湲곗〈 Pod 1媛?醫낅즺
-8. 媛숈? 怨쇱젙??諛섎났??紐⑤뱺 Pod瑜???踰꾩쟾?쇰줈 援먯껜
+1. 현재 frontend/backend Pod는 각각 2개 replica로 실행
+2. 새 이미지 태그가 manifest에 반영됨
+3. Argo CD sync 또는 kubectl apply가 Deployment 변경을 적용
+4. Kubernetes가 새 ReplicaSet 생성
+5. maxSurge: 1 설정에 따라 기존 2개 Pod 위에 새 Pod 1개를 추가로 생성
+6. readinessProbe가 성공해 새 Pod가 Ready 상태가 되면 Service 트래픽 대상에 포함
+7. maxUnavailable: 0 설정에 따라 Ready Pod 수를 유지하면서 기존 Pod 1개 종료
+8. 같은 과정을 반복해 모든 Pod를 새 버전으로 교체
 ```
 
-`maxSurge: 1`? ?낅뜲?댄듃 以??먰븯??replica ?섎낫??Pod瑜?理쒕? 1媛???留뚮뱾 ???덈떎???섎??낅땲?? `replicas: 2` 湲곗??쇰줈 ?낅뜲?댄듃 以??쇱떆?곸쑝濡?理쒕? 3媛?Pod媛 ?ㅽ뻾?????덉뒿?덈떎.
+`maxSurge: 1`은 업데이트 중 원하는 replica 수보다 Pod를 최대 1개 더 만들 수 있다는 의미입니다. `replicas: 2` 기준으로 업데이트 중 일시적으로 최대 3개 Pod가 실행될 수 있습니다.
 
-`maxUnavailable: 0`? ?낅뜲?댄듃 以??ъ슜 媛?ν븳 Pod ?섎? 以꾩씠吏 ?딄쿋?ㅻ뒗 ?섎??낅땲?? ??Pod媛 Ready ?섍린 ?꾩뿉??湲곗〈 Pod瑜?癒쇱? 醫낅즺?섏? ?딆쑝誘濡? 諛고룷 以??쒕퉬??以묐떒 媛?μ꽦??以꾩엯?덈떎.
+`maxUnavailable: 0`은 업데이트 중 사용 가능한 Pod 수를 줄이지 않겠다는 의미입니다. 새 Pod가 Ready 되기 전에는 기존 Pod를 먼저 종료하지 않으므로, 배포 중 서비스 중단 가능성을 줄입니다.
 
-?곕씪????踰꾩쟾 Pod媛 ?대?吏 ?ㅻ쪟, ?ㅼ젙 ?ㅻ쪟, ?좏뵆由ъ??댁뀡 湲곕룞 ?ㅽ뙣 ?깆쑝濡?Ready ?곹깭媛 ?섏? 紐삵븯硫?湲곗〈 Pod媛 怨꾩냽 ?좎??⑸땲?? ??寃쎌슦 Rolling Update媛 以묎컙?먯꽌 硫덉텛怨?Service??湲곗〈 Ready Pod濡??몃옒?쎌쓣 怨꾩냽 ?꾨떖?섎?濡? ?ㅽ뙣??諛고룷媛 怨㏓컮濡??쒕퉬??以묐떒?쇰줈 ?댁뼱吏吏 ?딆뒿?덈떎.
+따라서 새 버전 Pod가 이미지 오류, 설정 오류, 애플리케이션 기동 실패 등으로 Ready 상태가 되지 못하면 기존 Pod가 계속 유지됩니다. 이 경우 Rolling Update가 중간에서 멈추고 Service는 기존 Ready Pod로 트래픽을 계속 전달하므로, 실패한 배포가 곧바로 서비스 중단으로 이어지지 않습니다.
 
-readinessProbe????Pod瑜?Service ?몃옒?쎌뿉 ?ｌ뼱???섎뒗吏 ?먮떒?섎뒗 湲곗??낅땲??
+readinessProbe는 새 Pod를 Service 트래픽에 넣어도 되는지 판단하는 기준입니다.
 
 ```text
 frontend: HTTP GET /, port 80, initialDelaySeconds 10, periodSeconds 5
 backend:  TCP socket 8080, initialDelaySeconds 30, periodSeconds 10
 ```
 
-諛고룷 ?곹깭 ?뺤씤:
+배포 상태 확인:
 
 ```powershell
 kubectl rollout status deployment/rookies5-macta-frontend -n rookies5-macta
 kubectl rollout status deployment/rookies5-macta-backend -n rookies5-macta
 ```
 
-ReplicaSet怨?Pod 援먯껜 怨쇱젙 ?뺤씤:
+ReplicaSet과 Pod 교체 과정 확인:
 
 ```powershell
 kubectl get rs -n rookies5-macta
 kubectl get pods -n rookies5-macta -w
 ```
 
-臾몄젣媛 ?앷꼈?????댁쟾 踰꾩쟾?쇰줈 濡ㅻ갚:
+문제가 생겼을 때 이전 버전으로 롤백:
 
 ```powershell
 kubectl rollout undo deployment/rookies5-macta-frontend -n rookies5-macta
@@ -1447,7 +1446,7 @@ kubectl rollout undo deployment/rookies5-macta-backend -n rookies5-macta
 ```
 
 &nbsp;
-## ?댁쁺 ?뺤씤 紐낅졊
+## 운영 확인 명령
 
 ```powershell
 kubectl get pods -n rookies5-macta
@@ -1459,27 +1458,26 @@ kubectl get secret backend-secret -n rookies5-macta
 kubectl get secret rookies5-macta-infra-config -n rookies5-macta
 ```
 
-ALB ?묒냽:
+ALB 접속:
 
 ```text
 http://<alb-dns>
 https://macta.store
 ```
 
-二쇱쓽:
+주의:
 
-- ALB 湲곕낯 DNS濡?HTTPS ?묒냽?섎㈃ ?몄쬆??mismatch 寃쎄퀬媛 ?????덉뒿?덈떎.
-- 理쒖쥌 HTTPS 寃利앹? `https://macta.store`濡??⑸땲??
-- `macta.store`媛 DNS ?ㅻ쪟瑜??대㈃ Route53??`macta.store A Alias -> ALB` ?덉퐫?쒖? ?꾨찓???ㅼ엫?쒕쾭 ?꾩엫???뺤씤?⑸땲??
+- ALB 기본 DNS로 HTTPS 접속하면 인증서 mismatch 경고가 날 수 있습니다.
+- 최종 HTTPS 검증은 `https://macta.store`로 합니다.
+- `macta.store`가 DNS 오류를 내면 Route53의 `macta.store A Alias -> ALB` 레코드와 도메인 네임서버 위임을 확인합니다.
 
 &nbsp;
-## Git???щ━吏 ?딅뒗 ?뚯씪
+## Git에 올리지 않는 파일
 
-?ㅼ쓬 ?뚯씪? Git???щ━吏 ?딆뒿?덈떎.
+다음 파일은 Git에 올리지 않습니다.
 
 - `terraform/.terraform/`
 - `terraform/terraform.tfstate`
 - `terraform/terraform.tfstate.backup`
 - `terraform/*.tfvars`
 - Terraform plan output
-
