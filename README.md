@@ -1,4 +1,4 @@
-# <img src="MACTA-frontend/public/icons.png" width="40" height="40" align="center" /> 실시간 경매 플랫폼 MACTA
+# <img src="assets/readme/logo.png" width="40" height="40" align="center" /> 실시간 경매 플랫폼 MACTA
 
 ## 💻 Developers
 
@@ -10,9 +10,6 @@
 
 > [!NOTE]
 > **SK쉴더스 루키즈 5기**에서 AWS 기반 클라우드 인프라 구축과 CI/CD 파이프라인 교육을 진행한 뒤 이어진 **세 번째 미니 프로젝트**입니다.
-
-
-> SK쉴더스 루키즈 지능형 애플리케이션 개발 5기 Mini Project 3 - 4조
 
 **MACTA**: 사용자가 **상품을 등록**하고 **실시간 입찰**에 참여할 수 있는 **경매 플랫폼**으로, 경매 마감 직전에 **트래픽이 집중**되는 상황과 다양한 **보안 위협** 환경에서도 안정적으로 동작하도록 설계된 서비스
 
