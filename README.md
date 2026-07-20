@@ -221,6 +221,15 @@
 
 ---
 
+## 🖥️ Preview · [자세히 보기](https://bulldog93.tistory.com/47)
+
+<div align="center">
+  <img src="assets/readme/preview-home.png" alt="MACTA 홈 화면" width="900" />
+  <p>메인 페이지</p>
+</div>
+
+---
+
 &nbsp;
 
 ## 📌 Application
