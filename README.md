@@ -21,6 +21,206 @@
 
 ---
 
+## 🛠 Built With
+
+<p>
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="assets/readme/badges/dark/typescript.png">
+  <source media="(prefers-color-scheme: light)" srcset="assets/readme/badges/light/typescript.png">
+  <img src="assets/readme/badges/dark/typescript.png" alt="TypeScript" height="28" />
+</picture>
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="assets/readme/badges/dark/react.png">
+  <source media="(prefers-color-scheme: light)" srcset="assets/readme/badges/light/react.png">
+  <img src="assets/readme/badges/dark/react.png" alt="React" height="28" />
+</picture>
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="assets/readme/badges/dark/vite.png">
+  <source media="(prefers-color-scheme: light)" srcset="assets/readme/badges/light/vite.png">
+  <img src="assets/readme/badges/dark/vite.png" alt="Vite" height="28" />
+</picture>
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="assets/readme/badges/dark/reactrouter.png">
+  <source media="(prefers-color-scheme: light)" srcset="assets/readme/badges/light/reactrouter.png">
+  <img src="assets/readme/badges/dark/reactrouter.png" alt="React Router" height="28" />
+</picture>
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="assets/readme/badges/dark/tailwindcss.png">
+  <source media="(prefers-color-scheme: light)" srcset="assets/readme/badges/light/tailwindcss.png">
+  <img src="assets/readme/badges/dark/tailwindcss.png" alt="Tailwind CSS" height="28" />
+</picture>
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="assets/readme/badges/dark/tanstackquery.png">
+  <source media="(prefers-color-scheme: light)" srcset="assets/readme/badges/light/tanstackquery.png">
+  <img src="assets/readme/badges/dark/tanstackquery.png" alt="TanStack Query" height="28" />
+</picture>
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="assets/readme/badges/dark/zustand.png">
+  <source media="(prefers-color-scheme: light)" srcset="assets/readme/badges/light/zustand.png">
+  <img src="assets/readme/badges/dark/zustand.png" alt="Zustand" height="28" />
+</picture>
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="assets/readme/badges/dark/axios.png">
+  <source media="(prefers-color-scheme: light)" srcset="assets/readme/badges/light/axios.png">
+  <img src="assets/readme/badges/dark/axios.png" alt="Axios" height="28" />
+</picture>
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="assets/readme/badges/dark/reacthookform.png">
+  <source media="(prefers-color-scheme: light)" srcset="assets/readme/badges/light/reacthookform.png">
+  <img src="assets/readme/badges/dark/reacthookform.png" alt="React Hook Form" height="28" />
+</picture>
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="assets/readme/badges/dark/zod.png">
+  <source media="(prefers-color-scheme: light)" srcset="assets/readme/badges/light/zod.png">
+  <img src="assets/readme/badges/dark/zod.png" alt="Zod" height="28" />
+</picture>
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="assets/readme/badges/dark/java.png">
+  <source media="(prefers-color-scheme: light)" srcset="assets/readme/badges/light/java.png">
+  <img src="assets/readme/badges/dark/java.png" alt="Java" height="28" />
+</picture>
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="assets/readme/badges/dark/springboot.png">
+  <source media="(prefers-color-scheme: light)" srcset="assets/readme/badges/light/springboot.png">
+  <img src="assets/readme/badges/dark/springboot.png" alt="Spring Boot" height="28" />
+</picture>
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="assets/readme/badges/dark/springsecurity.png">
+  <source media="(prefers-color-scheme: light)" srcset="assets/readme/badges/light/springsecurity.png">
+  <img src="assets/readme/badges/dark/springsecurity.png" alt="Spring Security" height="28" />
+</picture>
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="assets/readme/badges/dark/jwt.png">
+  <source media="(prefers-color-scheme: light)" srcset="assets/readme/badges/light/jwt.png">
+  <img src="assets/readme/badges/dark/jwt.png" alt="JWT" height="28" />
+</picture>
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="assets/readme/badges/dark/hibernate.png">
+  <source media="(prefers-color-scheme: light)" srcset="assets/readme/badges/light/hibernate.png">
+  <img src="assets/readme/badges/dark/hibernate.png" alt="Hibernate" height="28" />
+</picture>
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="assets/readme/badges/dark/mariadb.png">
+  <source media="(prefers-color-scheme: light)" srcset="assets/readme/badges/light/mariadb.png">
+  <img src="assets/readme/badges/dark/mariadb.png" alt="MariaDB" height="28" />
+</picture>
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="assets/readme/badges/dark/redis.png">
+  <source media="(prefers-color-scheme: light)" srcset="assets/readme/badges/light/redis.png">
+  <img src="assets/readme/badges/dark/redis.png" alt="Redis" height="28" />
+</picture>
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="assets/readme/badges/dark/maven.png">
+  <source media="(prefers-color-scheme: light)" srcset="assets/readme/badges/light/maven.png">
+  <img src="assets/readme/badges/dark/maven.png" alt="Maven" height="28" />
+</picture>
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="assets/readme/badges/dark/docker.png">
+  <source media="(prefers-color-scheme: light)" srcset="assets/readme/badges/light/docker.png">
+  <img src="assets/readme/badges/dark/docker.png" alt="Docker" height="28" />
+</picture>
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="assets/readme/badges/dark/kubernetes.png">
+  <source media="(prefers-color-scheme: light)" srcset="assets/readme/badges/light/kubernetes.png">
+  <img src="assets/readme/badges/dark/kubernetes.png" alt="Kubernetes" height="28" />
+</picture>
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="assets/readme/badges/dark/terraform.png">
+  <source media="(prefers-color-scheme: light)" srcset="assets/readme/badges/light/terraform.png">
+  <img src="assets/readme/badges/dark/terraform.png" alt="Terraform" height="28" />
+</picture>
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="assets/readme/badges/dark/githubactions.png">
+  <source media="(prefers-color-scheme: light)" srcset="assets/readme/badges/light/githubactions.png">
+  <img src="assets/readme/badges/dark/githubactions.png" alt="GitHub Actions" height="28" />
+</picture>
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="assets/readme/badges/dark/argocd.png">
+  <source media="(prefers-color-scheme: light)" srcset="assets/readme/badges/light/argocd.png">
+  <img src="assets/readme/badges/dark/argocd.png" alt="Argo CD" height="28" />
+</picture>
+</p>
+
+<details>
+<summary><strong>기술 스택 상세 보기</strong></summary>
+
+<br>
+
+<div align="center">
+
+<table align="center">
+  <thead>
+    <tr>
+      <th align="left">구분</th>
+      <th align="left">기술</th>
+      <th align="left">역할</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td align="left"><strong>Frontend Core</strong></td>
+      <td align="left">TypeScript 6.0.2, React/React DOM 19.2.5, Vite 8.0.10</td>
+      <td align="left">타입 안전한 SPA 렌더링·개발 서버·프로덕션 번들</td>
+    </tr>
+    <tr>
+      <td align="left"><strong>Routing &amp; UI</strong></td>
+      <td align="left">React Router DOM 7.15.0, Tailwind CSS 4.2.4, Shadcn/ui · Radix UI, Lucide React</td>
+      <td align="left">페이지 라우팅, 유틸리티 퍼스트 스타일링, 공통 UI 프리미티브·아이콘</td>
+    </tr>
+    <tr>
+      <td align="left"><strong>State &amp; HTTP</strong></td>
+      <td align="left">TanStack Query 5.100.9, Zustand 5.0.13, Axios 1.16.0</td>
+      <td align="left">서버 상태 캐싱·동기화, 클라이언트 전역 상태, JWT 인터셉터 기반 API 통신</td>
+    </tr>
+    <tr>
+      <td align="left"><strong>Form &amp; Validation</strong></td>
+      <td align="left">React Hook Form 7.75.0, Zod 4.4.3</td>
+      <td align="left">경매 등록·입찰·결제 폼 상태 관리와 스키마 기반 입력 검증</td>
+    </tr>
+    <tr>
+      <td align="left"><strong>Backend Core</strong></td>
+      <td align="left">Java 17, Spring Boot 3.5.14, Spring Web, Spring Data JPA, Spring Validation, Spring WebSocket</td>
+      <td align="left">REST API·서비스 계층·요청 검증·실시간 알림 채널</td>
+    </tr>
+    <tr>
+      <td align="left"><strong>Persistence</strong></td>
+      <td align="left">Hibernate ORM, MariaDB JDBC, Redis, H2</td>
+      <td align="left">경매·입찰 영속화, @Version 낙관적 락, 캐시·실시간 상태 보조, 테스트용 인메모리 DB</td>
+    </tr>
+    <tr>
+      <td align="left"><strong>Security</strong></td>
+      <td align="left">Spring Security, JWT, BCrypt</td>
+      <td align="left">인증·인가, 토큰 기반 API 보호, 비밀번호 해시</td>
+    </tr>
+    <tr>
+      <td align="left"><strong>Storage &amp; Cloud SDK</strong></td>
+      <td align="left">AWS SDK (S3 / STS)</td>
+      <td align="left">상품 이미지 업로드·Presigned URL, IRSA 기반 권한 위임</td>
+    </tr>
+    <tr>
+      <td align="left"><strong>Build &amp; Container</strong></td>
+      <td align="left">Maven, Docker, ECR</td>
+      <td align="left">백엔드 빌드·이미지 패키징·컨테이너 레지스트리 배포</td>
+    </tr>
+    <tr>
+      <td align="left"><strong>Infrastructure</strong></td>
+      <td align="left">Terraform, VPC, Public/Private Subnet, Internet Gateway, NAT Gateway, ALB, EKS, Kubernetes, AWS Load Balancer Controller, RDS MariaDB, Redis, S3, WAFv2, ACM, IRSA, SSM Parameter Store, External Secrets Operator</td>
+      <td align="left">IaC 기반 네트워크·클러스터·DB·스토리지·보안·시크릿 구성</td>
+    </tr>
+    <tr>
+      <td align="left"><strong>CI/CD &amp; Ops</strong></td>
+      <td align="left">GitHub Actions, Argo CD, Kubernetes Rolling Update, CloudWatch</td>
+      <td align="left">이미지 빌드·푸시, GitOps 동기화, 무중단 배포, 운영 로그·메트릭</td>
+    </tr>
+  </tbody>
+</table>
+
+</div>
+
+</details>
+
+---
+
 &nbsp;
 
 ## 📌 Application
@@ -253,113 +453,6 @@ public class BidService {
 - 이미지 업로드 및 조회 과정에서 S3 트래픽이 외부 인터넷 경로로 나가지 않도록 하여 **네트워크 보안성**과 **전송 안정성**을 강화
 - **S3 Bucket Public Access**를 비활성화하여 외부 공개 접근을 차단하고, 필요한 요청만 애플리케이션과 IAM 정책을 통해 제어
 - VPC Endpoint와 Bucket 정책을 함께 사용해 허용된 네트워크와 권한 주체만 S3를 사용할 수 있도록 **접근 제어 범위**를 명확히 제한
-
-&nbsp;
-
-## 🔧 Tech Stack
-
-### Backend
-
-#### Language & Framework
-
-![Java](https://img.shields.io/badge/Java_17-007396?style=flat-square&logo=openjdk&logoColor=white)
-![Spring Boot](https://img.shields.io/badge/Spring_Boot_3.5.14-6DB33F?style=flat-square&logo=springboot&logoColor=white)
-![Spring Security](https://img.shields.io/badge/Spring_Security-6DB33F?style=flat-square&logo=springsecurity&logoColor=white)
-![Spring Data JPA](https://img.shields.io/badge/Spring_Data_JPA-6DB33F?style=flat-square&logo=spring&logoColor=white)
-![Spring Validation](https://img.shields.io/badge/Spring_Validation-6DB33F?style=flat-square)
-
-#### Authentication & Realtime
-
-![JWT](https://img.shields.io/badge/JWT-000000?style=flat-square&logo=jsonwebtokens&logoColor=white)
-![WebSocket](https://img.shields.io/badge/WebSocket-010101?style=flat-square)
-![Redis](https://img.shields.io/badge/Redis-DC382D?style=flat-square&logo=redis&logoColor=white)
-
-#### Database & Storage
-
-![MariaDB](https://img.shields.io/badge/MariaDB-003545?style=flat-square&logo=mariadb&logoColor=white)
-![H2](https://img.shields.io/badge/H2-1F6FEB?style=flat-square)
-
-#### AWS & Build
-
-![AWS SDK](https://img.shields.io/badge/AWS_SDK_S3_/_STS-FF9900?style=flat-square&logo=amazonaws&logoColor=white)
-![Maven](https://img.shields.io/badge/Maven-C71A36?style=flat-square&logo=apachemaven&logoColor=white)
-![Docker](https://img.shields.io/badge/Docker-2496ED?style=flat-square&logo=docker&logoColor=white)
-
-&nbsp;
-
-### Frontend
-
-#### Core
-
-![React](https://img.shields.io/badge/React_18-61DAFB?style=flat-square&logo=react&logoColor=black)
-![TypeScript](https://img.shields.io/badge/TypeScript-3178C6?style=flat-square&logo=typescript&logoColor=white)
-![Vite](https://img.shields.io/badge/Vite-646CFF?style=flat-square&logo=vite&logoColor=white)
-![React Router](https://img.shields.io/badge/React_Router-CA4245?style=flat-square&logo=reactrouter&logoColor=white)
-
-#### UI & Styling
-
-![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-06B6D4?style=flat-square&logo=tailwindcss&logoColor=white)
-![Shadcn UI](https://img.shields.io/badge/Shadcn_UI-000000?style=flat-square)
-![Lucide React](https://img.shields.io/badge/Lucide_React-F56565?style=flat-square)
-
-#### State & Data
-
-![Axios](https://img.shields.io/badge/Axios-5A29E4?style=flat-square&logo=axios&logoColor=white)
-![TanStack Query](https://img.shields.io/badge/TanStack_Query-FF4154?style=flat-square&logo=reactquery&logoColor=white)
-![Zustand](https://img.shields.io/badge/Zustand-4B5563?style=flat-square)
-
-#### Form & Validation
-
-![React Hook Form](https://img.shields.io/badge/React_Hook_Form-EC5990?style=flat-square&logo=reacthookform&logoColor=white)
-![Zod](https://img.shields.io/badge/Zod-3068B7?style=flat-square)
-![date-fns](https://img.shields.io/badge/date--fns-770C56?style=flat-square)
-
-#### Build & Container
-
-![Docker](https://img.shields.io/badge/Docker-2496ED?style=flat-square&logo=docker&logoColor=white)
-
-&nbsp;
-
-### Infrastructure
-
-#### Infrastructure as Code
-
-![Terraform](https://img.shields.io/badge/Terraform-844FBA?style=flat-square&logo=terraform&logoColor=white)
-
-#### Network
-
-![VPC](https://img.shields.io/badge/VPC-FF9900?style=flat-square&logo=amazonaws&logoColor=white)
-![Public Subnet](https://img.shields.io/badge/Public_Subnet-FF9900?style=flat-square)
-![Private Subnet](https://img.shields.io/badge/Private_Subnet-FF9900?style=flat-square)
-![Internet Gateway](https://img.shields.io/badge/IGW-FF9900?style=flat-square)
-![NAT Gateway](https://img.shields.io/badge/NAT_Gateway-FF9900?style=flat-square)
-
-#### Kubernetes & Compute
-
-![EKS](https://img.shields.io/badge/EKS-326CE5?style=flat-square&logo=amazoneks&logoColor=white)
-![Kubernetes](https://img.shields.io/badge/Kubernetes-326CE5?style=flat-square&logo=kubernetes&logoColor=white)
-![AWS Load Balancer Controller](https://img.shields.io/badge/AWS_Load_Balancer_Controller-326CE5?style=flat-square)
-
-#### Database & Storage
-
-![RDS MariaDB](https://img.shields.io/badge/RDS_MariaDB-527FFF?style=flat-square&logo=amazonrds&logoColor=white)
-![Redis](https://img.shields.io/badge/Redis-DC382D?style=flat-square&logo=redis&logoColor=white)
-![S3](https://img.shields.io/badge/S3-569A31?style=flat-square&logo=amazons3&logoColor=white)
-![ECR](https://img.shields.io/badge/ECR-FF9900?style=flat-square&logo=amazonecr&logoColor=white)
-
-#### Security
-
-![WAFv2](https://img.shields.io/badge/WAFv2-DD344C?style=flat-square)
-![ACM](https://img.shields.io/badge/ACM-FF9900?style=flat-square)
-![IRSA](https://img.shields.io/badge/IRSA-DD344C?style=flat-square)
-![SSM Parameter Store](https://img.shields.io/badge/SSM_Parameter_Store-FF9900?style=flat-square)
-![External Secrets Operator](https://img.shields.io/badge/External_Secrets_Operator-326CE5?style=flat-square)
-
-#### CI/CD & Monitoring
-
-![GitHub Actions](https://img.shields.io/badge/GitHub_Actions-2088FF?style=flat-square&logo=githubactions&logoColor=white)
-![Argo CD](https://img.shields.io/badge/Argo_CD-EF7B4D?style=flat-square&logo=argo&logoColor=white)
-![CloudWatch](https://img.shields.io/badge/CloudWatch-FF4F8B?style=flat-square&logo=amazoncloudwatch&logoColor=white)
 
 &nbsp;
 
