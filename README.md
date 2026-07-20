@@ -13,11 +13,11 @@
 
 ## 🚀 Overview
 
-실시간 경매는 마감이 다가올수록 입찰이 한꺼번에 몰리고, 그만큼 동시성 문제와 비정상 트래픽에 그대로 노출되기 쉽습니다. **MACTA**는 사용자가 상품을 등록하고 실시간으로 입찰하는 경매 플랫폼으로, 마감 직전 **트래픽이 집중되는 순간**과 다양한 **보안 위협** 속에서도 안정적으로 동작하도록 설계한 서비스입니다.
+실시간 경매는 마감이 다가올수록 입찰이 한꺼번에 몰리고, 동시성 문제와 비정상 트래픽에 그대로 노출되기 쉽습니다. **MACTA**는 상품 등록부터 실시간 입찰·낙찰·결제까지 **한 흐름으로 이어지는** 경매 플랫폼입니다.
 
-입찰이 몰리는 구간에서는 **낙관적 락** 기반 동시성 제어로 Race Condition·중복 갱신·데이터 무결성 문제를 막고, ALB 앞단에 **WAF**를 두어 IP별 요청 폭주(레이트 리밋), SQL Injection, XSS, 알려진 악성 요청 패턴 같은 비정상 트래픽을 사전에 차단합니다.
+React에서 경매 탐색·입찰·알림 UI를 제공하고, Spring Boot가 **회원·경매·입찰·결제·알림**을 도메인별로 처리합니다. 입찰이 몰리는 구간은 **낙관적 락**으로 무결성을 지키고, ALB 앞단 **WAF**로 레이트 리밋·인젝션 등 비정상 요청을 걸러 냅니다.
 
-애플리케이션은 **Kubernetes** 위에서 컨테이너로 운영해 트래픽이 늘어도 서비스 확장과 복구가 가능하고, **Rolling Update**로 기존 Pod와 신규 Pod를 순차 교체해 새 버전을 배포하는 중에도 **서비스 중단을 최소화**합니다.
+**상품 등록 → 실시간 입찰 → 낙찰 → 결제·배송** 흐름 위에 JWT 인증, WebSocket 알림, Kubernetes 기반 배포·Rolling Update를 붙여 둔 실시간 경매 서비스입니다.
 
 ---
 
@@ -226,6 +226,65 @@
 <div align="center">
   <img src="assets/readme/preview-home.png" alt="MACTA 홈 화면" width="900" />
   <p>메인 페이지</p>
+</div>
+
+<div align="center">
+
+<table align="center">
+  <thead>
+    <tr>
+      <th align="left">화면</th>
+      <th align="left">설명</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td align="left">🏠 홈</td>
+      <td align="left">카테고리·가격·검색·정렬, 인기·마감 임박 통계, 라이브 경매 카드 목록</td>
+    </tr>
+    <tr>
+      <td align="left">🔐 로그인</td>
+      <td align="left">JWT 기반 로그인, 인가된 API 요청</td>
+    </tr>
+    <tr>
+      <td align="left">✍️ 회원가입</td>
+      <td align="left">계정 생성 후 서비스 이용 시작</td>
+    </tr>
+    <tr>
+      <td align="left">📄 경매 상세</td>
+      <td align="left">실시간 최고가·입찰·마감 카운트다운, Q&amp;A 댓글·답글</td>
+    </tr>
+    <tr>
+      <td align="left">🔨 경매 등록</td>
+      <td align="left">이미지·시작가·카테고리·마감 시각 설정</td>
+    </tr>
+    <tr>
+      <td align="left">💳 결제</td>
+      <td align="left">낙찰 후 결제 대기, 최종가·결제 수단 확인</td>
+    </tr>
+    <tr>
+      <td align="left">👤 마이페이지</td>
+      <td align="left">입찰·낙찰 통계, 닉네임·프로필 관리</td>
+    </tr>
+    <tr>
+      <td align="left">📋 내 출품 관리</td>
+      <td align="left">판매 중·종료 상품 확인, 결제 완료 건 배송 시작</td>
+    </tr>
+    <tr>
+      <td align="left">📨 입찰 내역</td>
+      <td align="left">대기·낙찰·상회 상태 추적, 낙찰 건 결제 진입</td>
+    </tr>
+    <tr>
+      <td align="left">❤️ 관심 목록</td>
+      <td align="left">워치리스트 상품 모아보기·관심 해제</td>
+    </tr>
+    <tr>
+      <td align="left">🔔 알림</td>
+      <td align="left">상회 입찰·낙찰 등 실시간 이벤트 모음</td>
+    </tr>
+  </tbody>
+</table>
+
 </div>
 
 ---
