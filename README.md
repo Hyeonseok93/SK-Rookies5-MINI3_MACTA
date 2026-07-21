@@ -441,13 +441,17 @@ DB_URL=jdbc:mariadb://host.docker.internal:3306/mactadb?serverTimezone=Asia/Seou
 DB_USERNAME=root
 DB_PASSWORD=change-me
 JWT_SECRET=replace_with_a_random_secret_of_at_least_32_characters
+REDIS_HOST=redis
+REDIS_PORT=6379
+REDIS_PASSWORD=change-me
+
+# ---------------
+# AWS / S3
+# ---------------
 S3_BUCKET_NAME=your-private-bucket-name
 # 로컬에서만 필요할 때 채움. 비우면 기본 AWS 자격 증명(또는 IAM)을 사용.
 AWS_ACCESS_KEY=
 AWS_SECRET_KEY=
-REDIS_HOST=redis
-REDIS_PORT=6379
-REDIS_PASSWORD=change-me
 ```
 
 > 이미지 업로드를 쓰려면 실제 S3 버킷이 필요합니다. 배포 환경에서는 IRSA로 권한을 부여하며, Access Key를 넣지 않습니다.
