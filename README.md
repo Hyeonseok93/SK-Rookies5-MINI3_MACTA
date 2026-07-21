@@ -390,6 +390,18 @@ SK-Rookies5-MINI3_MACTA/
 
 ---
 
+## 🏗 Infrastructure Overview
+
+<div align="center">
+  <img src="assets/readme/infrastructure.drawio.png" alt="MACTA 인프라 아키텍처" width="1000" />
+</div>
+
+**Route53 → WAF/ACM → ALB → EKS(Frontend·Backend) → RDS·Redis·S3** 로 이어지는 AWS 기반 아키텍처입니다. 사용자 트래픽은 ALB까지만 도달하고, 애플리케이션과 데이터 계층은 Private Subnet 안에서만 통신합니다. 배포는 **GitHub Actions → ECR → Argo CD(GitOps)** 로 자동화됩니다.
+
+> 네트워크 분리·보안(WAF·IRSA·Secret 관리)·무중단 배포 등 상세한 설계 의도는 [기술 블로그](https://bulldog93.tistory.com/47)에서 다룹니다.
+
+---
+
 &nbsp;
 
 ## 📌 Application
