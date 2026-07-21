@@ -1,4 +1,4 @@
-# <img src="assets/readme/logo.png" width="40" height="40" align="center" /> 실시간 경매 플랫폼 MACTA
+# <img src=".github/readme/logo.png" width="40" height="40" align="center" /> 실시간 경매 플랫폼 MACTA
 
 ## 💻 Developers
 
@@ -25,119 +25,119 @@ React에서 경매 탐색·입찰·알림 UI를 제공하고, Spring Boot가 **�
 
 <p>
 <picture>
-  <source media="(prefers-color-scheme: dark)" srcset="assets/readme/badges/dark/typescript.png">
-  <source media="(prefers-color-scheme: light)" srcset="assets/readme/badges/light/typescript.png">
-  <img src="assets/readme/badges/dark/typescript.png" alt="TypeScript" height="28" />
+  <source media="(prefers-color-scheme: dark)" srcset=".github/readme/badges/dark/typescript.png">
+  <source media="(prefers-color-scheme: light)" srcset=".github/readme/badges/light/typescript.png">
+  <img src=".github/readme/badges/dark/typescript.png" alt="TypeScript" height="28" />
 </picture>
 <picture>
-  <source media="(prefers-color-scheme: dark)" srcset="assets/readme/badges/dark/react.png">
-  <source media="(prefers-color-scheme: light)" srcset="assets/readme/badges/light/react.png">
-  <img src="assets/readme/badges/dark/react.png" alt="React" height="28" />
+  <source media="(prefers-color-scheme: dark)" srcset=".github/readme/badges/dark/react.png">
+  <source media="(prefers-color-scheme: light)" srcset=".github/readme/badges/light/react.png">
+  <img src=".github/readme/badges/dark/react.png" alt="React" height="28" />
 </picture>
 <picture>
-  <source media="(prefers-color-scheme: dark)" srcset="assets/readme/badges/dark/vite.png">
-  <source media="(prefers-color-scheme: light)" srcset="assets/readme/badges/light/vite.png">
-  <img src="assets/readme/badges/dark/vite.png" alt="Vite" height="28" />
+  <source media="(prefers-color-scheme: dark)" srcset=".github/readme/badges/dark/vite.png">
+  <source media="(prefers-color-scheme: light)" srcset=".github/readme/badges/light/vite.png">
+  <img src=".github/readme/badges/dark/vite.png" alt="Vite" height="28" />
 </picture>
 <picture>
-  <source media="(prefers-color-scheme: dark)" srcset="assets/readme/badges/dark/reactrouter.png">
-  <source media="(prefers-color-scheme: light)" srcset="assets/readme/badges/light/reactrouter.png">
-  <img src="assets/readme/badges/dark/reactrouter.png" alt="React Router" height="28" />
+  <source media="(prefers-color-scheme: dark)" srcset=".github/readme/badges/dark/reactrouter.png">
+  <source media="(prefers-color-scheme: light)" srcset=".github/readme/badges/light/reactrouter.png">
+  <img src=".github/readme/badges/dark/reactrouter.png" alt="React Router" height="28" />
 </picture>
 <picture>
-  <source media="(prefers-color-scheme: dark)" srcset="assets/readme/badges/dark/tailwindcss.png">
-  <source media="(prefers-color-scheme: light)" srcset="assets/readme/badges/light/tailwindcss.png">
-  <img src="assets/readme/badges/dark/tailwindcss.png" alt="Tailwind CSS" height="28" />
+  <source media="(prefers-color-scheme: dark)" srcset=".github/readme/badges/dark/tailwindcss.png">
+  <source media="(prefers-color-scheme: light)" srcset=".github/readme/badges/light/tailwindcss.png">
+  <img src=".github/readme/badges/dark/tailwindcss.png" alt="Tailwind CSS" height="28" />
 </picture>
 <picture>
-  <source media="(prefers-color-scheme: dark)" srcset="assets/readme/badges/dark/tanstackquery.png">
-  <source media="(prefers-color-scheme: light)" srcset="assets/readme/badges/light/tanstackquery.png">
-  <img src="assets/readme/badges/dark/tanstackquery.png" alt="TanStack Query" height="28" />
+  <source media="(prefers-color-scheme: dark)" srcset=".github/readme/badges/dark/tanstackquery.png">
+  <source media="(prefers-color-scheme: light)" srcset=".github/readme/badges/light/tanstackquery.png">
+  <img src=".github/readme/badges/dark/tanstackquery.png" alt="TanStack Query" height="28" />
 </picture>
 <picture>
-  <source media="(prefers-color-scheme: dark)" srcset="assets/readme/badges/dark/zustand.png">
-  <source media="(prefers-color-scheme: light)" srcset="assets/readme/badges/light/zustand.png">
-  <img src="assets/readme/badges/dark/zustand.png" alt="Zustand" height="28" />
+  <source media="(prefers-color-scheme: dark)" srcset=".github/readme/badges/dark/zustand.png">
+  <source media="(prefers-color-scheme: light)" srcset=".github/readme/badges/light/zustand.png">
+  <img src=".github/readme/badges/dark/zustand.png" alt="Zustand" height="28" />
 </picture>
 <picture>
-  <source media="(prefers-color-scheme: dark)" srcset="assets/readme/badges/dark/axios.png">
-  <source media="(prefers-color-scheme: light)" srcset="assets/readme/badges/light/axios.png">
-  <img src="assets/readme/badges/dark/axios.png" alt="Axios" height="28" />
+  <source media="(prefers-color-scheme: dark)" srcset=".github/readme/badges/dark/axios.png">
+  <source media="(prefers-color-scheme: light)" srcset=".github/readme/badges/light/axios.png">
+  <img src=".github/readme/badges/dark/axios.png" alt="Axios" height="28" />
 </picture>
 <picture>
-  <source media="(prefers-color-scheme: dark)" srcset="assets/readme/badges/dark/reacthookform.png">
-  <source media="(prefers-color-scheme: light)" srcset="assets/readme/badges/light/reacthookform.png">
-  <img src="assets/readme/badges/dark/reacthookform.png" alt="React Hook Form" height="28" />
+  <source media="(prefers-color-scheme: dark)" srcset=".github/readme/badges/dark/reacthookform.png">
+  <source media="(prefers-color-scheme: light)" srcset=".github/readme/badges/light/reacthookform.png">
+  <img src=".github/readme/badges/dark/reacthookform.png" alt="React Hook Form" height="28" />
 </picture>
 <picture>
-  <source media="(prefers-color-scheme: dark)" srcset="assets/readme/badges/dark/zod.png">
-  <source media="(prefers-color-scheme: light)" srcset="assets/readme/badges/light/zod.png">
-  <img src="assets/readme/badges/dark/zod.png" alt="Zod" height="28" />
+  <source media="(prefers-color-scheme: dark)" srcset=".github/readme/badges/dark/zod.png">
+  <source media="(prefers-color-scheme: light)" srcset=".github/readme/badges/light/zod.png">
+  <img src=".github/readme/badges/dark/zod.png" alt="Zod" height="28" />
 </picture>
 <picture>
-  <source media="(prefers-color-scheme: dark)" srcset="assets/readme/badges/dark/java.png">
-  <source media="(prefers-color-scheme: light)" srcset="assets/readme/badges/light/java.png">
-  <img src="assets/readme/badges/dark/java.png" alt="Java" height="28" />
+  <source media="(prefers-color-scheme: dark)" srcset=".github/readme/badges/dark/java.png">
+  <source media="(prefers-color-scheme: light)" srcset=".github/readme/badges/light/java.png">
+  <img src=".github/readme/badges/dark/java.png" alt="Java" height="28" />
 </picture>
 <picture>
-  <source media="(prefers-color-scheme: dark)" srcset="assets/readme/badges/dark/springboot.png">
-  <source media="(prefers-color-scheme: light)" srcset="assets/readme/badges/light/springboot.png">
-  <img src="assets/readme/badges/dark/springboot.png" alt="Spring Boot" height="28" />
+  <source media="(prefers-color-scheme: dark)" srcset=".github/readme/badges/dark/springboot.png">
+  <source media="(prefers-color-scheme: light)" srcset=".github/readme/badges/light/springboot.png">
+  <img src=".github/readme/badges/dark/springboot.png" alt="Spring Boot" height="28" />
 </picture>
 <picture>
-  <source media="(prefers-color-scheme: dark)" srcset="assets/readme/badges/dark/springsecurity.png">
-  <source media="(prefers-color-scheme: light)" srcset="assets/readme/badges/light/springsecurity.png">
-  <img src="assets/readme/badges/dark/springsecurity.png" alt="Spring Security" height="28" />
+  <source media="(prefers-color-scheme: dark)" srcset=".github/readme/badges/dark/springsecurity.png">
+  <source media="(prefers-color-scheme: light)" srcset=".github/readme/badges/light/springsecurity.png">
+  <img src=".github/readme/badges/dark/springsecurity.png" alt="Spring Security" height="28" />
 </picture>
 <picture>
-  <source media="(prefers-color-scheme: dark)" srcset="assets/readme/badges/dark/jwt.png">
-  <source media="(prefers-color-scheme: light)" srcset="assets/readme/badges/light/jwt.png">
-  <img src="assets/readme/badges/dark/jwt.png" alt="JWT" height="28" />
+  <source media="(prefers-color-scheme: dark)" srcset=".github/readme/badges/dark/jwt.png">
+  <source media="(prefers-color-scheme: light)" srcset=".github/readme/badges/light/jwt.png">
+  <img src=".github/readme/badges/dark/jwt.png" alt="JWT" height="28" />
 </picture>
 <picture>
-  <source media="(prefers-color-scheme: dark)" srcset="assets/readme/badges/dark/hibernate.png">
-  <source media="(prefers-color-scheme: light)" srcset="assets/readme/badges/light/hibernate.png">
-  <img src="assets/readme/badges/dark/hibernate.png" alt="Hibernate" height="28" />
+  <source media="(prefers-color-scheme: dark)" srcset=".github/readme/badges/dark/hibernate.png">
+  <source media="(prefers-color-scheme: light)" srcset=".github/readme/badges/light/hibernate.png">
+  <img src=".github/readme/badges/dark/hibernate.png" alt="Hibernate" height="28" />
 </picture>
 <picture>
-  <source media="(prefers-color-scheme: dark)" srcset="assets/readme/badges/dark/mariadb.png">
-  <source media="(prefers-color-scheme: light)" srcset="assets/readme/badges/light/mariadb.png">
-  <img src="assets/readme/badges/dark/mariadb.png" alt="MariaDB" height="28" />
+  <source media="(prefers-color-scheme: dark)" srcset=".github/readme/badges/dark/mariadb.png">
+  <source media="(prefers-color-scheme: light)" srcset=".github/readme/badges/light/mariadb.png">
+  <img src=".github/readme/badges/dark/mariadb.png" alt="MariaDB" height="28" />
 </picture>
 <picture>
-  <source media="(prefers-color-scheme: dark)" srcset="assets/readme/badges/dark/redis.png">
-  <source media="(prefers-color-scheme: light)" srcset="assets/readme/badges/light/redis.png">
-  <img src="assets/readme/badges/dark/redis.png" alt="Redis" height="28" />
+  <source media="(prefers-color-scheme: dark)" srcset=".github/readme/badges/dark/redis.png">
+  <source media="(prefers-color-scheme: light)" srcset=".github/readme/badges/light/redis.png">
+  <img src=".github/readme/badges/dark/redis.png" alt="Redis" height="28" />
 </picture>
 <picture>
-  <source media="(prefers-color-scheme: dark)" srcset="assets/readme/badges/dark/maven.png">
-  <source media="(prefers-color-scheme: light)" srcset="assets/readme/badges/light/maven.png">
-  <img src="assets/readme/badges/dark/maven.png" alt="Maven" height="28" />
+  <source media="(prefers-color-scheme: dark)" srcset=".github/readme/badges/dark/maven.png">
+  <source media="(prefers-color-scheme: light)" srcset=".github/readme/badges/light/maven.png">
+  <img src=".github/readme/badges/dark/maven.png" alt="Maven" height="28" />
 </picture>
 <picture>
-  <source media="(prefers-color-scheme: dark)" srcset="assets/readme/badges/dark/docker.png">
-  <source media="(prefers-color-scheme: light)" srcset="assets/readme/badges/light/docker.png">
-  <img src="assets/readme/badges/dark/docker.png" alt="Docker" height="28" />
+  <source media="(prefers-color-scheme: dark)" srcset=".github/readme/badges/dark/docker.png">
+  <source media="(prefers-color-scheme: light)" srcset=".github/readme/badges/light/docker.png">
+  <img src=".github/readme/badges/dark/docker.png" alt="Docker" height="28" />
 </picture>
 <picture>
-  <source media="(prefers-color-scheme: dark)" srcset="assets/readme/badges/dark/kubernetes.png">
-  <source media="(prefers-color-scheme: light)" srcset="assets/readme/badges/light/kubernetes.png">
-  <img src="assets/readme/badges/dark/kubernetes.png" alt="Kubernetes" height="28" />
+  <source media="(prefers-color-scheme: dark)" srcset=".github/readme/badges/dark/kubernetes.png">
+  <source media="(prefers-color-scheme: light)" srcset=".github/readme/badges/light/kubernetes.png">
+  <img src=".github/readme/badges/dark/kubernetes.png" alt="Kubernetes" height="28" />
 </picture>
 <picture>
-  <source media="(prefers-color-scheme: dark)" srcset="assets/readme/badges/dark/terraform.png">
-  <source media="(prefers-color-scheme: light)" srcset="assets/readme/badges/light/terraform.png">
-  <img src="assets/readme/badges/dark/terraform.png" alt="Terraform" height="28" />
+  <source media="(prefers-color-scheme: dark)" srcset=".github/readme/badges/dark/terraform.png">
+  <source media="(prefers-color-scheme: light)" srcset=".github/readme/badges/light/terraform.png">
+  <img src=".github/readme/badges/dark/terraform.png" alt="Terraform" height="28" />
 </picture>
 <picture>
-  <source media="(prefers-color-scheme: dark)" srcset="assets/readme/badges/dark/githubactions.png">
-  <source media="(prefers-color-scheme: light)" srcset="assets/readme/badges/light/githubactions.png">
-  <img src="assets/readme/badges/dark/githubactions.png" alt="GitHub Actions" height="28" />
+  <source media="(prefers-color-scheme: dark)" srcset=".github/readme/badges/dark/githubactions.png">
+  <source media="(prefers-color-scheme: light)" srcset=".github/readme/badges/light/githubactions.png">
+  <img src=".github/readme/badges/dark/githubactions.png" alt="GitHub Actions" height="28" />
 </picture>
 <picture>
-  <source media="(prefers-color-scheme: dark)" srcset="assets/readme/badges/dark/argocd.png">
-  <source media="(prefers-color-scheme: light)" srcset="assets/readme/badges/light/argocd.png">
-  <img src="assets/readme/badges/dark/argocd.png" alt="Argo CD" height="28" />
+  <source media="(prefers-color-scheme: dark)" srcset=".github/readme/badges/dark/argocd.png">
+  <source media="(prefers-color-scheme: light)" srcset=".github/readme/badges/light/argocd.png">
+  <img src=".github/readme/badges/dark/argocd.png" alt="Argo CD" height="28" />
 </picture>
 </p>
 
@@ -224,7 +224,7 @@ React에서 경매 탐색·입찰·알림 UI를 제공하고, Spring Boot가 **�
 ## 🖥️ Preview · [자세히 보기](https://bulldog93.tistory.com/47)
 
 <div align="center">
-  <img src="assets/readme/preview-home.png" alt="MACTA 홈 화면" width="900" />
+  <img src=".github/readme/preview-home.png" alt="MACTA 홈 화면" width="900" />
   <p>메인 페이지</p>
 </div>
 
@@ -341,11 +341,11 @@ Spring Boot REST API가 **회원(User) · 경매(Auction) · 입찰(Bid) · 결�
 
 ```text
 SK-Rookies5-MINI3_MACTA/
-┣━━ 📂 assets/                              # README용 에셋
-┃   ┗━━ 📂 readme/
-┃       ┣━━ 📂 badges/dark|light/           # Built With 뱃지 (다크·라이트)
-┃       ┣━━ 🖼️ logo.png                     # README 타이틀 로고
-┃       ┗━━ 🖼️ preview-home.png             # Preview 스크린샷
+┣━━ 📂 .github/readme/                      # README 전용 에셋
+┃   ┣━━ 📂 badges/dark|light/               # Built With 뱃지 (다크·라이트)
+┃   ┣━━ 🖼️ logo.png                         # README 타이틀 로고
+┃   ┣━━ 🖼️ preview-home.png                 # Preview 스크린샷
+┃   ┗━━ 🖼️ infrastructure.drawio.png        # 인프라 아키텍처 다이어그램
 ┣━━ 📂 MACTA-frontend/                      # React 클라이언트
 ┃   ┣━━ 📂 src/
 ┃   ┃   ┣━━ 📂 api/                         # Axios 인스턴스 · auction/auth/user API
@@ -394,7 +394,7 @@ SK-Rookies5-MINI3_MACTA/
 ## 🏗 Infrastructure Overview
 
 <div align="center">
-  <img src="assets/readme/infrastructure.drawio.png" alt="MACTA 인프라 아키텍처" width="1000" />
+  <img src=".github/readme/infrastructure.drawio.png" alt="MACTA 인프라 아키텍처" width="1000" />
 </div>
 
 **Route53 → WAF/ACM → ALB → EKS(Frontend·Backend) → RDS·Redis·S3** 로 이어지는 AWS 기반 아키텍처입니다. 사용자 트래픽은 ALB까지만 도달하고, 애플리케이션과 데이터 계층은 Private Subnet 안에서만 통신합니다. 배포는 **GitHub Actions → ECR → Argo CD(GitOps)** 로 자동화됩니다.
