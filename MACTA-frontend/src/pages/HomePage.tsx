@@ -1,5 +1,6 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { Filter, Plus, Clock, TrendingUp, ChevronDown, ChevronUp, Search, Coins, Loader2, Heart } from 'lucide-react';
 import { Layout } from '../components/layout/Layout';
 import { CountdownTimer } from '../components/common/CountdownTimer';
@@ -19,6 +20,7 @@ type SortOption = 'newest' | 'closing-soon' | 'price-low' | 'price-high';
 export function HomePage() {
   const navigate = useNavigate();
   const { showToast } = useToast();
+  const queryClient = useQueryClient();
   const [searchParams, setSearchParams] = useSearchParams();
   const { user, isLoggedIn } = useAuthStore();
   
@@ -43,8 +45,21 @@ export function HomePage() {
     size: PAGE_SIZE
   });
 
-  const [apiCategories, setApiCategories] = useState<Category[]>([]);
-  const [stats, setStats] = useState<AuctionStats | null>(null);
+  const { data: apiCategories = [] } = useQuery({
+    queryKey: ['categories'],
+    queryFn: async () => {
+      const res = await auctionApi.getCategories();
+      return res.success ? res.data : ([] as Category[]);
+    },
+  });
+
+  const { data: stats = null } = useQuery({
+    queryKey: ['auction-stats'],
+    queryFn: async () => {
+      const res = await auctionApi.getAuctionStats();
+      return res.success ? res.data : (null as AuctionStats | null);
+    },
+  });
   
   // Collapsible states
   const [isCategoryExpanded, setIsCategoryExpanded] = useState(true);
@@ -54,36 +69,6 @@ export function HomePage() {
   // Local input states for price
   const [minPriceInput, setMinPriceInput] = useState(minPrice);
   const [maxPriceInput, setMaxPriceInput] = useState(maxPrice);
-
-  useEffect(() => {
-    // Fetch categories and stats from API with error handling
-    const fetchData = async () => {
-      try {
-        const [catRes, statsRes] = await Promise.all([
-          auctionApi.getCategories().catch(err => ({ success: false, data: [] as Category[], _error: err })),
-          auctionApi.getAuctionStats().catch(err => ({ success: false, data: null, _error: err }))
-        ]);
-
-        if (catRes.success) {
-          setApiCategories(catRes.data);
-        } else {
-          console.warn('Failed to fetch categories');
-          setApiCategories([]);
-        }
-
-        if (statsRes.success) {
-          setStats(statsRes.data);
-        } else {
-          console.warn('Failed to fetch stats');
-          setStats(null);
-        }
-      } catch (err) {
-        console.error('Unexpected error in HomePage data fetching:', err);
-      }
-    };
-
-    fetchData();
-  }, []);
 
   const updateFilters = (updates: Record<string, string>) => {
     const newParams = new URLSearchParams(searchParams);
@@ -110,23 +95,17 @@ export function HomePage() {
   const handleToggleLike = async (e: React.MouseEvent, id: number) => {
     e.stopPropagation();
     
-    // 1. Optimistic UI Update: 즉시 화면의 하트 색상을 바꿈 (로딩 없이 즉시)
     setAuctions(prev => prev.map(item => 
       item.id === id ? { ...item, isLiked: !item.isLiked } : item
     ));
 
     try {
-      // 2. 서버 통신 (로딩 스피너 없이 백그라운드에서 실행)
       const res = await auctionApi.toggleLike(id);
       if (res.success) {
         showToast(res.data.isLiked ? 'Added to watchlist' : 'Removed from watchlist', 'success');
-        // 사이드바 통계만 조용히 업데이트
-        auctionApi.getAuctionStats().then(statsRes => {
-          if (statsRes.success) setStats(statsRes.data);
-        });
+        queryClient.invalidateQueries({ queryKey: ['auction-stats'] });
       }
     } catch {
-      // 3. 실패 시 UI 롤백
       setAuctions(prev => prev.map(item => 
         item.id === id ? { ...item, isLiked: !item.isLiked } : item
       ));

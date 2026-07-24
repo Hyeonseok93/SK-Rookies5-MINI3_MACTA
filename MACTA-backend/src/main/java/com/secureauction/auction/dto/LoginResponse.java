@@ -1,13 +1,20 @@
 package com.secureauction.auction.dto;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Builder;
 import lombok.Getter;
 
-@Getter
 @Builder
 public class LoginResponse {
-    private String accessToken;
-    private UserDto user;
+    /** HttpOnly 쿠키로만 전달. JSON 응답에는 포함하지 않음. */
+    private final String accessToken;
+    @Getter
+    private final UserDto user;
+
+    @JsonIgnore
+    public String getAccessToken() {
+        return accessToken;
+    }
 
     @Getter
     @Builder

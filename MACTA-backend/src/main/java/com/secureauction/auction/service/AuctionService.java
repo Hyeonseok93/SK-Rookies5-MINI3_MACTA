@@ -3,7 +3,9 @@ package com.secureauction.auction.service;
 import com.secureauction.auction.domain.*;
 import com.secureauction.auction.dto.AuctionDto;
 import com.secureauction.auction.dto.AuctionStatsResponse;
-import com.secureauction.auction.global.security.CustomUserDetails;
+import com.secureauction.auction.exception.BusinessException;
+import com.secureauction.auction.exception.ErrorCode;
+import com.secureauction.auction.global.security.SecurityUtils;
 import com.secureauction.auction.repository.AuctionLikeRepository;
 import com.secureauction.auction.repository.AuctionRepository;
 import com.secureauction.auction.repository.PictureRepository;
@@ -14,15 +16,17 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
@@ -31,15 +35,15 @@ public class AuctionService {
 
     private final AuctionRepository auctionRepository;
     private final PictureRepository pictureRepository;
-    private final ImageService imageService;
+    private final PictureUrlResolver pictureUrlResolver;
     private final AuctionLikeRepository auctionLikeRepository;
+    private final AuctionViewService auctionViewService;
 
-    /**
-     * [등록] 경매 상품 등록
-     */
     @Transactional
     public Long createAuction(AuctionDto.CreateRequest request, User seller) {
-        // 1. Auction 엔티티 생성
+        LocalDateTime startTime = request.getStartTime() != null ? request.getStartTime() : LocalDateTime.now();
+        AuctionStatus initialStatus = startTime.isAfter(LocalDateTime.now()) ? AuctionStatus.READY : AuctionStatus.LIVE;
+
         Auction auction = Auction.builder()
                 .seller(seller)
                 .title(request.getTitle())
@@ -47,15 +51,13 @@ public class AuctionService {
                 .category(Category.valueOf(request.getCategory()))
                 .startPrice(request.getStartPrice())
                 .currentPrice(request.getStartPrice())
-                .startTime(request.getStartTime() != null ? request.getStartTime() : LocalDateTime.now())
+                .startTime(startTime)
                 .endTime(request.getEndTime())
-                .status(AuctionStatus.LIVE)
+                .status(initialStatus)
                 .build();
 
-        // 2. 경매 저장
         Auction savedAuction = auctionRepository.save(auction);
 
-        // 3. 사진 엔티티 생성 및 저장
         if (request.getPictures() != null) {
             List<Picture> pictures = request.getPictures().stream()
                     .map(picDto -> Picture.builder()
@@ -73,22 +75,12 @@ public class AuctionService {
         return savedAuction.getId();
     }
 
-    /**
-     * 메인 페이지: 전체 경매 목록 조회 (필터링 및 정렬 지원)
-     */
     @Transactional(readOnly = true)
     public Page<AuctionDto.ListResponse> getAuctionList(
             String category, String q, Long minPrice, Long maxPrice, String sort, Pageable pageable) {
-        
-        // 현재 로그인 사용자 식별
-        User currentUser = null;
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        if (authentication != null && authentication.getPrincipal() instanceof CustomUserDetails) {
-            currentUser = ((CustomUserDetails) authentication.getPrincipal()).getUser();
-        }
-        final User finalUser = currentUser;
 
-        // 정렬 조건 처리
+        User currentUser = SecurityUtils.currentUserOrNull();
+
         Sort sortCondition = switch (sort) {
             case "closing-soon" -> Sort.by(Sort.Direction.ASC, "endTime");
             case "price-low" -> Sort.by(Sort.Direction.ASC, "currentPrice");
@@ -98,26 +90,21 @@ public class AuctionService {
 
         Pageable sortedPageable = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(), sortCondition);
 
-        // 동적 쿼리 (Specification) 생성
         Specification<Auction> spec = (root, query, cb) -> {
             List<Predicate> predicates = new ArrayList<>();
-
-            // 1. 상태 (기본적으로 LIVE 인 것만 조회)
             predicates.add(cb.equal(root.get("status"), AuctionStatus.LIVE));
 
-            // 2. 카테고리 필터
             if (category != null && !category.isEmpty()) {
                 try {
                     predicates.add(cb.equal(root.get("category"), Category.valueOf(category)));
-                } catch (IllegalArgumentException ignored) {}
+                } catch (IllegalArgumentException ignored) {
+                }
             }
 
-            // 3. 검색어 필터 (제목)
             if (q != null && !q.isEmpty()) {
                 predicates.add(cb.like(cb.lower(root.get("title")), "%" + q.toLowerCase() + "%"));
             }
 
-            // 4. 가격 범위 필터
             if (minPrice != null) {
                 predicates.add(cb.greaterThanOrEqualTo(root.get("currentPrice"), minPrice));
             }
@@ -128,53 +115,55 @@ public class AuctionService {
             return cb.and(predicates.toArray(new Predicate[0]));
         };
 
-        return auctionRepository.findAll(spec, sortedPageable).map(auction -> {
-            String mainUrl = auction.getPictures().stream()
-                    .filter(Picture::getIsMain)
-                    .map(picture -> imageService.createPresignedUrl(picture.getImageKey()))
-                    .findFirst()
-                    .orElse(null);
+        Page<Auction> page = auctionRepository.findAll(spec, sortedPageable);
+        List<Auction> auctions = page.getContent();
+        List<Long> auctionIds = auctions.stream().map(Auction::getId).toList();
 
-            boolean isLiked = finalUser != null && auctionLikeRepository.findByUserAndAuction(finalUser, auction).isPresent();
+        Set<Long> likedIds = new HashSet<>();
+        Map<Long, String> mainImageKeys = new HashMap<>();
 
+        if (!auctionIds.isEmpty()) {
+            if (currentUser != null) {
+                likedIds.addAll(auctionLikeRepository.findLikedAuctionIds(currentUser, auctionIds));
+            }
+            for (Object[] row : pictureRepository.findMainImageKeysByAuctionIds(auctionIds)) {
+                mainImageKeys.put((Long) row[0], (String) row[1]);
+            }
+        }
+
+        return page.map(auction -> {
+            String imageKey = mainImageKeys.get(auction.getId());
+            int bidCount = auction.getBidCount() != null ? auction.getBidCount() : 0;
             return AuctionDto.ListResponse.builder()
                     .id(auction.getId())
                     .title(auction.getTitle())
                     .currentPrice(auction.getCurrentPrice())
                     .status(auction.getStatus().name())
                     .category(auction.getCategory().name())
-                    .mainPictureUrl(mainUrl)
+                    .mainPictureUrl(pictureUrlResolver.resolve(imageKey))
                     .startTime(auction.getStartTime())
                     .endTime(auction.getEndTime())
-                    .bidCount(auction.getBids().size())
-                    .isLiked(isLiked)
+                    .bidCount(bidCount)
+                    .isLiked(likedIds.contains(auction.getId()))
                     .sellerId(auction.getSeller().getId())
                     .build();
         });
     }
 
-    /**
-     * 상세 페이지: 특정 경매 상세 정보 조회
-     */
-    @Transactional
+    @Transactional(readOnly = true)
     public AuctionDto.DetailResponse getAuctionDetail(Long id) {
+        auctionViewService.incrementViewCount(id);
+
         Auction auction = auctionRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("해당 경매 물품을 찾을 수 없습니다. ID: " + id));
+                .orElseThrow(() -> new BusinessException(ErrorCode.AUCTION_NOT_FOUND));
 
-        // 조회수 증가
-        auction.increaseViewCount();
-
-        // 현재 로그인한 사용자의 좋아요 여부 확인
-        boolean isLiked = false;
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        if (authentication != null && authentication.getPrincipal() instanceof CustomUserDetails) {
-            User currentUser = ((CustomUserDetails) authentication.getPrincipal()).getUser();
-            isLiked = auctionLikeRepository.findByUserAndAuction(currentUser, auction).isPresent();
-        }
+        User currentUser = SecurityUtils.currentUserOrNull();
+        boolean isLiked = currentUser != null
+                && auctionLikeRepository.findByUserAndAuction(currentUser, auction).isPresent();
 
         List<AuctionDto.PictureInfo> pictureInfos = auction.getPictures().stream()
                 .map(p -> AuctionDto.PictureInfo.builder()
-                        .url(imageService.createPresignedUrl(p.getImageKey()))
+                        .url(pictureUrlResolver.resolve(p.getImageKey()))
                         .imageKey(p.getImageKey())
                         .isMain(p.getIsMain())
                         .sortOrder(p.getSortOrder())
@@ -187,12 +176,11 @@ public class AuctionService {
                 .findFirst()
                 .orElse(null);
 
-        // 입찰 기록 (나중에 추가 구현 가능)
         List<AuctionDto.BidInfo> biddingHistory = auction.getBids().stream()
                 .map(bid -> AuctionDto.BidInfo.builder()
-                        .bidderNickname(bid.getUser().getNickname()) // 입찰자 닉네임
-                        .price(bid.getPrice())                      // 입찰 금액
-                        .bidTime(bid.getUpdatedAt())                // 입찰 시간
+                        .bidderNickname(bid.getUser().getNickname())
+                        .price(bid.getPrice())
+                        .bidTime(bid.getUpdatedAt())
                         .build())
                 .sorted((b1, b2) -> b2.getBidTime().compareTo(b1.getBidTime()))
                 .collect(Collectors.toList());
@@ -224,7 +212,7 @@ public class AuctionService {
     @Transactional
     public AuctionDto.LikeToggleResponse toggleLike(Long auctionId, User user) {
         Auction auction = auctionRepository.findById(auctionId)
-                .orElseThrow(() -> new IllegalArgumentException("해당 경매 물품을 찾을 수 없습니다. ID: " + auctionId));
+                .orElseThrow(() -> new BusinessException(ErrorCode.AUCTION_NOT_FOUND));
 
         Optional<AuctionLike> auctionLike = auctionLikeRepository.findByUserAndAuction(user, auction);
         boolean isLiked;
@@ -246,9 +234,6 @@ public class AuctionService {
                 .build();
     }
 
-    /**
-     * 메인 페이지 통계 정보 조회
-     */
     @Transactional(readOnly = true)
     public AuctionStatsResponse getStats() {
         LocalDateTime now = LocalDateTime.now();

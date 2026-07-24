@@ -1,5 +1,8 @@
 package com.secureauction.auction.dto;
 
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Positive;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -15,12 +18,24 @@ public class AuctionDto {
     @NoArgsConstructor
     @AllArgsConstructor
     public static class CreateRequest {
+        @NotBlank(message = "제목은 필수입니다.")
         private String title;
+
+        @NotBlank(message = "설명은 필수입니다.")
         private String description;
+
+        @NotBlank(message = "카테고리는 필수입니다.")
         private String category;
+
+        @NotNull(message = "시작가는 필수입니다.")
+        @Positive(message = "시작가는 0보다 커야 합니다.")
         private Long startPrice;
+
         private LocalDateTime startTime;
+
+        @NotNull(message = "종료 시간은 필수입니다.")
         private LocalDateTime endTime;
+
         private List<PictureInfo> pictures;
     }
 

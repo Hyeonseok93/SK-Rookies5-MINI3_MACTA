@@ -1,8 +1,8 @@
 import { api } from './client';
-import type { 
-  AuctionListResponse, ApiResponse, Category, 
-  AuctionDetail, Comment, AuctionStats, CreateAuctionRequest, 
-  NotificationListResponse, LikeToggleResponse 
+import type {
+  AuctionListResponse, ApiResponse, Category,
+  AuctionDetail, Comment, AuctionStats, CreateAuctionRequest,
+  LikeToggleResponse,
 } from './types';
 
 const getSafeImageFileName = (file: File) => {
@@ -68,33 +68,6 @@ export const auctionApi = {
   },
 
   /**
-   * 4.3 결제하기
-   * POST /payments
-   */
-  processPayment: async (auctionId: number, amount: number): Promise<ApiResponse<void>> => {
-    const { data } = await api.post<ApiResponse<void>>('/payments', { auctionId, amount });
-    return data;
-  },
-
-  /**
-   * 4.3 배송 시작 (설계서 추가)
-   * PATCH /auctions/{id}/shipping
-   */
-  startShipping: async (id: string): Promise<ApiResponse<void>> => {
-    const { data } = await api.patch<ApiResponse<void>>(`/auctions/${id}/shipping`);
-    return data;
-  },
-
-  /**
-   * 4.3 거래 확정 (설계서 추가)
-   * PATCH /auctions/{id}/complete
-   */
-  completeTransaction: async (id: string): Promise<ApiResponse<void>> => {
-    const { data } = await api.patch<ApiResponse<void>>(`/auctions/${id}/complete`);
-    return data;
-  },
-
-  /**
    * 4.7 좋아요(관심목록) 토글
    * POST /auctions/{id}/likes
    */
@@ -156,51 +129,6 @@ export const auctionApi = {
         'Content-Type': 'multipart/form-data',
       },
     });
-    return data;
-  },
-
-  /**
-   * 4.5 알림 목록 조회
-   * GET /notifications
-   */
-  getNotifications: async (params: { page?: number; size?: number } = {}): Promise<NotificationListResponse> => {
-    const { data } = await api.get<NotificationListResponse>('/notifications', { params });
-    return data;
-  },
-
-  /**
-   * 4.6 알림 읽음 처리
-   * PATCH /notifications/{id}
-   */
-  markNotificationAsRead: async (id: number): Promise<ApiResponse<void>> => {
-    const { data } = await api.patch<ApiResponse<void>>(`/notifications/${id}`);
-    return data;
-  },
-
-  /**
-   * 알림 삭제
-   * DELETE /notifications/{id}
-   */
-  deleteNotification: async (id: number): Promise<ApiResponse<void>> => {
-    const { data } = await api.delete<ApiResponse<void>>(`/notifications/${id}`);
-    return data;
-  },
-
-  /**
-   * 읽은 알림 모두 삭제
-   * DELETE /notifications/read
-   */
-  deleteReadNotifications: async (): Promise<ApiResponse<void>> => {
-    const { data } = await api.delete<ApiResponse<void>>('/notifications/read');
-    return data;
-  },
-
-  /**
-   * 모든 알림 읽음 처리
-   * PATCH /notifications/read
-   */
-  markAllNotificationsAsRead: async (): Promise<ApiResponse<void>> => {
-    const { data } = await api.patch<ApiResponse<void>>('/notifications/read');
     return data;
   },
 

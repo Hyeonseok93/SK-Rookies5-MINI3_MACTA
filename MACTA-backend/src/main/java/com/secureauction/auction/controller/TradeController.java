@@ -1,12 +1,12 @@
 package com.secureauction.auction.controller;
 
-import com.secureauction.auction.domain.User;
 import com.secureauction.auction.dto.ApiResponse;
 import com.secureauction.auction.dto.PaymentRequest;
 import com.secureauction.auction.exception.BusinessException;
 import com.secureauction.auction.exception.ErrorCode;
 import com.secureauction.auction.global.security.CustomUserDetails;
 import com.secureauction.auction.service.TradeService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
@@ -23,7 +23,7 @@ public class TradeController {
      */
     @PostMapping("/payments")
     public ApiResponse<Void> processPayment(
-            @RequestBody PaymentRequest request,
+            @Valid @RequestBody PaymentRequest request,
             @AuthenticationPrincipal CustomUserDetails userDetails) {
         
         if (userDetails == null) {

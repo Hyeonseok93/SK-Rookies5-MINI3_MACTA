@@ -5,7 +5,6 @@ import com.secureauction.auction.dto.ApiResponse;
 import com.secureauction.auction.dto.BidRequest;
 import com.secureauction.auction.dto.BidResponse;
 import com.secureauction.auction.global.security.CustomUserDetails;
-import com.secureauction.auction.repository.UserRepository;
 import com.secureauction.auction.service.BidService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -18,7 +17,6 @@ import org.springframework.web.bind.annotation.*;
 public class AuctionBidController {
 
     private final BidService bidService;
-    private final UserRepository userRepository;
 
     @PostMapping("/{id}/bids")
     public ApiResponse<BidResponse> placeBid(

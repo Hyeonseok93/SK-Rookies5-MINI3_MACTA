@@ -147,7 +147,7 @@ export interface AuctionDetail extends AuctionSummary {
 
 export interface Notification {
   id: number;
-  type: 'OUTBID' | 'AUCTION_WON' | 'AUCTION_ENDED' | 'NEW_QUESTION' | 'NEW_ANSWER' | 'CLOSING_SOON';
+  type: 'OUTBID' | 'NEW_BID' | 'AUCTION_WON' | 'AUCTION_ENDED' | 'NEW_QUESTION' | 'NEW_ANSWER' | 'CLOSING_SOON' | 'PAYMENT_COMPLETED' | 'SHIPPING_STARTED' | 'TRADE_COMPLETED';
   content: string;
   targetUrl: string;
   isRead: boolean;

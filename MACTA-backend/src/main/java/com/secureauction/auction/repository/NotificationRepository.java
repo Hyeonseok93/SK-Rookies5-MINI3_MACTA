@@ -1,6 +1,7 @@
 package com.secureauction.auction.repository;
 
 import com.secureauction.auction.domain.Notification;
+import com.secureauction.auction.domain.NotificationType;
 import com.secureauction.auction.domain.User;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -16,4 +17,6 @@ public interface NotificationRepository extends JpaRepository<Notification, Long
 
     // 읽은 알림 일괄 삭제
     void deleteAllByUserAndIsReadTrue(User user);
+
+    boolean existsByUserAndTypeAndTargetUrl(User user, NotificationType type, String targetUrl);
 }

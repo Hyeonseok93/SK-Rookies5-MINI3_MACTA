@@ -19,8 +19,8 @@ public class CustomUserDetails implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        // 회원의 권한(USER, ADMIN) 앞에 "ROLE_"을 붙여 Spring Security 규격에 맞게 전달합니다.
-        return List.of(new SimpleGrantedAuthority("ROLE_" + user.getRole().name()));
+        // UserRole enum values are already ROLE_USER / ROLE_ADMIN
+        return List.of(new SimpleGrantedAuthority(user.getRole().name()));
     }
 
     @Override

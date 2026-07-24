@@ -1,9 +1,10 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { ArrowLeft, Bell, Clock, Check, ExternalLink, Trash2 } from 'lucide-react';
 import { Layout } from '../components/layout/Layout';
-import { auctionApi } from '../api/auction';
-import type { Notification, PageInfo } from '../api/types';
+import { notificationApi } from '../api/notification';
+import type { Notification } from '../api/types';
 import { useToast } from '../components/common/Toast';
 import { Pagination } from '../components/common/Pagination';
 import { ErrorState } from '../components/common/ErrorState';
@@ -13,43 +14,45 @@ import { normalizeProductDetailUrl } from '../utils/routes';
 export function NotificationsPage() {
   const navigate = useNavigate();
   const { showToast } = useToast();
-  const [notifications, setNotifications] = useState<Notification[]>([]);
-  const [pageInfo, setPageInfo] = useState<PageInfo | null>(null);
-  const [isLoading, setIsLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
+  const queryClient = useQueryClient();
   const [filter, setFilter] = useState<'all' | 'unread'>('all');
   const [currentPage, setCurrentPage] = useState(0);
   const PAGE_SIZE = 20;
 
-  const fetchNotifications = useCallback(async () => {
-    setIsLoading(true);
-    setError(null);
-    try {
-      const res = await auctionApi.getNotifications({ 
-        page: currentPage, 
-        size: PAGE_SIZE 
+  const queryKey = ['notifications', currentPage, PAGE_SIZE] as const;
+
+  const { data, isLoading, error, refetch } = useQuery({
+    queryKey,
+    queryFn: async () => {
+      const res = await notificationApi.getNotifications({
+        page: currentPage,
+        size: PAGE_SIZE,
       });
-      if (res.success && res.data) {
-        // res.data is { content: Notification[], pageInfo: PageInfo }
-        setNotifications(res.data.content || []);
-        setPageInfo(res.data.pageInfo);
+      if (!res.success || !res.data) {
+        throw new Error('알림을 불러오는데 실패했습니다.');
       }
-    } catch {
-      setError('알림을 불러오는데 실패했습니다.');
-    } finally {
-      setIsLoading(false);
-    }
-  }, [currentPage]);
+      return {
+        notifications: res.data.content || ([] as Notification[]),
+        pageInfo: res.data.pageInfo,
+      };
+    },
+  });
 
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      fetchNotifications();
-    }, 0);
+  const notifications = data?.notifications ?? [];
+  const pageInfo = data?.pageInfo ?? null;
 
-    return () => {
-      clearTimeout(timer);
-    };
-  }, [fetchNotifications]);
+  const setNotifications = (
+    updater: Notification[] | ((prev: Notification[]) => Notification[]),
+  ) => {
+    queryClient.setQueryData<{ notifications: Notification[]; pageInfo: typeof pageInfo }>(
+      queryKey,
+      (prev) => {
+        if (!prev) return prev;
+        const next = typeof updater === 'function' ? updater(prev.notifications) : updater;
+        return { ...prev, notifications: next };
+      },
+    );
+  };
 
   const handleFilterChange = (newFilter: 'all' | 'unread') => {
     setFilter(newFilter);
@@ -57,7 +60,7 @@ export function NotificationsPage() {
   };
 
   const handleMarkAsRead = async (id: number) => {
-    const res = await auctionApi.markNotificationAsRead(id);
+    const res = await notificationApi.markNotificationAsRead(id);
     if (res.success) {
       setNotifications(prev => prev.map(n => n.id === id ? { ...n, isRead: true } : n));
     }
@@ -71,7 +74,7 @@ export function NotificationsPage() {
 
   const handleDelete = async (e: React.MouseEvent, id: number) => {
     e.stopPropagation();
-    const res = await auctionApi.deleteNotification(id);
+    const res = await notificationApi.deleteNotification(id);
     if (res.success) {
       setNotifications(prev => prev.filter(n => n.id !== id));
       showToast('알림이 삭제되었습니다.', 'info');
@@ -81,8 +84,8 @@ export function NotificationsPage() {
   const handleMarkAllRead = async () => {
     const unreadIds = notifications.filter(n => !n.isRead).map(n => n.id);
     if (unreadIds.length === 0) return;
-    
-    await Promise.all(unreadIds.map(id => auctionApi.markNotificationAsRead(id)));
+
+    await Promise.all(unreadIds.map(id => notificationApi.markNotificationAsRead(id)));
     setNotifications(prev => prev.map(n => ({ ...n, isRead: true })));
     showToast('모든 알림을 읽음 처리했습니다.', 'success');
   };
@@ -94,14 +97,15 @@ export function NotificationsPage() {
       return;
     }
 
-    const res = await auctionApi.deleteReadNotifications();
+    const res = await notificationApi.deleteReadNotifications();
     if (res.success) {
       setNotifications(prev => prev.filter(n => !n.isRead));
       showToast('읽은 알림을 모두 삭제했습니다.', 'success');
+      queryClient.invalidateQueries({ queryKey: ['notifications'] });
     }
   };
 
-  const filteredNotifications = filter === 'unread' 
+  const filteredNotifications = filter === 'unread'
     ? notifications.filter(n => !n.isRead)
     : notifications;
 
@@ -119,120 +123,112 @@ export function NotificationsPage() {
             <h1 className="text-3xl font-bold text-white">알림함</h1>
           </div>
           
-          <div className="flex gap-3">
-            {notifications.some(n => !n.isRead) && (
-              <button 
-                onClick={handleMarkAllRead}
-                className="text-xs bg-blue-600/10 text-blue-400 border border-blue-600/30 px-3 py-1.5 rounded-lg hover:bg-blue-600/20 transition-colors flex items-center gap-2"
-              >
-                <Check className="w-4 h-4" />
-                모두 읽음 처리
-              </button>
-            )}
-            {notifications.some(n => n.isRead) && (
-              <button 
-                onClick={handleDeleteRead}
-                className="text-xs bg-red-600/10 text-red-400 border border-red-600/30 px-3 py-1.5 rounded-lg hover:bg-red-500/20 transition-colors flex items-center gap-2"
-              >
-                <Trash2 className="w-4 h-4" />
-                읽은 메시지 삭제
-              </button>
-            )}
+          <div className="flex items-center gap-2">
+            <button
+              onClick={() => handleFilterChange('all')}
+              className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
+                filter === 'all' ? 'bg-blue-600 text-white' : 'bg-[#1e3a5f]/50 text-gray-400 hover:text-white'
+              }`}
+            >
+              전체
+            </button>
+            <button
+              onClick={() => handleFilterChange('unread')}
+              className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
+                filter === 'unread' ? 'bg-blue-600 text-white' : 'bg-[#1e3a5f]/50 text-gray-400 hover:text-white'
+              }`}
+            >
+              읽지 않음
+            </button>
           </div>
         </div>
 
-        {/* Filters */}
-        <div className="flex gap-2 mb-6">
+        <div className="flex flex-wrap gap-2 mb-6">
           <button
-            onClick={() => handleFilterChange('all')}
-            className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
-              filter === 'all' ? 'bg-blue-600 text-white' : 'text-gray-400 hover:bg-[#1e3a5f]/30'
-            }`}
+            onClick={handleMarkAllRead}
+            className="flex items-center gap-2 px-3 py-1.5 text-sm text-blue-400 hover:bg-blue-500/10 rounded-lg transition-colors"
           >
-            전체
+            <Check className="w-4 h-4" /> 모두 읽음
           </button>
           <button
-            onClick={() => handleFilterChange('unread')}
-            className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
-              filter === 'unread' ? 'bg-blue-600 text-white' : 'text-gray-400 hover:bg-[#1e3a5f]/30'
-            }`}
+            onClick={handleDeleteRead}
+            className="flex items-center gap-2 px-3 py-1.5 text-sm text-red-400 hover:bg-red-500/10 rounded-lg transition-colors"
           >
-            읽지 않음 ({notifications.filter(n => !n.isRead).length})
+            <Trash2 className="w-4 h-4" /> 읽은 알림 삭제
           </button>
         </div>
 
-        <div className="bg-[#0d1b2e] border border-[#1e3a5f] rounded-2xl overflow-hidden shadow-2xl">
-          {isLoading ? (
-            <div className="py-20 flex flex-col items-center justify-center text-blue-400">
-              <div className="w-10 h-10 border-4 border-blue-600 border-t-transparent rounded-full animate-spin mb-4" />
-              <p className="text-gray-400">알림을 불러오는 중입니다...</p>
-            </div>
-          ) : error ? (
-            <div className="p-8">
-              <ErrorState message={error} onRetry={fetchNotifications} />
-            </div>
-          ) : filteredNotifications.length > 0 ? (
-            <div className="divide-y divide-[#1e3a5f]">
-              {filteredNotifications.map((n) => (
-                <div 
-                  key={n.id} 
-                  className={`p-6 flex items-center gap-4 transition-all cursor-pointer hover:bg-[#1e3a5f]/10 ${!n.isRead ? 'bg-blue-600/5' : 'opacity-70'}`}
-                  onClick={() => handleMarkAsRead(n.id)}
-                >
-                  <div className={`p-3 rounded-xl flex-shrink-0 ${!n.isRead ? 'bg-blue-600/20 text-blue-400' : 'bg-gray-800 text-gray-500'}`}>
-                    <Bell className="w-6 h-6" />
-                  </div>
+        {isLoading ? (
+          <div className="py-20 text-center text-gray-500">알림을 불러오는 중...</div>
+        ) : error ? (
+          <ErrorState message={(error as Error).message} onRetry={() => refetch()} />
+        ) : filteredNotifications.length === 0 ? (
+          <div className="py-20 text-center">
+            <Bell className="w-12 h-12 text-gray-700 mx-auto mb-4" />
+            <p className="text-gray-500">알림이 없습니다.</p>
+          </div>
+        ) : (
+          <div className="space-y-3">
+            {filteredNotifications.map((n) => (
+              <div
+                key={n.id}
+                onClick={() => handleMarkAsRead(n.id)}
+                className={`p-4 rounded-xl border transition-all cursor-pointer ${
+                  n.isRead
+                    ? 'bg-[#0d1b2e]/50 border-[#1e3a5f]/50 opacity-70'
+                    : 'bg-[#0d1b2e] border-blue-500/30 shadow-lg shadow-blue-900/10'
+                }`}
+              >
+                <div className="flex justify-between gap-4">
                   <div className="flex-1 min-w-0">
-                    <div className="flex justify-between items-start mb-1">
-                      <p className={`text-lg leading-snug ${!n.isRead ? 'text-white font-semibold' : 'text-gray-300'}`}>
-                        {n.content}
-                      </p>
-                    </div>
-                    <div className="flex items-center gap-4 text-sm text-gray-500">
-                      <div className="flex items-center gap-1.5">
-                        <Clock className="w-4 h-4" />
-                        {formatDateTime(n.createdAt)}
-                      </div>
-                      <span className="px-2 py-0.5 rounded-md bg-[#1e3a5f]/50 text-[10px] uppercase font-bold tracking-wider">
-                        {n.type === 'OUTBID' ? '입찰 상회' : n.type === 'AUCTION_ENDED' ? '경매 종료' : n.type.replace('_', ' ')}
+                    <div className="flex items-center gap-2 mb-1">
+                      <span className="text-[10px] font-bold uppercase tracking-wider text-blue-400 bg-blue-500/10 px-1.5 py-0.5 rounded">
+                        {n.type === 'OUTBID' ? '입찰 상회'
+                          : n.type === 'NEW_BID' ? '신규 입찰'
+                          : n.type === 'AUCTION_ENDED' ? '경매 종료'
+                          : n.type === 'PAYMENT_COMPLETED' ? '결제 완료'
+                          : n.type === 'SHIPPING_STARTED' ? '배송 시작'
+                          : n.type === 'TRADE_COMPLETED' ? '거래 완료'
+                          : n.type.replace('_', ' ')}
                       </span>
+                      {!n.isRead && <div className="w-1.5 h-1.5 rounded-full bg-blue-500" />}
+                    </div>
+                    <p className={`text-sm mb-2 ${n.isRead ? 'text-gray-400' : 'text-white font-medium'}`}>
+                      {n.content}
+                    </p>
+                    <div className="flex items-center gap-3 text-xs text-gray-500">
+                      <span className="flex items-center gap-1">
+                        <Clock className="w-3 h-3" />
+                        {formatDateTime(n.createdAt)}
+                      </span>
+                      {n.targetUrl && (
+                        <button
+                          onClick={(e) => handleNavigate(e, n.targetUrl, n.id)}
+                          className="flex items-center gap-1 text-blue-400 hover:underline"
+                        >
+                          <ExternalLink className="w-3 h-3" /> 바로가기
+                        </button>
+                      )}
                     </div>
                   </div>
-                  <div className="flex items-center gap-2">
-                    <button 
-                      onClick={(e) => handleNavigate(e, n.targetUrl, n.id)}
-                      className="flex items-center gap-2 px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg text-sm font-semibold transition-all shadow-lg shadow-blue-500/10"
-                    >
-                      <span>보기</span>
-                      <ExternalLink className="w-4 h-4" />
-                    </button>
-                    <button 
-                      onClick={(e) => handleDelete(e, n.id)}
-                      className="p-2 text-gray-500 hover:text-red-400 transition-colors"
-                      title="삭제"
-                    >
-                      <Trash2 className="w-5 h-5" />
-                    </button>
-                  </div>
+                  <button
+                    onClick={(e) => handleDelete(e, n.id)}
+                    className="p-2 text-gray-600 hover:text-red-400 transition-colors self-start"
+                    title="삭제"
+                  >
+                    <Trash2 className="w-4 h-4" />
+                  </button>
                 </div>
-              ))}
-            </div>
-          ) : (
-            <div className="py-32 px-4 text-center">
-              <div className="w-20 h-20 bg-[#1e3a5f]/20 rounded-full flex items-center justify-center mx-auto mb-6">
-                <Bell className="w-10 h-10 text-gray-600 opacity-30" />
               </div>
-              <h2 className="text-xl font-semibold text-white mb-2">새로운 알림이 없습니다.</h2>
-              <p className="text-gray-500">경매와 관련된 새로운 소식이 있으면 여기에 표시됩니다.</p>
-            </div>
-          )}
-        </div>
+            ))}
+          </div>
+        )}
 
-        {!isLoading && pageInfo && (
-          <Pagination 
-            currentPage={currentPage} 
-            totalPages={pageInfo.totalPages} 
-            onPageChange={setCurrentPage} 
+        {pageInfo && (
+          <Pagination
+            currentPage={currentPage}
+            totalPages={pageInfo.totalPages}
+            onPageChange={setCurrentPage}
           />
         )}
       </div>

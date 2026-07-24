@@ -3,7 +3,6 @@ package com.secureauction.auction.service;
 import com.secureauction.auction.domain.Notification;
 import com.secureauction.auction.domain.NotificationType;
 import com.secureauction.auction.domain.User;
-import com.secureauction.auction.dto.NotificationDto;
 import com.secureauction.auction.exception.BusinessException;
 import com.secureauction.auction.exception.ErrorCode;
 import com.secureauction.auction.repository.NotificationRepository;
@@ -14,7 +13,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -79,6 +77,9 @@ public class NotificationService {
                 .isRead(false)
                 .build();
         notificationRepository.save(notification);
+    }
 
+    public boolean existsClosingSoon(User user, String targetUrl) {
+        return notificationRepository.existsByUserAndTypeAndTargetUrl(user, NotificationType.CLOSING_SOON, targetUrl);
     }
 }

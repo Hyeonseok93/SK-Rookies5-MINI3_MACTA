@@ -2,6 +2,7 @@ package com.secureauction.auction.domain;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.OptimisticLock;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
@@ -58,12 +59,18 @@ public class Auction {
     private LocalDateTime endTime;
 
     @Builder.Default
+    @OptimisticLock(excluded = true)
     @Column(name = "view_count", nullable = false)
     private Integer viewCount = 0;
 
     @Builder.Default
+    @OptimisticLock(excluded = true)
     @Column(name = "like_count", nullable = false)
     private Integer likeCount = 0;
+
+    @Builder.Default
+    @Column(name = "bid_count", nullable = false)
+    private Integer bidCount = 0;
 
     @Version
     @Column(nullable = false)
@@ -117,5 +124,12 @@ public class Auction {
         if (this.likeCount != null && this.likeCount > 0) {
             this.likeCount--;
         }
+    }
+
+    public void increaseBidCount() {
+        if (this.bidCount == null) {
+            this.bidCount = 0;
+        }
+        this.bidCount++;
     }
 }

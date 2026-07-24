@@ -54,7 +54,7 @@ public class AuthService {
             throw new BusinessException(ErrorCode.INVALID_PASSWORD);
         }
 
-        String token = jwtTokenProvider.createToken(user.getLoginId(), user.getRole().name());
+        String token = jwtTokenProvider.createToken(user);
 
         return LoginResponse.builder()
                 .accessToken(token)

@@ -7,12 +7,19 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 
+import java.util.Collection;
+import java.util.List;
 import java.util.Optional;
 
 public interface AuctionLikeRepository extends JpaRepository<AuctionLike, Long> {
 
     Optional<AuctionLike> findByUserAndAuction(User user, Auction auction);
+
+    @Query("SELECT al.auction.id FROM AuctionLike al WHERE al.user = :user AND al.auction.id IN :auctionIds")
+    List<Long> findLikedAuctionIds(@Param("user") User user, @Param("auctionIds") Collection<Long> auctionIds);
 
     @EntityGraph(attributePaths = {"auction"})
     Page<AuctionLike> findByUser(User user, Pageable pageable);

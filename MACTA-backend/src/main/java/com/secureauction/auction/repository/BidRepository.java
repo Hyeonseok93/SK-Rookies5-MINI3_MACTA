@@ -10,10 +10,22 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import com.secureauction.auction.domain.User;
 
+import java.util.Collection;
+import java.util.List;
 import java.util.Optional;
 
 public interface BidRepository extends JpaRepository<Bid, Long> {
     Optional<Bid> findFirstByAuctionOrderByPriceDesc(Auction auction);
+    long countByAuction(Auction auction);
+
+    @Query("SELECT b.auction.id, COUNT(b) FROM Bid b WHERE b.auction.id IN :auctionIds GROUP BY b.auction.id")
+    List<Object[]> countGroupedByAuctionIds(@Param("auctionIds") Collection<Long> auctionIds);
+
+    @Query("SELECT b.auction.id, MAX(b.price) FROM Bid b WHERE b.auction.id IN :auctionIds GROUP BY b.auction.id")
+    List<Object[]> findMaxPriceGroupedByAuctionIds(@Param("auctionIds") Collection<Long> auctionIds);
+
+    @Query("SELECT b.auction.id, MAX(b.price) FROM Bid b WHERE b.user = :user AND b.auction.id IN :auctionIds GROUP BY b.auction.id")
+    List<Object[]> findMaxPriceGroupedByUserAndAuctionIds(@Param("user") User user, @Param("auctionIds") Collection<Long> auctionIds);
     @Query("SELECT DISTINCT b.auction FROM Bid b WHERE b.user = :user")
     Page<Auction> findBidAuctionsByUser(@Param("user") User user, Pageable pageable);
 

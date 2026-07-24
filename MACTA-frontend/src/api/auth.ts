@@ -1,6 +1,5 @@
-import type { AxiosError } from 'axios';
 import { api } from './client';
-import { clearAccessTokenCookie, setAccessTokenCookie } from './tokenCookie';
+import { getApiErrorMessage } from '../utils/apiError';
 
 export const AUTH_STATE_CHANGED_EVENT = 'macta-auth-state-changed';
 
@@ -31,7 +30,6 @@ export interface LoginUser {
 }
 
 interface LoginData {
-  accessToken: string;
   user: LoginUser;
 }
 
@@ -40,20 +38,34 @@ interface SignupData {
   nickname: string;
 }
 
-interface ErrorResponse {
-  message?: string;
+export async function restoreSession() {
+  try {
+    const { data } = await api.get<ApiResponse<LoginData>>('/auth/me');
+    if (data.success && data.data?.user) {
+      localStorage.setItem('macta_user', JSON.stringify(data.data.user));
+      window.dispatchEvent(new Event(AUTH_STATE_CHANGED_EVENT));
+      return data.data.user;
+    }
+  } catch {
+    localStorage.removeItem('macta_user');
+  }
+  return null;
 }
 
 export async function login(payload: LoginRequest) {
   const { data } = await api.post<ApiResponse<LoginData>>('/auth/login', payload);
-  setAccessTokenCookie(data.data.accessToken);
   localStorage.setItem('macta_user', JSON.stringify(data.data.user));
   window.dispatchEvent(new Event(AUTH_STATE_CHANGED_EVENT));
   return data;
 }
 
-export function logout() {
-  clearAccessTokenCookie();
+export async function logout() {
+  try {
+    await api.post('/auth/logout');
+  } catch {
+    // Ignore logout API failures; still clear local session.
+  }
+
   localStorage.removeItem('macta_user');
   window.dispatchEvent(new Event(AUTH_STATE_CHANGED_EVENT));
 }
@@ -85,17 +97,5 @@ export async function checkNickname(nickname: string) {
 }
 
 export function getAuthErrorMessage(error: unknown, fallback: string) {
-  const axiosError = error as AxiosError<ErrorResponse>;
-  const status = axiosError.response?.status;
-  const responseMessage = axiosError.response?.data?.message;
-
-  if (responseMessage) {
-    return responseMessage;
-  }
-
-  if (status && status >= 500) {
-    return axiosError.message;
-  }
-
-  return fallback;
+  return getApiErrorMessage(error, fallback);
 }

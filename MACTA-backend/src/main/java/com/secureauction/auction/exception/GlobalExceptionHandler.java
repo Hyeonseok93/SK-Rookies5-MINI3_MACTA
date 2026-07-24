@@ -4,9 +4,9 @@ import com.secureauction.auction.dto.ApiResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.OptimisticLockingFailureException;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
-import org.springframework.web.bind.MethodArgumentNotValidException;
 
 @Slf4j
 @RestControllerAdvice
@@ -18,7 +18,7 @@ public class GlobalExceptionHandler {
         ErrorCode errorCode = e.getErrorCode();
         return ResponseEntity
                 .status(errorCode.getStatus())
-                .body(ApiResponse.error(errorCode.getMessage()));
+                .body(ApiResponse.error(errorCode));
     }
 
     @ExceptionHandler(OptimisticLockingFailureException.class)
@@ -27,7 +27,7 @@ public class GlobalExceptionHandler {
         ErrorCode errorCode = ErrorCode.BID_CONFLICT;
         return ResponseEntity
                 .status(errorCode.getStatus())
-                .body(ApiResponse.error(errorCode.getMessage()));
+                .body(ApiResponse.error(errorCode));
     }
 
     @ExceptionHandler(Exception.class)
@@ -43,7 +43,7 @@ public class GlobalExceptionHandler {
         String errorMessage = e.getBindingResult().getAllErrors().get(0).getDefaultMessage();
         log.error("ValidationException: {}", errorMessage);
         return ResponseEntity
-                .status(400)
-                .body(ApiResponse.error(errorMessage));
+                .status(ErrorCode.INVALID_INPUT_VALUE.getStatus())
+                .body(ApiResponse.error(ErrorCode.INVALID_INPUT_VALUE));
     }
 }

@@ -1,6 +1,7 @@
 package com.secureauction.auction.dto;
 
 import com.secureauction.auction.domain.Comment;
+import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -17,6 +18,7 @@ public class CommentDto {
     @NoArgsConstructor
     @AllArgsConstructor
     public static class CreateRequest {
+        @NotBlank(message = "내용은 필수입니다.")
         private String content;
     }
 

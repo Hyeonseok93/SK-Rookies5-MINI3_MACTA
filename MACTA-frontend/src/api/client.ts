@@ -1,9 +1,7 @@
 import axios from 'axios';
-import { getAccessTokenCookie } from './tokenCookie';
 import { useTimeStore } from '../store/useTimeStore';
 import { useAuthStore } from '../store/useAuthStore';
 
-// Extend AxiosRequestConfig to include metadata
 declare module 'axios' {
   export interface AxiosRequestConfig {
     metadata?: {
@@ -21,22 +19,13 @@ export const api = axios.create({
 });
 
 api.interceptors.request.use((config) => {
-  const accessToken = getAccessTokenCookie();
-
-  if (accessToken) {
-    config.headers.Authorization = `Bearer ${accessToken}`;
-  }
-
-  // Record start time for RTT compensation
+  // Auth: HttpOnly cookie (withCredentials). Do not put JWT in JS-accessible storage.
   config.metadata = { startTime: Date.now() };
-
   return config;
 });
 
-// Response Interceptor for Time Sync and Global Error Handling
 api.interceptors.response.use(
   (response) => {
-    // 1. Time Synchronization Logic
     const startTime = response.config.metadata?.startTime;
     const endTime = Date.now();
     const serverTimestamp = response.data?.timestamp;
@@ -45,8 +34,6 @@ api.interceptors.response.use(
       const st = new Date(serverTimestamp).getTime();
       const rtt = (endTime - startTime) / 2;
       const serverOffset = (st + rtt) - endTime;
-      
-      // Update global time offset
       useTimeStore.getState().setServerOffset(serverOffset);
     }
 
@@ -73,15 +60,18 @@ api.interceptors.response.use(
         }
         break;
 
-      case 401:
-        // Unauthorized: Clear tokens and redirect
+      case 401: {
         customMessage = '세션이 만료되었습니다. 다시 로그인해주세요.';
         useAuthStore.getState().logout();
+        const url = String(error.config?.url ?? '');
+        if (!url.includes('/auth/me')) {
+          api.post('/auth/logout').catch(() => undefined);
+        }
         break;
+      }
 
       case 403:
         customMessage = '해당 작업에 대한 권한이 없습니다.';
-        useAuthStore.getState().logout();
         break;
 
       case 404:
@@ -106,7 +96,6 @@ api.interceptors.response.use(
         customMessage = customMessage || '알 수 없는 오류가 발생했습니다.';
     }
 
-    // Wrap the error with our custom message
     return Promise.reject({
       ...error,
       status,

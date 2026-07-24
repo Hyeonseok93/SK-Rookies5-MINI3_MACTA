@@ -1,5 +1,6 @@
 package com.secureauction.auction.dto;
 
+import com.secureauction.auction.exception.ErrorCode;
 import lombok.Builder;
 import lombok.Getter;
 
@@ -11,7 +12,15 @@ public class ApiResponse<T> {
     private boolean success;
     private T data;
     private String message;
+    private ErrorBody error;
     private LocalDateTime timestamp;
+
+    @Getter
+    @Builder
+    public static class ErrorBody {
+        private String code;
+        private String message;
+    }
 
     public static <T> ApiResponse<T> success(T data) {
         return ApiResponse.<T>builder()
@@ -35,6 +44,18 @@ public class ApiResponse<T> {
         return ApiResponse.<T>builder()
                 .success(false)
                 .message(message)
+                .timestamp(LocalDateTime.now())
+                .build();
+    }
+
+    public static <T> ApiResponse<T> error(ErrorCode errorCode) {
+        return ApiResponse.<T>builder()
+                .success(false)
+                .message(errorCode.getMessage())
+                .error(ErrorBody.builder()
+                        .code(errorCode.name())
+                        .message(errorCode.getMessage())
+                        .build())
                 .timestamp(LocalDateTime.now())
                 .build();
     }

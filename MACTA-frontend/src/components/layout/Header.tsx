@@ -1,13 +1,13 @@
 import { useState, useEffect, useRef } from 'react';
 import { useNavigate, Link, useSearchParams } from 'react-router-dom';
 import { Search, Bell, User, Menu, Clock, ExternalLink, LogOut } from 'lucide-react';
-import { auctionApi } from '../../api/auction';
+import { notificationApi } from '../../api/notification';
+import { logout as authLogout, AUTH_STATE_CHANGED_EVENT } from '../../api/auth';
 import type { Notification } from '../../api/types';
 import { useAuthStore } from '../../store/useAuthStore';
 import { useToast } from '../common/Toast';
 import { formatTime } from '../../utils/format';
 import { normalizeProductDetailUrl } from '../../utils/routes';
-import { AUTH_STATE_CHANGED_EVENT } from '../../api/auth';
 
 export function Header() {
   const navigate = useNavigate();
@@ -15,7 +15,7 @@ export function Header() {
   const [searchParams] = useSearchParams();
   const [searchQuery, setSearchQuery] = useState(searchParams.get('q') || '');
   const [showMobileMenu, setShowMobileMenu] = useState(false);
-  const { isLoggedIn, logout: storeLogout, syncAuthState } = useAuthStore();
+  const { isLoggedIn, syncAuthState } = useAuthStore();
 
   // Notification State
   const [notifications, setNotifications] = useState<Notification[]>([]);
@@ -59,7 +59,7 @@ export function Header() {
       }
 
       try {
-        const res = await auctionApi.getNotifications();
+        const res = await notificationApi.getNotifications();
         if (res.success && res.data) {
           const notificationList = res.data.content || [];
           setNotifications(notificationList);
@@ -86,7 +86,7 @@ export function Header() {
   };
 
   const markAsRead = async (id: number) => {
-    const res = await auctionApi.markNotificationAsRead(id);
+    const res = await notificationApi.markNotificationAsRead(id);
     if (res.success) {
       setNotifications(prev => prev.map(n => n.id === id ? { ...n, isRead: true } : n));
     }
@@ -99,8 +99,9 @@ export function Header() {
     navigate(normalizeProductDetailUrl(targetUrl));
   };
 
-  const handleLogout = () => {
-    storeLogout();
+  const handleLogout = async () => {
+    await authLogout();
+    syncAuthState();
     showToast('로그아웃 되었습니다.', 'success');
     setShowMobileMenu(false);
     navigate('/');

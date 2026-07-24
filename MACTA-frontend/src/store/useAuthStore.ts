@@ -1,7 +1,5 @@
 import { create } from 'zustand';
-import { clearAccessTokenCookie, getAccessTokenCookie } from '../api/tokenCookie';
-
-const AUTH_STATE_CHANGED_EVENT = 'macta-auth-state-changed';
+import { AUTH_STATE_CHANGED_EVENT } from '../api/auth';
 
 interface User {
   id: number | string;
@@ -27,15 +25,11 @@ const getStoredUser = (): User | null => {
 };
 
 const getCurrentAuthState = () => {
-  const accessToken = getAccessTokenCookie();
   const user = getStoredUser();
-
-  if (!accessToken || !user) {
-    localStorage.removeItem('macta_user');
-    return { user: null, isLoggedIn: false };
+  if (user) {
+    return { user, isLoggedIn: true };
   }
-
-  return { user, isLoggedIn: true };
+  return { user: null, isLoggedIn: false };
 };
 
 export const useAuthStore = create<AuthState>((set) => ({
@@ -43,14 +37,13 @@ export const useAuthStore = create<AuthState>((set) => ({
   setUser: (user) => {
     if (user) {
       localStorage.setItem('macta_user', JSON.stringify(user));
-      set({ user, isLoggedIn: Boolean(getAccessTokenCookie()) });
+      set({ user, isLoggedIn: true });
     } else {
       localStorage.removeItem('macta_user');
       set({ user: null, isLoggedIn: false });
     }
   },
   logout: () => {
-    clearAccessTokenCookie();
     localStorage.removeItem('macta_user');
     set({ user: null, isLoggedIn: false });
     window.dispatchEvent(new Event(AUTH_STATE_CHANGED_EVENT));

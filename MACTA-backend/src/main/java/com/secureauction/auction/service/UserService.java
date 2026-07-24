@@ -10,6 +10,7 @@ import com.secureauction.auction.repository.AuctionLikeRepository;
 import com.secureauction.auction.repository.AuctionRepository;
 import com.secureauction.auction.repository.BidRepository;
 import com.secureauction.auction.repository.PaymentRepository;
+import com.secureauction.auction.repository.PictureRepository;
 import com.secureauction.auction.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -18,6 +19,10 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 @Service
 @RequiredArgsConstructor
 public class UserService {
@@ -25,40 +30,73 @@ public class UserService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final AuctionLikeRepository auctionLikeRepository;
-    private final AuctionRepository auctionRepository; // 추가됨
-    private final BidRepository bidRepository; // 추가됨
+    private final AuctionRepository auctionRepository;
+    private final BidRepository bidRepository;
     private final PaymentRepository paymentRepository;
-    private final ImageService imageService;
+    private final PictureRepository pictureRepository;
+    private final PictureUrlResolver pictureUrlResolver;
 
-    // --- 공통 DTO 변환 메서드 ---
-    private AuctionDto.MyPageListResponse convertToMyBidListResponse(Auction auction, User user) {
-        Long highestBidPrice = bidRepository.findHighestPriceByAuction(auction);
-        Long myHighestBidPrice = bidRepository.findHighestPriceByAuctionAndUser(auction, user);
-        
-        // Null safety for primitive Long unboxing if needed, though DTO usually accepts Long
-        long current = highestBidPrice != null ? highestBidPrice : auction.getCurrentPrice();
-        
-        return convertToMyPageListResponse(auction, current, myHighestBidPrice, user);
+    private Map<Long, String> loadMainImageKeys(List<Long> auctionIds) {
+        Map<Long, String> map = new HashMap<>();
+        if (auctionIds.isEmpty()) {
+            return map;
+        }
+        for (Object[] row : pictureRepository.findMainImageKeysByAuctionIds(auctionIds)) {
+            map.put((Long) row[0], (String) row[1]);
+        }
+        return map;
     }
 
-    private AuctionDto.MyPageListResponse convertToMyPageListResponse(Auction auction, Long currentPrice, Long myPrice, User currentUser) {
-        String mainUrl = auction.getPictures().stream()
-                .filter(p -> Boolean.TRUE.equals(p.getIsMain()))
-                .findFirst()
-                .map(p -> imageService.createPresignedUrl(p.getImageKey()))
-                .orElse(null);
+    private Map<Long, Long> loadFinalPrices(List<Long> auctionIds) {
+        Map<Long, Long> map = new HashMap<>();
+        if (auctionIds.isEmpty()) {
+            return map;
+        }
+        for (Object[] row : paymentRepository.findFinalPricesByAuctionIds(auctionIds)) {
+            map.put((Long) row[0], (Long) row[1]);
+        }
+        return map;
+    }
+
+    private Map<Long, Long> loadMaxPrices(List<Long> auctionIds) {
+        Map<Long, Long> map = new HashMap<>();
+        if (auctionIds.isEmpty()) {
+            return map;
+        }
+        for (Object[] row : bidRepository.findMaxPriceGroupedByAuctionIds(auctionIds)) {
+            map.put((Long) row[0], (Long) row[1]);
+        }
+        return map;
+    }
+
+    private Map<Long, Long> loadMyMaxPrices(User user, List<Long> auctionIds) {
+        Map<Long, Long> map = new HashMap<>();
+        if (auctionIds.isEmpty()) {
+            return map;
+        }
+        for (Object[] row : bidRepository.findMaxPriceGroupedByUserAndAuctionIds(user, auctionIds)) {
+            map.put((Long) row[0], (Long) row[1]);
+        }
+        return map;
+    }
+
+    private AuctionDto.MyPageListResponse toMyPageResponse(
+            Auction auction,
+            Long currentPrice,
+            Long myPrice,
+            User currentUser,
+            Map<Long, String> mainImageKeys,
+            Map<Long, Long> finalPrices
+    ) {
+        String mainUrl = pictureUrlResolver.resolve(mainImageKeys.get(auction.getId()));
 
         Long finalPrice = null;
         if (auction.getStatus() != AuctionStatus.LIVE && auction.getStatus() != AuctionStatus.READY) {
-            finalPrice = paymentRepository.findByAuction(auction)
-                    .map(com.secureauction.auction.domain.Payment::getFinalPrice)
-                    .orElse(null);
+            finalPrice = finalPrices.get(auction.getId());
         }
 
-        // 상태 계산 로직 (WON, OUTBID, SOLD 등)
         String statusStr = auction.getStatus().name();
         if (currentUser != null) {
-            // 내가 입찰자 혹은 위너인 경우
             if (auction.getStatus() == AuctionStatus.FINISHED) {
                 if (auction.getWinner() != null && currentUser.getId().equals(auction.getWinner().getId())) {
                     statusStr = "WON";
@@ -70,7 +108,6 @@ public class UserService {
                     statusStr = "OUTBID";
                 }
             }
-            // 내가 판매자인 경우
             if (currentUser.getId().equals(auction.getSeller().getId()) && auction.getStatus() == AuctionStatus.FINISHED) {
                 if (auction.getWinner() != null) {
                     statusStr = "SOLD";
@@ -92,6 +129,23 @@ public class UserService {
                 .createdAt(auction.getCreatedAt())
                 .mainPictureUrl(mainUrl)
                 .build();
+    }
+
+    private Page<AuctionDto.MyPageListResponse> mapAuctionPage(Page<Auction> page, User user, boolean includeMyBid) {
+        List<Auction> auctions = page.getContent();
+        List<Long> ids = auctions.stream().map(Auction::getId).toList();
+        Map<Long, String> mainImageKeys = loadMainImageKeys(ids);
+        Map<Long, Long> finalPrices = loadFinalPrices(ids);
+        Map<Long, Long> maxPrices = includeMyBid ? loadMaxPrices(ids) : Map.of();
+        Map<Long, Long> myPrices = includeMyBid ? loadMyMaxPrices(user, ids) : Map.of();
+
+        return page.map(auction -> {
+            Long current = includeMyBid
+                    ? maxPrices.getOrDefault(auction.getId(), auction.getCurrentPrice())
+                    : auction.getCurrentPrice();
+            Long myPrice = includeMyBid ? myPrices.get(auction.getId()) : null;
+            return toMyPageResponse(auction, current, myPrice, user, mainImageKeys, finalPrices);
+        });
     }
 
     @Transactional(readOnly = true)
@@ -142,40 +196,31 @@ public class UserService {
         user.updateInfo(request.getNickname());
     }
 
-    // 5. 내가 등록한 경매 목록
     @Transactional(readOnly = true)
     public Page<AuctionDto.MyPageListResponse> getMyAuctions(User user, String status, Pageable pageable) {
+        Page<Auction> page;
         if (status == null || status.isBlank() || "ALL".equalsIgnoreCase(status)) {
-            return auctionRepository.findBySeller(user, pageable)
-                    .map(auction -> convertToMyPageListResponse(auction, auction.getCurrentPrice(), null, user));
+            page = auctionRepository.findBySeller(user, pageable);
+        } else if ("SOLD".equalsIgnoreCase(status)) {
+            page = auctionRepository.findBySellerAndStatusAndWinnerIsNotNull(user, AuctionStatus.FINISHED, pageable);
+        } else if ("FINISHED".equalsIgnoreCase(status)) {
+            page = auctionRepository.findBySellerAndStatusAndWinnerIsNull(user, AuctionStatus.FINISHED, pageable);
+        } else {
+            AuctionStatus auctionStatus;
+            try {
+                auctionStatus = AuctionStatus.valueOf(status.toUpperCase());
+            } catch (IllegalArgumentException e) {
+                throw new BusinessException(ErrorCode.INVALID_INPUT_VALUE);
+            }
+            page = auctionRepository.findBySellerAndStatus(user, auctionStatus, pageable);
         }
-
-        if ("SOLD".equalsIgnoreCase(status)) {
-            return auctionRepository.findBySellerAndStatusAndWinnerIsNotNull(user, AuctionStatus.FINISHED, pageable)
-                    .map(auction -> convertToMyPageListResponse(auction, auction.getCurrentPrice(), null, user));
-        }
-
-        if ("FINISHED".equalsIgnoreCase(status)) {
-            return auctionRepository.findBySellerAndStatusAndWinnerIsNull(user, AuctionStatus.FINISHED, pageable)
-                    .map(auction -> convertToMyPageListResponse(auction, auction.getCurrentPrice(), null, user));
-        }
-
-        AuctionStatus auctionStatus;
-        try {
-            auctionStatus = AuctionStatus.valueOf(status.toUpperCase());
-        } catch (IllegalArgumentException e) {
-            throw new BusinessException(ErrorCode.INVALID_INPUT_VALUE);
-        }
-
-        return auctionRepository.findBySellerAndStatus(user, auctionStatus, pageable)
-                .map(auction -> convertToMyPageListResponse(auction, auction.getCurrentPrice(), null, user));
+        return mapAuctionPage(page, user, false);
     }
 
-    // 6. 내가 입찰한 경매 목록
     @Transactional(readOnly = true)
     public Page<AuctionDto.MyPageListResponse> getMyBids(User user, String status, Pageable pageable) {
         Page<Auction> auctions;
-        
+
         if (status == null || status.isBlank() || "ALL".equalsIgnoreCase(status)) {
             auctions = bidRepository.findBidAuctionsByUser(user, pageable);
         } else if ("WON".equalsIgnoreCase(status)) {
@@ -196,13 +241,21 @@ public class UserService {
             auctions = bidRepository.findBidAuctionsByUserAndStatus(user, auctionStatus, pageable);
         }
 
-        return auctions.map(auction -> convertToMyBidListResponse(auction, user));
+        return mapAuctionPage(auctions, user, true);
     }
 
-    // 7. 관심 상품 목록 (수정됨)
     @Transactional(readOnly = true)
     public Page<AuctionDto.MyPageListResponse> getMyWishlist(User user, Pageable pageable) {
-        return auctionLikeRepository.findByUser(user, pageable)
-                .map(like -> convertToMyPageListResponse(like.getAuction(), like.getAuction().getCurrentPrice(), null, user));
+        Page<com.secureauction.auction.domain.AuctionLike> likes = auctionLikeRepository.findByUser(user, pageable);
+        List<Long> ids = likes.getContent().stream()
+                .map(like -> like.getAuction().getId())
+                .toList();
+        Map<Long, String> mainImageKeys = loadMainImageKeys(ids);
+        Map<Long, Long> finalPrices = loadFinalPrices(ids);
+
+        return likes.map(like -> {
+            Auction auction = like.getAuction();
+            return toMyPageResponse(auction, auction.getCurrentPrice(), null, user, mainImageKeys, finalPrices);
+        });
     }
 }

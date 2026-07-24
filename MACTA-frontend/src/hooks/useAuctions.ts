@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { auctionApi } from '../api/auction';
 import type { AuctionListResponse, AuctionSummary, PageInfo } from '../api/types';
 
@@ -6,15 +6,7 @@ const getAuctionItems = (response: AuctionListResponse): AuctionSummary[] => {
   return response.data?.content || [];
 };
 
-export function useAuctions({
-  category,
-  q,
-  minPrice,
-  maxPrice,
-  sort,
-  page,
-  size
-}: {
+export type AuctionFilters = {
   category?: string;
   q?: string;
   minPrice?: string;
@@ -22,50 +14,49 @@ export function useAuctions({
   sort?: string;
   page?: number;
   size?: number;
-}) {
-  const [auctions, setAuctions] = useState<AuctionSummary[]>([]);
-  const [pageInfo, setPageInfo] = useState<PageInfo | null>(null);
-  const [isLoading, setIsLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
+};
 
-  const fetchAuctions = useCallback(async () => {
-    // Ensure the loading state update is asynchronous to avoid cascading renders warning
-    await Promise.resolve();
-    setIsLoading(true);
-    
-    try {
-      const response = await auctionApi.getAuctions({
-        category,
-        q,
-        minPrice,
-        maxPrice,
-        sort,
-        page,
-        size
-      });
-      
-      if (response.success) {
-        setAuctions(getAuctionItems(response));
-        
-        // 백엔드 구조상 data 안에 pageInfo가 들어있음
-        const pagination = response.data?.pageInfo;
-        setPageInfo(pagination ?? null);
-      } else {
-        setError(response.message || 'Failed to fetch auctions');
+export function auctionsQueryKey(filters: AuctionFilters) {
+  return ['auctions', filters] as const;
+}
+
+export function useAuctions(filters: AuctionFilters) {
+  const queryClient = useQueryClient();
+  const queryKey = auctionsQueryKey(filters);
+
+  const query = useQuery({
+    queryKey,
+    queryFn: async () => {
+      const response = await auctionApi.getAuctions(filters);
+      if (!response.success) {
+        throw new Error(response.message || 'Failed to fetch auctions');
       }
-    } catch {
-      setError('An unexpected error occurred');
-    } finally {
-      setIsLoading(false);
-    }
-  }, [category, q, minPrice, maxPrice, sort, page, size]);
+      return {
+        auctions: getAuctionItems(response),
+        pageInfo: (response.data?.pageInfo ?? null) as PageInfo | null,
+      };
+    },
+  });
 
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      fetchAuctions();
-    }, 0);
-    return () => clearTimeout(timer);
-  }, [fetchAuctions]);
+  const setAuctions = (
+    updater: AuctionSummary[] | ((prev: AuctionSummary[]) => AuctionSummary[]),
+  ) => {
+    queryClient.setQueryData<{ auctions: AuctionSummary[]; pageInfo: PageInfo | null }>(
+      queryKey,
+      (prev) => {
+        if (!prev) return prev;
+        const next = typeof updater === 'function' ? updater(prev.auctions) : updater;
+        return { ...prev, auctions: next };
+      },
+    );
+  };
 
-  return { auctions, setAuctions, pageInfo, isLoading, error, refetch: fetchAuctions };
+  return {
+    auctions: query.data?.auctions ?? [],
+    setAuctions,
+    pageInfo: query.data?.pageInfo ?? null,
+    isLoading: query.isLoading,
+    error: query.error ? (query.error as Error).message : null,
+    refetch: query.refetch,
+  };
 }

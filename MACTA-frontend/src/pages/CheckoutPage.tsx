@@ -3,6 +3,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { ArrowLeft, CreditCard, Package, Shield, Loader2, CheckCircle2, AlertCircle } from 'lucide-react';
 import { Layout } from '../components/layout/Layout';
 import { auctionApi } from '../api/auction';
+import { paymentApi } from '../api/payment';
 import type { AuctionDetail } from '../api/types';
 import { useToast } from '../components/common/Toast';
 import { formatPrice } from '../utils/format';
@@ -46,7 +47,7 @@ export function CheckoutPage() {
     
     setIsProcessing(true);
     try {
-      const res = await auctionApi.processPayment(item.id, item.currentPrice);
+      const res = await paymentApi.processPayment(item.id, item.currentPrice);
       if (res.success) {
         showToast('Payment successful! Your item will be shipped soon.', 'success');
         navigate('/my-page?tab=auctions');

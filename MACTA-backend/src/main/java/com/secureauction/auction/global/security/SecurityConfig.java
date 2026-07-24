@@ -40,11 +40,13 @@ public class SecurityConfig {
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/error").permitAll()
+                        .requestMatchers("/ws/**").permitAll()
                         .requestMatchers("/api/v1/auth/**").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/v1/auctions").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/v1/auctions/stats").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/v1/auctions/{id:[0-9]+}").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/v1/auctions/{auctionId:[0-9]+}/comments").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/api/v1/categories").permitAll()
                         .requestMatchers("/api/v1/notifications/**").authenticated()
                         .requestMatchers("/api/v1/users/**").authenticated()
                         .anyRequest().authenticated()
@@ -61,7 +63,7 @@ public class SecurityConfig {
         config.setAllowedOrigins(List.of("http://localhost:5173", "https://macta.store"));
         config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"));
         config.setAllowedHeaders(List.of("*"));
-        config.setExposedHeaders(List.of("Authorization"));
+        config.setExposedHeaders(List.of("Authorization", "Set-Cookie"));
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", config);

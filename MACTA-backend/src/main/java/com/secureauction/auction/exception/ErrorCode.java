@@ -19,6 +19,7 @@ public enum ErrorCode {
     SELF_BID_NOT_ALLOWED(HttpStatus.BAD_REQUEST, "자신의 경매 물품에는 입찰할 수 없습니다."),
     UNAUTHORIZED(HttpStatus.UNAUTHORIZED, "유효하지 않은 JWT 토큰입니다."),
     ACCESS_DENIED(HttpStatus.FORBIDDEN, "권한이 부족합니다."),
+    NOT_AUCTION_SELLER(HttpStatus.FORBIDDEN, "판매자만 답변할 수 있습니다."),
     RESOURCE_NOT_FOUND(HttpStatus.NOT_FOUND, "요청한 리소스를 찾을 수 없습니다."),
     BID_CONFLICT(HttpStatus.CONFLICT, "동시 입찰 충돌이 발생했습니다."),
     ALREADY_PROCESSED(HttpStatus.CONFLICT, "이미 처리된 상태입니다."),
