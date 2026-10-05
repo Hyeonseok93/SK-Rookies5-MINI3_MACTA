@@ -221,7 +221,7 @@ React에서 경매 탐색·입찰·알림 UI를 제공하고, Spring Boot가 **�
 
 ---
 
-## 🖥️ Preview · [자세히 보기](https://bulldog93.tistory.com/47)
+## 🖥️ Preview · [자세히 보기](https://hyeonseok93.github.io/posts/rookies-showcase-mini3/)
 
 <div align="center">
   <img src=".github/readme/preview-home.png" alt="MACTA 홈 화면" width="900" />
@@ -333,7 +333,7 @@ Spring Boot REST API가 **회원(User) · 경매(Auction) · 입찰(Bid) · 결�
 
 주요 엔드포인트는 `/api/v1/auth`(가입·로그인·중복 확인), `/api/v1/auctions`(목록·상세·등록·관심·입찰), `/api/v1/users/me`(프로필·출품·입찰·관심 목록), `/api/v1/payments`·배송·거래 완료(Trade), `/api/v1/notifications`, `/api/v1/auctions/{id}/comments`, `/api/v1/images`·`/api/v1/categories`로 나뉩니다.
 
-> 상세 ERD 한 장과 주요 API 표(설계 의도 포함)는 [기술 블로그](https://bulldog93.tistory.com/47)에서 다룹니다.
+> 상세 ERD 한 장과 주요 API 표(설계 의도 포함)는 [기술 블로그](https://hyeonseok93.github.io/posts/rookies-showcase-mini3/)에서 다룹니다.
 
 ---
 
@@ -399,7 +399,7 @@ SK-Rookies5-MINI3_MACTA/
 
 **Route53 → WAF/ACM → ALB → EKS(Frontend·Backend) → RDS·Redis·S3** 로 이어지는 AWS 기반 아키텍처입니다. 사용자 트래픽은 ALB까지만 도달하고, 애플리케이션과 데이터 계층은 Private Subnet 안에서만 통신합니다. 배포는 **GitHub Actions → ECR → Argo CD(GitOps)** 로 자동화됩니다.
 
-> 네트워크 분리·보안(WAF·IRSA·Secret 관리)·무중단 배포 등 상세한 설계 의도는 [기술 블로그](https://bulldog93.tistory.com/47)에서 다룹니다.
+> 네트워크 분리·보안(WAF·IRSA·Secret 관리)·무중단 배포 등 상세한 설계 의도는 [기술 블로그](https://hyeonseok93.github.io/posts/rookies-showcase-mini3/)에서 다룹니다.
 
 ---
 
